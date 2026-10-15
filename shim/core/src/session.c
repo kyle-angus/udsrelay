@@ -39,7 +39,7 @@ static void blob(const shim_session *s, const shim_ops *ops, uint16_t cmd, const
     }
     const size_t logged = cap ? capped(s, size) : size;
     emit(ops, s->line,
-         shim_trace_blob(s->line, SHIM_TRACE_LINE_MAX, ops->now(ops->ctx), s->port, cmd, tag, extra,
+         shim_trace_blob(s->line, SHIM_TRACE_LINE_MAX, ops->now(ops->ctx), s->port, s->sess, cmd, tag, extra,
                          data, size, logged));
 }
 
@@ -178,7 +178,7 @@ shim_result_t shim_session_run(shim_session *s, const shim_ops *ops) {
         s->requests++;
 
         emit(ops, s->line,
-             shim_trace_msg(s->line, SHIM_TRACE_LINE_MAX, ops->now(ops->ctx), "req", s->port, id,
+             shim_trace_msg(s->line, SHIM_TRACE_LINE_MAX, ops->now(ops->ctx), "req", s->port, s->sess, id,
                             shim_command_name(s->port, id), 0, s->proc, req, 0));
         log_buffers(s, ops, &msg, req, req, 0);
 
@@ -206,7 +206,7 @@ shim_result_t shim_session_run(shim_session *s, const shim_ops *ops) {
         if (shim_ipc_parse(cmd, &rsp) == 0) {
             emit(ops, s->line,
                  shim_trace_msg(s->line, SHIM_TRACE_LINE_MAX, ops->now(ops->ctx), "rsp", s->port,
-                                id, NULL, 0, NULL, cmd, 0));
+                                s->sess, id, NULL, 0, NULL, cmd, 0));
             log_buffers(s, ops, &rsp, cmd, req, 1);
             npending = collect_copy_handles(&rsp, cmd, pending_close, 0);
         }

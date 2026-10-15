@@ -213,6 +213,7 @@ bool Attach(const char *name, Handle real, Handle *client) {
     slot->port[SHIM_PORT_NAME_MAX] = '\0';
     std::memset(&slot->session, 0, sizeof(slot->session));
     slot->session.port = slot->port;
+    slot->session.sess = idx;
     slot->session.server = server;
     slot->session.real = real;
     slot->session.proc = g_proc;

@@ -17,21 +17,24 @@ type Record struct {
 	Instance string `json:"instance"`
 	Line     int    `json:"line"`
 	// Kind is req, rsp, unimpl, wake, signal, blob or note.
-	Kind     string            `json:"kind"`
-	Wall     uint64            `json:"wall_us"`
-	Port     string            `json:"port,omitempty"`
-	Cmd      uint16            `json:"cmd,omitempty"`
-	Name     string            `json:"name,omitempty"`
-	Tid      uint32            `json:"tid,omitempty"`
-	Proc     string            `json:"proc,omitempty"`
-	Hdr      uint32            `json:"hdr,omitempty"`
-	Words    []uint32          `json:"words,omitempty"`
-	Deferred bool              `json:"deferred,omitempty"`
-	Event    string            `json:"event,omitempty"`
-	Tag      string            `json:"tag,omitempty"`
-	Size     int               `json:"size,omitempty"`
-	Data     []byte            `json:"data,omitempty"`
-	Extra    map[string]string `json:"extra,omitempty"`
+	Kind     string   `json:"kind"`
+	Wall     uint64   `json:"wall_us"`
+	Port     string   `json:"port,omitempty"`
+	Cmd      uint16   `json:"cmd,omitempty"`
+	Name     string   `json:"name,omitempty"`
+	Tid      uint32   `json:"tid,omitempty"`
+	Proc     string   `json:"proc,omitempty"`
+	Hdr      uint32   `json:"hdr,omitempty"`
+	Words    []uint32 `json:"words,omitempty"`
+	Deferred bool     `json:"deferred,omitempty"`
+	// Sess identifies the shim session a req/rsp/blob belongs to; empty in Azahar logs, whose
+	// replies always follow their request.
+	Sess  string            `json:"sess,omitempty"`
+	Event string            `json:"event,omitempty"`
+	Tag   string            `json:"tag,omitempty"`
+	Size  int               `json:"size,omitempty"`
+	Data  []byte            `json:"data,omitempty"`
+	Extra map[string]string `json:"extra,omitempty"`
 	// Note fields, for stock log lines.
 	Level   string `json:"level,omitempty"`
 	Class   string `json:"class,omitempty"`
@@ -160,6 +163,7 @@ func parseTrace(body string) (Record, error) {
 			rec.Words = append(rec.Words, uint32(n))
 		}
 	}
+	rec.Sess = f["sess"]
 	rec.Deferred = f["deferred"] == "1"
 	if v, ok := f["size"]; ok {
 		n, _ := strconv.Atoi(v)

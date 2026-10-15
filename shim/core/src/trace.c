@@ -53,15 +53,18 @@ static void prefix(sbuf *b, shim_time t, const char *cls, const char *level, con
               (unsigned)(t.uptime_us % 1000000u), cls, level, func);
 }
 
-size_t shim_trace_msg(char *out, size_t cap, shim_time t, const char *kind, const char *port,
+size_t shim_trace_msg(char *out, size_t cap, shim_time t, const char *kind, const char *port, int sess,
                       uint16_t cmd, const char *name, uint32_t tid, const char *proc,
                       const uint32_t *words, int deferred) {
     sbuf b = {out, cap, 0, 0};
     const unsigned n = shim_ipc_words(words[0]) > SHIM_IPC_MAX_WORDS ? SHIM_IPC_MAX_WORDS
                                                                       : shim_ipc_words(words[0]);
     prefix(&b, t, "Service", "Info", "Forward");
-    sb_printf(&b, "UDSTRACE v=1 kind=%s wall=%llu port=%s cmd=0x%04x", kind,
-              (unsigned long long)t.wall_us, port, cmd);
+    sb_printf(&b, "UDSTRACE v=1 kind=%s wall=%llu port=%s", kind, (unsigned long long)t.wall_us, port);
+    if (sess >= 0) {
+        sb_printf(&b, " sess=%d", sess);
+    }
+    sb_printf(&b, " cmd=0x%04x", cmd);
     if (strcmp(kind, "req") == 0) {
         sb_printf(&b, " name=\"%s\" tid=%u proc=\"%s\"", name ? name : "", (unsigned)tid,
                   proc ? proc : "");
@@ -77,7 +80,7 @@ size_t shim_trace_msg(char *out, size_t cap, shim_time t, const char *kind, cons
     return sb_finish(&b);
 }
 
-size_t shim_trace_blob(char *out, size_t cap, shim_time t, const char *port, uint16_t cmd,
+size_t shim_trace_blob(char *out, size_t cap, shim_time t, const char *port, int sess, uint16_t cmd,
                        const char *tag, const char *extra, const uint8_t *data, size_t size,
                        size_t logged) {
     sbuf b = {out, cap, 0, 0};
@@ -85,8 +88,11 @@ size_t shim_trace_blob(char *out, size_t cap, shim_time t, const char *port, uin
         logged = size;
     }
     prefix(&b, t, "Service", "Info", "TraceBlob");
-    sb_printf(&b, "UDSTRACE v=1 kind=blob wall=%llu port=%s cmd=0x%04x tag=%s",
-              (unsigned long long)t.wall_us, port, cmd, tag);
+    sb_printf(&b, "UDSTRACE v=1 kind=blob wall=%llu port=%s", (unsigned long long)t.wall_us, port);
+    if (sess >= 0) {
+        sb_printf(&b, " sess=%d", sess);
+    }
+    sb_printf(&b, " cmd=0x%04x tag=%s", cmd, tag);
     if (extra && *extra) {
         sb_printf(&b, " %s", extra);
     }

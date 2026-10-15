@@ -70,11 +70,11 @@ static void test_trace_format(void) {
     char line[SHIM_TRACE_LINE_MAX];
     shim_time t = {1792000000000000ull, 12000345};
     uint32_t w[4] = {0x00140042, 0, 7, 9}; // 1 normal + 2 translate words
-    size_t n = shim_trace_msg(line, sizeof(line), t, "req", "nwm::UDS", 0x14, "PullPacket", 0,
+    size_t n = shim_trace_msg(line, sizeof(line), t, "req", "nwm::UDS", 1, 0x14, "PullPacket", 0,
                               "0004000000055D00", w, 0);
     const char *want =
         "[  12.000345] Service <Info> shim:Forward:0: UDSTRACE v=1 kind=req wall=1792000000000000 "
-        "port=nwm::UDS cmd=0x0014 name=\"PullPacket\" tid=0 proc=\"0004000000055D00\" "
+        "port=nwm::UDS sess=1 cmd=0x0014 name=\"PullPacket\" tid=0 proc=\"0004000000055D00\" "
         "hdr=0x00140042 words=0x00140042,0x00000000,0x00000007,0x00000009\n";
     CHECK(n == strlen(want) && strcmp(line, want) == 0);
     if (strcmp(line, want) != 0) {
@@ -82,12 +82,12 @@ static void test_trace_format(void) {
     }
 
     const uint8_t data[4] = {0xde, 0xad, 0xbe, 0xef};
-    n = shim_trace_blob(line, sizeof(line), t, "nwm::UDS", 0x17, "send", "dest=0x0002 chan=1 flags=0x00",
+    n = shim_trace_blob(line, sizeof(line), t, "nwm::UDS", -1, 0x17, "send", "dest=0x0002 chan=1 flags=0x00",
                         data, 4, 2);
     CHECK(strstr(line, "kind=blob wall=1792000000000000 port=nwm::UDS cmd=0x0017 tag=send "
                        "dest=0x0002 chan=1 flags=0x00 size=4 hex=dead\n") != NULL);
 
-    CHECK(shim_trace_msg(line, 40, t, "req", "nwm::UDS", 0x14, "x", 0, "p", w, 0) == 0);
+    CHECK(shim_trace_msg(line, 40, t, "req", "nwm::UDS", -1, 0x14, "x", 0, "p", w, 0) == 0);
 
     CHECK(strcmp(shim_trace_tag("nwm::UDS", 0x1D, 0, 1, 0), "netinfo") == 0);
     CHECK(strcmp(shim_trace_tag("nwm::UDS", 0x14, 1, 0, 0), "recv") == 0);

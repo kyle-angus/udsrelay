@@ -42,6 +42,7 @@ typedef struct {
 
 typedef struct {
     const char *port;     ///< service name, e.g. "nwm::UDS"
+    int sess;             ///< logged as sess= to tell concurrent sessions apart; < 0 omits it
     shim_handle_t server; ///< server end of the pair given to the game
     shim_handle_t real;   ///< session to the real service
     const char *proc;     ///< logged as proc=, e.g. the title ID

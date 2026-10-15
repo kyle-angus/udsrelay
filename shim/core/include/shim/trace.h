@@ -21,12 +21,13 @@ typedef struct {
 
 /// Formats a req or rsp line from raw message words. Returns the line length (no newline
 /// terminator is added beyond the trailing '\n'), or 0 if `cap` is too small.
-size_t shim_trace_msg(char *out, size_t cap, shim_time t, const char *kind, const char *port,
+/// `sess` (>= 0) is logged as sess= so concurrent sessions' lines can be paired; < 0 omits it.
+size_t shim_trace_msg(char *out, size_t cap, shim_time t, const char *kind, const char *port, int sess,
                       uint16_t cmd, const char *name, uint32_t tid, const char *proc,
                       const uint32_t *words, int deferred);
 
 /// Formats a blob line. `size` is the full payload length; only `logged` bytes are hex-encoded.
-size_t shim_trace_blob(char *out, size_t cap, shim_time t, const char *port, uint16_t cmd,
+size_t shim_trace_blob(char *out, size_t cap, shim_time t, const char *port, int sess, uint16_t cmd,
                        const char *tag, const char *extra, const uint8_t *data, size_t size,
                        size_t logged);
 

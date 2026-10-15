@@ -171,6 +171,40 @@ func TestSameShapeReplyNotDeferred(t *testing.T) {
 	}
 }
 
+// The console shim forwards X/Y's two nwm::UDS sessions at once, so a SendTo on one and a
+// PullPacket on the other interleave. Each reply must reach its own request.
+func TestInterleavedSessions(t *testing.T) {
+	const pfx = "[ 1.0] Service <Info> shim:Forward:0: UDSTRACE v=1 "
+	lines := []string{
+		`kind=req wall=1000 port=nwm::UDS sess=1 cmd=0x0017 name="SendTo" tid=0 proc="p" hdr=0x00170182 words=0x00170182,0x00000002,0x00000002,0x000000f3,0x00000000,0x00000040,0x00000002,0x00004002,0x08000000`,
+		`kind=req wall=1001 port=nwm::UDS sess=2 cmd=0x0014 name="PullPacket" tid=0 proc="p" hdr=0x001400c0 words=0x001400c0,0x00000002,0x000005dc,0x00000000`,
+		`kind=rsp wall=1002 port=nwm::UDS sess=1 cmd=0x0017 hdr=0x00170040 deferred=0 words=0x00170040,0x00000000`,
+		`kind=rsp wall=1003 port=nwm::UDS sess=2 cmd=0x0014 hdr=0x001400c2 deferred=0 words=0x001400c2,0x00000000,0x00000000,0x00000000,0x00000002,0x08000000`,
+		// Old logs without sess still pair by port and command.
+		`kind=req wall=1004 port=nwm::UDS cmd=0x000a name="DisconnectNetwork" tid=0 proc="p" hdr=0x000a0000 words=0x000a0000`,
+		`kind=req wall=1005 port=nwm::UDS cmd=0x0014 name="PullPacket" tid=0 proc="p" hdr=0x001400c0 words=0x001400c0,0x00000002,0x000005dc,0x00000000`,
+		`kind=rsp wall=1006 port=nwm::UDS cmd=0x000a hdr=0x000a0040 deferred=0 words=0x000a0040,0x00000000`,
+	}
+	var log strings.Builder
+	for _, l := range lines {
+		log.WriteString(pfx + l + "\n")
+	}
+	recs, err := Parse(strings.NewReader(log.String()), "console")
+	if err != nil {
+		t.Fatal(err)
+	}
+	s := NewSession("console", recs)
+	for _, cmd := range []uint16{0x17, 0x14, 0x0a} {
+		c := findCall(t, s, PortUDS, cmd)
+		if code, ok := c.Result(); !ok || code != 0 {
+			t.Errorf("%s: result = %#x, %v; want OK", c.Name, code, ok)
+		}
+	}
+	if s.Calls()[0].Req.Sess != "1" {
+		t.Errorf("sess not parsed: %q", s.Calls()[0].Req.Sess)
+	}
+}
+
 func TestResultString(t *testing.T) {
 	if ResultString(0) != "OK" {
 		t.Error("zero should be OK")

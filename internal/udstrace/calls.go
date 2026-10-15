@@ -49,10 +49,24 @@ type Item struct {
 }
 
 // Build pairs one instance's records into calls and standalone items, in log order.
+//
+// Requests still waiting for their reply stay open, and each reply, payload or unimpl record
+// goes to the newest open request with the same port, command and session. In Azahar a reply
+// always follows its request, but the console shim forwards several sessions at once (X/Y keeps
+// two nwm::UDS sessions busy during a trade), so their lines interleave.
 func Build(recs []Record) []Item {
 	var items []Item
-	var open *Call // request whose immediate reply has not been logged yet
+	var open []*Call // requests whose reply has not been logged yet
 	var calls []*Call
+	takeOpen := func(r *Record) *Call {
+		for j := len(open) - 1; j >= 0; j-- {
+			if c := open[j]; sameCall(c, r) {
+				open = append(open[:j], open[j+1:]...)
+				return c
+			}
+		}
+		return nil
+	}
 	for i := range recs {
 		r := &recs[i]
 		switch r.Kind {
@@ -61,33 +75,30 @@ func Build(recs []Record) []Item {
 			if c.Name == "" {
 				c.Name = CommandName(r.Port, r.Cmd)
 			}
-			open = c
+			open = append(open, c)
 			calls = append(calls, c)
 			items = append(items, Item{Wall: r.Wall, Instance: r.Instance, Call: c})
 		case "blob":
-			if open != nil && open.Cmd == r.Cmd {
-				open.Blobs = append(open.Blobs, r)
-			} else if c := lastCall(calls, r.Port, r.Cmd); c != nil {
+			if c := lastCall(calls, r); c != nil {
 				c.Blobs = append(c.Blobs, r)
 			}
 		case "unimpl":
-			if open != nil && open.Cmd == r.Cmd {
-				open.Unimplemented = true
-				open = nil
+			if c := takeOpen(r); c != nil {
+				c.Unimplemented = true
 			}
 		case "rsp":
-			if open == nil || open.Cmd != r.Cmd || open.Port != r.Port {
+			c := takeOpen(r)
+			if c == nil {
 				continue
 			}
-			if r.Deferred && r.Hdr == open.Req.Hdr {
+			if r.Deferred && r.Hdr == c.Req.Hdr {
 				// Deferred with the header unchanged: the handler left its reply to a wake-up
 				// callback. Without deferred=1 an unchanged header is just a reply shaped like
 				// the request, such as ndm:u's one-word-in, one-word-out commands.
-				open.AwaitingWake = true
+				c.AwaitingWake = true
 			} else {
-				open.Reply = r.Words
+				c.Reply = r.Words
 			}
-			open = nil
 		case "wake":
 			for j := len(calls) - 1; j >= 0; j-- {
 				c := calls[j]
@@ -103,9 +114,14 @@ func Build(recs []Record) []Item {
 	return items
 }
 
-func lastCall(calls []*Call, port string, cmd uint16) *Call {
+// sameCall reports whether record r (a reply, payload or unimpl) can belong to call c.
+func sameCall(c *Call, r *Record) bool {
+	return c.Port == r.Port && c.Cmd == r.Cmd && c.Req.Sess == r.Sess
+}
+
+func lastCall(calls []*Call, r *Record) *Call {
 	for j := len(calls) - 1; j >= 0; j-- {
-		if calls[j].Port == port && calls[j].Cmd == cmd {
+		if sameCall(calls[j], r) {
 			return calls[j]
 		}
 	}
