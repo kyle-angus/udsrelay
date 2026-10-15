@@ -35,6 +35,7 @@ type ShimConsole struct {
 	mu          sync.Mutex
 	scan        []scannedBeacon
 	statusEvent uint32
+	binds       map[uint32]uint32 // bind ID -> its event
 	// For checking that every status change was signalled on the status event.
 	lastStatus  ConnectionStatus
 	lastSignals uint32
@@ -68,6 +69,7 @@ func NewShimConsole(bin, relayAddr, lobby, label string) (*ShimConsole, error) {
 		return nil, err
 	}
 	c.lastStatus.Status = StatusNotConnected
+	c.binds = map[uint32]uint32{}
 	return c, nil
 }
 
@@ -160,6 +162,33 @@ func (c *ShimConsole) request(words []uint32, bufs ...[]byte) ipcReply {
 	return r
 }
 
+// wakesBinds runs a request that must signal the given binds' events (or every bind's, when
+// ids is nil) if it succeeds: the game's receive thread waits on its bind event and only exits
+// when woken. Called with c.mu held.
+func (c *ShimConsole) wakesBinds(name string, ids []uint32, words ...uint32) ipcReply {
+	if ids == nil {
+		for id := range c.binds {
+			ids = append(ids, id)
+		}
+	}
+	before := map[uint32]uint32{}
+	for _, id := range ids {
+		if h, ok := c.binds[id]; ok {
+			before[id] = c.signals(h)
+		}
+	}
+	r := c.request(words)
+	if r.result() != ResultOK {
+		return r
+	}
+	for id, n := range before {
+		if c.signals(c.binds[id]) == n {
+			c.problem("%s did not signal bind %d's event", name, id)
+		}
+	}
+	return r
+}
+
 func (c *ShimConsole) simple(words ...uint32) uint32 {
 	c.mu.Lock()
 	defer c.mu.Unlock()
@@ -201,8 +230,9 @@ func (c *ShimConsole) InitializeWithVersion(self [relay.NodeInfoSize]byte) uint3
 func (c *ShimConsole) Shutdown() uint32 {
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	r := c.request([]uint32{0x00030000}).result()
+	r := c.wakesBinds("Shutdown", nil, 0x00030000).result()
 	c.statusEvent = 0
+	c.binds = map[uint32]uint32{}
 	return r
 }
 
@@ -226,7 +256,11 @@ func (c *ShimConsole) BeginHostingNetwork(netInfo, passphrase []byte) uint32 {
 		staticDesc(len(passphrase), 0), 0}, ni, passphrase).result()
 }
 
-func (c *ShimConsole) DestroyNetwork() uint32 { return c.simple(0x00080000) }
+func (c *ShimConsole) DestroyNetwork() uint32 {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	return c.wakesBinds("DestroyNetwork", nil, 0x00080000).result()
+}
 
 func (c *ShimConsole) SetApplicationData(data []byte) uint32 {
 	c.mu.Lock()
@@ -442,7 +476,11 @@ func (c *ShimConsole) ConnectToNetwork(netInfo, passphrase []byte, connType uint
 		staticDesc(len(passphrase), 0), 0}, ni, passphrase).result()
 }
 
-func (c *ShimConsole) DisconnectNetwork() uint32 { return c.simple(0x000A0000) }
+func (c *ShimConsole) DisconnectNetwork() uint32 {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	return c.wakesBinds("DisconnectNetwork", nil, 0x000A0000).result()
+}
 
 func (c *ShimConsole) EjectClient(node uint16) uint32 { return c.simple(0x00050040, uint32(node)) }
 
@@ -535,8 +573,12 @@ func (c *ShimConsole) Bind(bindID uint32, channel uint8, node uint16, recvBufSiz
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	r := c.request([]uint32{0x00120100, bindID, uint32(recvBufSize), uint32(channel), uint32(node)})
-	if r.result() == ResultOK && (len(r.words) != 4 || r.words[0] != 0x00120042 || r.words[2] != 0 || r.words[3] == 0) {
-		c.problem("Bind reply %#x carries no event", r.words)
+	if r.result() == ResultOK {
+		if len(r.words) != 4 || r.words[0] != 0x00120042 || r.words[2] != 0 || r.words[3] == 0 {
+			c.problem("Bind reply %#x carries no event", r.words)
+		} else {
+			c.binds[bindID] = r.words[3]
+		}
 	}
 	return r.result()
 }
@@ -544,10 +586,11 @@ func (c *ShimConsole) Bind(bindID uint32, channel uint8, node uint16, recvBufSiz
 func (c *ShimConsole) Unbind(bindID uint32) uint32 {
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	r := c.request([]uint32{0x00130040, bindID})
+	r := c.wakesBinds("Unbind", []uint32{bindID}, 0x00130040, bindID)
 	if len(r.words) != 6 || word(r.words, 2) != bindID {
 		c.problem("Unbind reply %#x", r.words)
 	}
+	delete(c.binds, bindID)
 	return r.result()
 }
 

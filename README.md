@@ -9,7 +9,7 @@ The first target is Pokémon X/Y: a local trade, then a local battle.
 - Phase 1 (recon in Azahar): done. Traces for idle, trade, battle, two drop cases and an X–Y trade are in `recon/traces/`; findings are in the design doc's Phase 1 entry.
 - Phase 2 (passthrough shim on hardware): done. A full trade and a full battle ran between two consoles through the shim; the battle trace is in `recon/traces/battle-hw-01/`, and the differences from Azahar are in the design doc.
 - Phase 3 (relay server): done. `udsrelay` serves rooms, scan, join, node events, data forwarding and keepalive over UDP. `udsfake` fake consoles pass the exit test and replay all six two-console traces through it with hardware's result codes and byte-for-byte data.
-- Phase 4 (relay mode): built, not yet tested on hardware. The shim core emulates `nwm::UDS` over the relay (`shim/core/src/uds.c`), and the plugin runs it with `mode = relay` in `shim.ini`. All six traces replay through the C emulator against the relay (`TestReplayTracesShim`). See `shim/RUNBOOK.md` section 8.
+- Phase 4 (relay mode): done on one LAN. A full trade and a full battle ran between two consoles through the relay (`shim/RUNBOOK.md` section 8). The shim core emulates `nwm::UDS` over the relay (`shim/core/src/uds.c`), and the plugin runs it with `mode = relay` in `shim.ini`. All six traces replay through the C emulator against the relay (`TestReplayTracesShim`).
 
 ## Layout
 

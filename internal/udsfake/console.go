@@ -300,8 +300,14 @@ func (c *Console) DestroyNetwork() uint32 {
 	return ResultOK
 }
 
+// notConnected also wakes every bind's receiver, as NWM does: the game's receive thread waits on
+// its bind event and must be woken to see the network go (and on Unbind and Shutdown, which the
+// shim's emulator also signals).
 func (c *Console) notConnected(reason uint32) {
 	c.st = ConnectionStatus{Status: StatusNotConnected, Reason: reason, NodeID: c.st.NodeID}
+	for _, b := range c.binds {
+		b.signals++
+	}
 	c.signal()
 }
 

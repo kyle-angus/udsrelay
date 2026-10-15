@@ -4,7 +4,7 @@
 
 namespace udsrelay {
 
-constexpr const char *kShimVersion = "0.3.0";
+constexpr const char *kShimVersion = "0.3.1";
 
 /// Loads config, opens the SD log, hooks srv:GetServiceHandle. Call from PatchProcess.
 void Start();

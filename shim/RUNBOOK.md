@@ -194,7 +194,7 @@ How it is put together:
 - If the relay does not answer HELLO within 3 s of InitializeWithVersion, the emulator fails it with `0xE06113F9`, what real NWM returned in section 7, so the game shows its usual communication error.
 - Results follow `battle-hw-01`: 0x0021 succeeds, 0x0023 returns a word ending `1fff`, DestroyNetwork with no network and PullPacket after leaving fail with `0xC8A113EA`. Commands it does not know succeed with no output and are logged as `not emulated`.
 
-Tested on a PC only so far: `TestReplayTracesShim` (in `internal/udsfake`) runs each of the six two-console traces through two copies of the emulator (`shim/core/tests/uds_replay.c`) against the Go relay, as the game's side: it sends hardware-shaped IPC requests, parses the beacons and joins through DecryptBeaconData's node list. It checks every reply against the recording, every frame byte for byte, the reply layouts, and that every status change was signalled.
+On a PC, `TestReplayTracesShim` (in `internal/udsfake`) runs each of the six two-console traces through two copies of the emulator (`shim/core/tests/uds_replay.c`) against the Go relay, as the game's side: it sends hardware-shaped IPC requests, parses the beacons and joins through DecryptBeaconData's node list. It checks every reply against the recording, every frame byte for byte, the reply layouts, and that every status change was signalled.
 
 ### On two consoles
 
@@ -213,6 +213,12 @@ Tested on a PC only so far: `TestReplayTracesShim` (in `internal/udsfake`) runs 
 6. Copy both logs off and redact them as in section 4 (scans now contain only the other console's beacon). `not emulated` lines name commands the emulator does not handle yet.
 
 What to look for: whether the client sees the host's network in PSS, whether the trade completes, and the reason code a client gets when the host quits mid-match (the emulator reports 4, unconfirmed).
+
+### Results (2026-10-15, two consoles on one LAN, Pokémon X, Luma3DS v13.4)
+
+- **0.3.0:** PSS found the other console and a full trade completed over the relay, but both consoles then froze on a black screen (music still playing). After DisconnectNetwork or DestroyNetwork and the Unbinds, the game waits for its receive thread, which waits on the bind event. Real NWM signals the bind events on teardown and Unbind, so the thread pulls once, gets `0xC8A113EA` and exits (`battle-hw-01` shows that pull). The emulator did not signal them.
+- **0.3.1** signals every bind's event on Unbind, Shutdown, DestroyNetwork, DisconnectNetwork and a lost network. A full trade and a full battle completed over the relay, each returning to PSS normally, with no warnings and no unhandled commands in the host's log (884 frames sent, 776 received). The replay test now checks these signals.
+- Still unconfirmed: the reason code a client sees when the host quits mid-match, and play across two networks (Phase 5).
 
 ## Troubleshooting
 

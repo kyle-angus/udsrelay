@@ -219,6 +219,25 @@ static void signal_status(shim_uds *u) {
     }
 }
 
+// Wakes every bind's receiver. The game's receive thread waits on its bind event and only
+// notices an unbind or a lost network when woken; NWM (as Azahar models it) signals the bind
+// events on Unbind, Shutdown, DestroyNetwork and DisconnectNetwork. Without this the game
+// waits forever for that thread when it leaves local play.
+static void signal_bind(shim_uds *u, shim_uds_bind *b) {
+    if (b->event) {
+        u->stats.bind_signals++;
+        u->ops->signal_event(u->ops->ctx, b->event);
+    }
+}
+
+static void signal_binds(shim_uds *u) {
+    for (int i = 0; i < SHIM_UDS_MAX_BINDS; i++) {
+        if (u->binds[i].used) {
+            signal_bind(u, &u->binds[i]);
+        }
+    }
+}
+
 static void not_connected(shim_uds *u, uint32_t reason) {
     const uint16_t node = u->st.node_id;
     memset(&u->st, 0, sizeof(u->st));
@@ -226,6 +245,7 @@ static void not_connected(shim_uds *u, uint32_t reason) {
     u->st.reason = reason;
     u->st.node_id = node;
     signal_status(u);
+    signal_binds(u);
 }
 
 static void free_queue(shim_uds *u, shim_uds_bind *b) {
@@ -239,9 +259,11 @@ static void free_queue(shim_uds *u, shim_uds_bind *b) {
     b->count = b->queued_bytes = 0;
 }
 
+// Wakes the bind's receiver, then forgets the bind. The game's own handle keeps the event alive.
 static void drop_bind(shim_uds *u, shim_uds_bind *b) {
     free_queue(u, b);
     if (b->event) {
+        signal_bind(u, b);
         u->ops->close_handle(u->ops->ctx, b->event);
     }
     memset(b, 0, sizeof(*b));
