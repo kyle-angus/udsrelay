@@ -79,8 +79,10 @@ func Build(recs []Record) []Item {
 			if open == nil || open.Cmd != r.Cmd || open.Port != r.Port {
 				continue
 			}
-			if r.Hdr == open.Req.Hdr {
-				// Header unchanged: the handler deferred its reply to a wake-up callback.
+			if r.Deferred && r.Hdr == open.Req.Hdr {
+				// Deferred with the header unchanged: the handler left its reply to a wake-up
+				// callback. Without deferred=1 an unchanged header is just a reply shaped like
+				// the request, such as ndm:u's one-word-in, one-word-out commands.
 				open.AwaitingWake = true
 			} else {
 				open.Reply = r.Words

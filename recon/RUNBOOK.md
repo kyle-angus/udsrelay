@@ -26,7 +26,15 @@ git -C ~/src/azahar submodule update --init --recursive
 git -C ~/src/azahar apply "$PWD/recon/azahar/udstrace.patch"
 ```
 
-Build it by following Azahar's [Building From Source](https://github.com/azahar-emu/azahar/wiki/Building-From-Source) wiki page for macOS. Add `-DCITRA_WARNINGS_AS_ERRORS=OFF` to the CMake configure line: Azahar treats warnings as errors by default, and this patch has not yet been compiled inside the full Azahar tree.
+Build it by following Azahar's [Building From Source](https://github.com/azahar-emu/azahar/wiki/Building-From-Source) wiki page for macOS. The wiki needs full Xcode, not just the Command Line Tools. Add `-DCITRA_WARNINGS_AS_ERRORS=OFF` to the CMake configure line: Azahar treats warnings as errors by default, and this patch has not yet been compiled inside the full Azahar tree. Also add `-DENABLE_FFMPEG=OFF`: FFmpeg only powers video dumping, and Azahar requires exactly FFmpeg 7.x. On Apple Silicon:
+
+```bash
+cmake -S ~/src/azahar -B ~/src/azahar/build -DCMAKE_OSX_ARCHITECTURES=arm64 -DCMAKE_BUILD_TYPE=Release -DCITRA_WARNINGS_AS_ERRORS=OFF -DENABLE_FFMPEG=OFF
+```
+
+```bash
+cmake --build ~/src/azahar/build -j"$(sysctl -n hw.logicalcpu)"
+```
 
 Point the helper at the binary inside the bundle, not the `.app` itself:
 
@@ -62,7 +70,7 @@ For Azahar's own NWM/NDM debug lines as well, set the log filter (Emulation → 
 recon/recon.sh setup
 ```
 
-This creates `recon/run/host/user` and `recon/run/client/user`, which are gitignored. When Azahar's working directory contains a `user/` folder, it uses that folder for config, saves and logs, so the two instances never share a log file.
+This creates `recon/run/host/user` and `recon/run/client/user`, which are gitignored. When Azahar's working directory contains a `user/` folder, it uses that folder for config, saves and logs, so the two instances never share a log file. On macOS, Azahar first changes to the folder that contains its `.app` bundle, so `launch` copies the bundle into `recon/run/<instance>/` and runs that copy.
 
 Launch each instance once (`recon/recon.sh launch host`, then `client`) and set it up:
 

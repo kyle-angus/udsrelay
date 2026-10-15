@@ -132,8 +132,13 @@ func WriteSummary(w io.Writer, sessions []*Session, title string) {
 
 	// Network
 	p("\n## Network parameters\n\n")
+	// PSS re-hosts the same network every few seconds, so identical parameters are listed once
+	// with a count and the time they were first seen.
 	seenNet := false
 	for _, s := range sessions {
+		var order []string
+		count := map[string]int{}
+		first := map[string]uint64{}
 		for _, c := range s.Calls() {
 			nb := c.Blob("netinfo")
 			if nb == nil {
@@ -148,10 +153,21 @@ func WriteSummary(w io.Writer, sessions []*Session, title string) {
 			if c.Cmd == CmdConnectToNetwork || c.Cmd == CmdConnectDeprecated {
 				role = "joined (conn_type " + nb.Extra["conn_type"] + ")"
 			}
-			p("- **%s: %s via %s**: wlan comm ID `0x%08x`, ID8 `0x%02x`, max nodes %d, attributes `0x%04x`, network ID `0x%08x`, app data %d bytes",
+			line := fmt.Sprintf("**%s: %s via %s**: wlan comm ID `0x%08x`, ID8 `0x%02x`, max nodes %d, attributes `0x%04x`, network ID `0x%08x`, app data %d bytes",
 				s.Instance, role, c.Name, ni.WlanCommID, ni.ID8, ni.MaxNodes, ni.Attributes, ni.NetworkID, ni.AppDataSize)
 			if pb := c.Blob("passphrase"); pb != nil {
-				p(", passphrase %d bytes `%s`", pb.Size, hex.EncodeToString(pb.Data))
+				line += fmt.Sprintf(", passphrase %d bytes `%s`", pb.Size, hex.EncodeToString(pb.Data))
+			}
+			if count[line] == 0 {
+				order = append(order, line)
+				first[line] = c.Req.Wall
+			}
+			count[line]++
+		}
+		for _, line := range order {
+			p("- %s", line)
+			if n := count[line]; n > 1 {
+				p(" (%d times, first at %s)", n, strings.TrimSpace(rel(first[line], start)))
 			}
 			p(".\n")
 		}

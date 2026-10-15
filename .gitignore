@@ -5,3 +5,6 @@ shim/core/build/
 shim/plugin/build/
 *.3gx
 *.elf
+
+# Game dumps and saves used for recon; never commit them.
+game/

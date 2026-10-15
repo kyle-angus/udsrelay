@@ -152,6 +152,25 @@ func TestClientDeferredConnect(t *testing.T) {
 	}
 }
 
+// A reply whose header matches the request is only a pending wake-up when it is marked deferred.
+// idle-01 showed ndm:u OverrideDefaultDaemons (one word in, one out) reported as "(no wake-up logged)".
+func TestSameShapeReplyNotDeferred(t *testing.T) {
+	log := `[ 1.0] Service <Info> x: UDSTRACE v=1 kind=req wall=1000 port=ndm:u cmd=0x0014 name="OverrideDefaultDaemons" tid=1 proc="kujira-1" hdr=0x00140040 words=0x00140040,0x0000000f
+[ 1.0] Service <Info> x: UDSTRACE v=1 kind=rsp wall=1001 port=ndm:u cmd=0x0014 hdr=0x00140040 deferred=0 words=0x00140040,0x00000000
+`
+	recs, err := Parse(strings.NewReader(log), "host")
+	if err != nil {
+		t.Fatal(err)
+	}
+	c := findCall(t, NewSession("host", recs), "ndm:u", 0x14)
+	if c.AwaitingWake {
+		t.Error("deferred=0 reply treated as awaiting a wake-up")
+	}
+	if code, ok := c.Result(); !ok || code != 0 {
+		t.Errorf("result = %#x, %v; want OK", code, ok)
+	}
+}
+
 func TestResultString(t *testing.T) {
 	if ResultString(0) != "OK" {
 		t.Error("zero should be OK")

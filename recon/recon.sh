@@ -34,10 +34,19 @@ cmd_launch() {
   [[ -x "$AZAHAR" ]] || die "AZAHAR is not executable: $AZAHAR"
   [[ -d "$RUN/$inst/user" ]] || die "run '$0 setup' first"
   # Azahar uses ./user as its user dir when it exists in the working directory, which gives
-  # each instance its own config, saves and log/azahar_log.txt.
+  # each instance its own config, saves and log/azahar_log.txt. On macOS it first changes to
+  # the directory containing its .app bundle, so each instance runs its own copy of the bundle,
+  # refreshed on every launch to pick up rebuilds.
+  local exe="$AZAHAR"
+  if [[ "$AZAHAR" == *.app/Contents/MacOS/* ]]; then
+    local bundle="${AZAHAR%/Contents/MacOS/*}"
+    local name="$(basename "$bundle")"
+    rsync -a --delete "$bundle/" "$RUN/$inst/$name/"
+    exe="$RUN/$inst/$name/${AZAHAR#"$bundle"/}"
+  fi
   cd "$RUN/$inst"
   echo "launching $inst in $PWD (UDSTRACE_PORTS=${UDSTRACE_PORTS:-default}, UDSTRACE_PAYLOAD_MAX=${UDSTRACE_PAYLOAD_MAX:-512})"
-  exec "$AZAHAR"
+  exec "$exe"
 }
 
 cmd_collect() {
