@@ -1,0 +1,25 @@
+Author: 3DS Local Wireless Relay
+
+Version:
+    Major: 0
+    Minor: 2
+    Revision: 0
+
+Targets: # Low title IDs this plugin targets (0 for all). Install per title under /luma/plugins/<titleid>/.
+    #- 0x00055D00 # Pokémon X
+    #- 0x00055E00 # Pokémon Y
+
+Title: UDS Relay shim (passthrough)
+
+Summary: Logs every local-wireless call the game makes
+
+Description: |
+  Phase 2 passthrough shim. Intercepts the game's nwm::UDS and ndm:u
+  service sessions, forwards every call to the real services unchanged,
+  and logs each request, reply and payload to sdmc:/udsrelay/logs.
+
+Compatibility: Console
+
+MemorySize: 5MiB
+
+UsePrivateMemory: false

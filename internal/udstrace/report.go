@@ -20,6 +20,21 @@ func NewSession(instance string, recs []Record) *Session {
 	return &Session{Instance: instance, Records: recs, Items: Build(recs)}
 }
 
+// ShiftWall moves every timestamp in the session by shiftUs microseconds. Console clocks are
+// not synchronised, so two consoles' logs need a manual offset to line up in one timeline.
+func (s *Session) ShiftWall(shiftUs int64) {
+	for i := range s.Records {
+		if s.Records[i].Wall != 0 {
+			s.Records[i].Wall = uint64(int64(s.Records[i].Wall) + shiftUs)
+		}
+	}
+	for i := range s.Items {
+		if s.Items[i].Wall != 0 {
+			s.Items[i].Wall = uint64(int64(s.Items[i].Wall) + shiftUs)
+		}
+	}
+}
+
 // Calls returns the session's calls in order.
 func (s *Session) Calls() []*Call {
 	var out []*Call

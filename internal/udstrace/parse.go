@@ -51,6 +51,7 @@ var noteClasses = map[string]bool{
 	"Service.NDM": true,
 	"Service.AC":  true,
 	"Network":     true,
+	"Plugin":      true, // the console shim's own diagnostics
 }
 
 const tracePrefix = "UDSTRACE v=1 "

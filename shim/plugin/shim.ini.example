@@ -1,0 +1,8 @@
+# Copy to sdmc:/udsrelay/shim.ini to change the defaults.
+
+# Services to intercept and log. Add ac:u to see whether the game checks the
+# Wi-Fi connection during local play (an open question in the design doc).
+ports = nwm::UDS, ndm:u
+
+# Bytes of each send/recv/beacon payload to log; -1 logs whole payloads.
+payload_max = 512
