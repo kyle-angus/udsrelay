@@ -94,24 +94,31 @@ The build script copies `shim/core` and `shim/plugin` to `/tmp/udsrelay-shim-bui
 2. Play the same scenarios as Phase 1 (`idle`, `trade`, `battle`; see `recon/RUNBOOK.md`), one session per game launch.
 3. Check the plugin menu (Select by default) → Status: hooks installed, sessions intercepted, bytes written and dropped lines.
 4. Quit the game from the HOME menu. The log flushes every second, so at most the last second is lost.
-5. Copy `sdmc:/udsrelay/logs/*.log` off each console (SD card reader, or ftpd), into `recon/traces/<session>/console-host.log` and `console-client.log`.
+5. Copy the new log from `sdmc:/udsrelay/logs/` off each console (SD card reader, or ftpd) before the next session, under a name that includes the session, for example `trade-hw-02-host.log`. Two sessions copied to the same name overwrite each other.
+6. Redact each log into `recon/traces/<session>/`. The game's first scan returns every nearby Wi-Fi access point, so the raw logs contain third-party network names and MAC addresses. They also carry your consoles' own MACs and friend-code seeds. `redact` empties every beacon payload, zeroes the host MAC in netinfo and the NodeInfo friend-code seeds, and keeps the rest:
+
+   ```bash
+   go run ./cmd/udstrace redact ~/Desktop/trade-hw-02-host.log recon/traces/trade-hw-02/console-host.log
+   ```
+
+   Do the same for the client log. Keep the raw logs out of the repository.
 
 ## 5. Compare against the Azahar trace
 
 ```bash
-go run ./cmd/udstrace compare azahar=recon/traces/trade-01/host.log console=recon/traces/trade-hw-01/console-host.log
+go run ./cmd/udstrace compare azahar=recon/traces/battle-01/host.log console=recon/traces/battle-hw-01/console-host.log
 ```
 
 ```bash
-go run ./cmd/udstrace compare azahar=recon/traces/trade-01/client.log console=recon/traces/trade-hw-01/console-client.log
+go run ./cmd/udstrace compare azahar=recon/traces/battle-01/client.log console=recon/traces/battle-hw-01/console-client.log
 ```
 
 `compare` reports commands present in only one trace, commands whose result codes differ, changes in the order of significant calls (polls and data packets are left out of the order check), and network parameter differences. It exits 1 on any difference.
 
-For a merged two-console timeline, line the clocks up with `-shift`. Console clocks differ by seconds, so pick an offset (in milliseconds; the value below is only an example) that puts the client's ConnectToNetwork just before the host's next GetConnectionStatus shows two nodes:
+For a merged two-console timeline, line the clocks up with `-shift`. Console clocks can differ by anything from seconds to hours (about an hour in `battle-hw-01`), so pick an offset in milliseconds that puts the host's first GetConnectionStatus showing two nodes just after the client's ConnectToNetwork. For `battle-hw-01`:
 
 ```bash
-go run ./cmd/udstrace timeline -shift client=-2350 host=recon/traces/trade-hw-01/console-host.log client=recon/traces/trade-hw-01/console-client.log
+go run ./cmd/udstrace timeline -shift host=-3591640 host=recon/traces/battle-hw-01/console-host.log client=recon/traces/battle-hw-01/console-client.log
 ```
 
 Expected differences from Azahar, which are not shim bugs:
@@ -119,6 +126,12 @@ Expected differences from Azahar, which are not shim bugs:
 - Azahar replies to `ConnectToNetwork` asynchronously and logs `wake` lines. On hardware the reply comes back directly.
 - Azahar stubs `EjectClient` and `EjectSpectators` and has no handler for some commands. Real NWM returns real results.
 - Console logs have no `signal` lines: the shim cannot see NWM signal its events without stealing those signals from the game.
+- Real NWM returns success for SetProbeResponseParam (`0x0021`) and for `0x0023` (plus one word, `0x00881fff`); Azahar has no handler for either.
+- DestroyNetwork with no network up fails with `0xC8A113EA` on hardware and `0xC8A111EA` in Azahar.
+- The network a client joins has a real network ID on hardware (random per hosting); Azahar uses 0.
+- Many call-order changes: PSS's host/scan cycle timing is random, so the background cycles never line up. Check the order around Bind, BeginHostingNetwork (ID8 `0x01`), ConnectToNetwork and teardown instead.
+
+Phase 2 captures: `battle-hw-01` (two consoles, a full local battle). The first hardware trade was overwritten on the SD card before it was copied; it matched `trade-01` with the same differences as above.
 
 ## 6. Done when
 
@@ -138,6 +151,6 @@ Expected differences from Azahar, which are not shim bugs:
 
 ## Status and risks
 
-- **Not run on hardware yet.** The plugin builds with devkitARM (GCC 16.1) and libctrpf 0.8.0, but nothing has run on a console. The Makefile works around two mismatches between libctrpf 0.8.0 and current libctru: it adds libctru's `include/3ds` for libctrpf's `"types.h"` includes, and defines the `NORETURN` macro libctru dropped. `svcControlService` comes from a minimal `Sources/luma_svc.hpp`, since devkitPro does not install Luma's `csvc.h`.
+- **Tested on two consoles** (Pokémon X, Luma3DS v13.4): a full trade and a full battle in passthrough, with no dropped lines or failed forwards. Exiting the game after a trip to the HOME menu corrupted the plugin heap even with the shim disabled, so `main()` no longer deletes the menu at exit. The Makefile works around two mismatches between libctrpf 0.8.0 and current libctru: it adds libctru's `include/3ds` for libctrpf's `"types.h"` includes, and defines the `NORETURN` macro libctru dropped. `svcControlService` comes from a minimal `Sources/luma_svc.hpp`, since devkitPro does not install Luma's `csvc.h`.
 - **Same-process sessions:** the game and the shim share a process, so the game's client session and the shim's server session live in one handle table. The kernel allows this, but it is the first thing to suspect if requests never arrive.
 - **One hook point:** if a game obtains `nwm::UDS` before the plugin loads, or through a path other than GetServiceHandle, the shim never sees it. The plugin loader runs before the game's entry point, so the first case should not happen.

@@ -7,7 +7,7 @@ Local-wireless multiplayer for real 3DS consoles over the internet. A shim on ea
 The first target is Pokémon X/Y: a local trade, then a local battle.
 
 - Phase 1 (recon in Azahar): done. Traces for idle, trade, battle, two drop cases and an X–Y trade are in `recon/traces/`; findings are in the design doc's Phase 1 entry.
-- Phase 2 (passthrough shim on hardware): the 3GX plugin is written. Its core is tested on a PC against a fake kernel; the plugin builds with devkitARM and libctrpf 0.8.0 but has not been run on a console yet.
+- Phase 2 (passthrough shim on hardware): done. A full trade and a full battle ran between two consoles through the shim; the battle trace is in `recon/traces/battle-hw-01/`, and the differences from Azahar are in the design doc.
 
 ## Layout
 

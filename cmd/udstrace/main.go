@@ -5,6 +5,7 @@
 //	udstrace summary [-title "Pokémon X/Y trade"] [-o trace.md] host=host.log client=client.log
 //	udstrace compare azahar=recon/traces/trade-01/host.log console=shim-host.log
 //	udstrace json host=host.log
+//	udstrace redact console-host.log recon/traces/battle-hw-01/console-host.log
 package main
 
 import (
@@ -22,6 +23,7 @@ import (
 
 func usage() {
 	fmt.Fprint(os.Stderr, `usage: udstrace <timeline|summary|compare|json> [flags] [label=]log ...
+       udstrace redact in.log out.log
 
 Each log is one instance's trace: an Azahar log or a console shim log. The label (default:
 file name) names the instance in the output, e.g. host=host/user/log/azahar_log.txt.
@@ -29,6 +31,11 @@ file name) names the instance in the output, e.g. host=host/user/log/azahar_log.
 compare takes exactly two logs for the same role, reference first:
   udstrace compare azahar=azahar-host.log console=console-host.log
 It exits 1 when the traces differ.
+
+redact copies a console log with identifying data removed: beacon payloads emptied (the
+game's first scan returns all nearby Wi-Fi access points), the host MAC in netinfo zeroed,
+and NodeInfo friend-code seeds zeroed. Changed lines are marked redacted=<what>. Redact
+hardware logs before committing them.
 
 flags:
   -v              timeline: show every poll, data packet, payload preview and debug note
@@ -45,6 +52,10 @@ func main() {
 		usage()
 	}
 	mode := os.Args[1]
+	if mode == "redact" {
+		redact(os.Args[2:])
+		return
+	}
 	fs := flag.NewFlagSet(mode, flag.ExitOnError)
 	fs.Usage = usage
 	verbose := fs.Bool("v", false, "")
@@ -135,6 +146,33 @@ func main() {
 		}
 		os.Exit(exitCode)
 	}
+}
+
+// redact copies a log with identifying data removed: udstrace redact in.log out.log
+func redact(args []string) {
+	if len(args) != 2 || args[0] == args[1] {
+		usage()
+	}
+	in, err := os.Open(args[0])
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "udstrace:", err)
+		os.Exit(1)
+	}
+	defer in.Close()
+	out, err := os.Create(args[1])
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "udstrace:", err)
+		os.Exit(1)
+	}
+	n, err := udstrace.Redact(in, out)
+	if cerr := out.Close(); err == nil {
+		err = cerr
+	}
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "udstrace:", err)
+		os.Exit(1)
+	}
+	fmt.Fprintf(os.Stderr, "redacted %d line(s) into %s\n", n, args[1])
 }
 
 func load(args []string) ([]*udstrace.Session, error) {
