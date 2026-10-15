@@ -38,6 +38,9 @@ typedef struct {
     const uint8_t *(*view)(void *ctx, uint32_t addr, uint32_t size);
     shim_time (*now)(void *ctx);
     void (*log)(void *ctx, const char *line, size_t len);
+    /// Optional. Called with each request before it is forwarded; returning nonzero means it
+    /// wrote the reply into cmd itself and the real service never sees the request.
+    int (*answer)(void *ctx, const char *port, uint32_t *cmd);
 } shim_ops;
 
 typedef struct {
@@ -56,6 +59,7 @@ typedef struct {
 
     uint32_t requests;
     uint32_t failures; ///< forwarded requests whose send failed
+    uint32_t answered; ///< requests ops->answer replied to without forwarding
 } shim_session;
 
 /// Serves the session until the game closes it (returns 0) or the kernel reports an error

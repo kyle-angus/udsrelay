@@ -83,6 +83,46 @@ int shim_config_parse(shim_config *cfg, const char *text, size_t len) {
                     } else {
                         cfg->payload_max = value < 0 ? -1 : value;
                     }
+                } else if (klen == 5 && memcmp(text + i, "relay", 5) == 0) {
+                    const char *colon = NULL;
+                    for (const char *q = v; q < text + end; q++) {
+                        if (*q == ':') {
+                            colon = q;
+                        }
+                    }
+                    char port[8];
+                    const size_t hlen = colon ? (size_t)(colon - v) : 0;
+                    const size_t plen = colon ? (size_t)(text + end - colon - 1) : 0;
+                    long pn = 0;
+                    if (colon && hlen > 0 && hlen < sizeof(cfg->relay_host) && plen > 0 && plen < sizeof(port)) {
+                        memcpy(port, colon + 1, plen);
+                        port[plen] = '\0';
+                        char *endp;
+                        pn = strtol(port, &endp, 10);
+                        if (*endp != '\0') {
+                            pn = 0;
+                        }
+                    }
+                    if (pn > 0 && pn < 65536) {
+                        memcpy(cfg->relay_host, v, hlen);
+                        cfg->relay_host[hlen] = '\0';
+                        cfg->relay_port = (unsigned short)pn;
+                    } else {
+                        bad++;
+                    }
+                } else if (klen == 5 && memcmp(text + i, "lobby", 5) == 0) {
+                    if (vlen > 0 && vlen < sizeof(cfg->lobby)) {
+                        memcpy(cfg->lobby, v, vlen);
+                        cfg->lobby[vlen] = '\0';
+                    } else {
+                        bad++;
+                    }
+                } else if (klen == 8 && memcmp(text + i, "fake_ndm", 8) == 0) {
+                    if (vlen == 1 && (*v == '0' || *v == '1')) {
+                        cfg->fake_ndm = *v == '1';
+                    } else {
+                        bad++;
+                    }
                 } else {
                     bad++;
                 }

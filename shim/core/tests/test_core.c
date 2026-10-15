@@ -166,6 +166,15 @@ static void test_config(void) {
     const char toolong[] = "ports=nwm::UDSX,ndm:u";
     shim_config_parse(&cfg, toolong, sizeof(toolong) - 1);
     CHECK(cfg.nports == 1 && shim_config_traces(&cfg, "ndm:u"));
+
+    CHECK(cfg.relay_host[0] == '\0' && cfg.lobby[0] == '\0' && !cfg.fake_ndm);
+    const char relay[] = "relay = relay.example.net:28300\nlobby = 3q2-hEXAMPLE key\nfake_ndm = 1\n";
+    CHECK(shim_config_parse(&cfg, relay, sizeof(relay) - 1) == 0);
+    CHECK(strcmp(cfg.relay_host, "relay.example.net") == 0 && cfg.relay_port == 28300);
+    CHECK(strcmp(cfg.lobby, "3q2-hEXAMPLE key") == 0 && cfg.fake_ndm == 1);
+    const char badrelay[] = "relay = nohost\nrelay = :1\nrelay = h:99999\nrelay = h:12x\nfake_ndm = yes\n";
+    CHECK(shim_config_parse(&cfg, badrelay, sizeof(badrelay) - 1) == 5);
+    CHECK(strcmp(cfg.relay_host, "relay.example.net") == 0 && cfg.relay_port == 28300); // unchanged
 }
 
 static void test_ring(void) {
@@ -475,7 +484,7 @@ static void test_session(const char *fixture_path) {
     s.line = malloc(SHIM_TRACE_LINE_MAX);
 
     shim_ops ops = {&k, f_cmdbuf, f_static, f_send_sync, f_reply_and_receive, f_close,
-                    f_addr_of, f_view, f_now, f_log};
+                    f_addr_of, f_view, f_now, f_log, NULL};
     CHECK(shim_session_run(&s, &ops) == 0);
 
     CHECK(s.requests == 5 && s.failures == 0);
@@ -546,10 +555,59 @@ static void test_session_error_result(void) {
     s.bank_rsp = arena_alloc(&k, SHIM_STATIC_SLOTS * s.slot_size);
     s.line = malloc(SHIM_TRACE_LINE_MAX);
     shim_ops ops = {&k, f_cmdbuf, f_static, f_send_sync, f_reply_and_receive, f_close,
-                    f_addr_of, f_view, f_now, f_log};
+                    f_addr_of, f_view, f_now, f_log, NULL};
     CHECK(shim_session_run(&s, &ops) == 0);
     CHECK(k.nreplies == 1 && k.replies[0][1] == 0xC8A0CFEF);
     CHECK(strstr(k.text, "words=0x000b0040,0xc8a0cfef\n") != NULL);
+    free(s.line);
+    free(k.arena);
+}
+
+// ops->answer replies to ndm:u's EnterExclusiveState itself: the real service never runs.
+static int answer_ndm(void *ctx, const char *port, uint32_t *cmd) {
+    (void)ctx;
+    if (strcmp(port, "ndm:u") != 0 || (cmd[0] >> 16) != 0x0001) {
+        return 0;
+    }
+    cmd[0] = SHIM_IPC_MAKE_HEADER(0x0001, 1, 0);
+    cmd[1] = 0;
+    return 1;
+}
+
+static void test_session_answer(void) {
+    fake_kernel k;
+    memset(&k, 0, sizeof(k));
+    k.arena = calloc(1, ARENA_SIZE);
+    k.cmdbuf = arena_alloc(&k, 0x100);
+    k.static_bufs = arena_alloc(&k, 0x80);
+    k.service = failing_nwm; // would answer 0xC8A0CFEF if it were reached
+    k.next_handle = 0x100;
+    fake_msg req[2];
+    memset(req, 0, sizeof(req));
+    req[0].words[0] = 0x00010042; // EnterExclusiveState(2) + process ID descriptor
+    req[0].words[1] = 2;
+    req[0].words[2] = 0x20;
+    req[1].words[0] = 0x00020002; // LeaveExclusiveState: forwarded
+    req[1].words[1] = 0x20;
+    k.requests = req;
+    k.nrequests = 2;
+    shim_session s;
+    memset(&s, 0, sizeof(s));
+    s.port = "ndm:u";
+    s.server = 1;
+    s.real = 2;
+    s.proc = "";
+    s.slot_size = 0x100;
+    s.bank_req = arena_alloc(&k, SHIM_STATIC_SLOTS * s.slot_size);
+    s.bank_rsp = arena_alloc(&k, SHIM_STATIC_SLOTS * s.slot_size);
+    s.line = malloc(SHIM_TRACE_LINE_MAX);
+    shim_ops ops = {&k, f_cmdbuf, f_static, f_send_sync, f_reply_and_receive, f_close,
+                    f_addr_of, f_view, f_now, f_log, answer_ndm};
+    CHECK(shim_session_run(&s, &ops) == 0);
+    CHECK(k.nreplies == 2 && k.replies[0][0] == 0x00010040 && k.replies[0][1] == 0);
+    CHECK(k.replies[1][1] == 0xC8A0CFEF); // the second request did reach the service
+    CHECK(s.answered == 1 && s.requests == 2);
+    CHECK(strstr(k.text, "ndm:u: answered 0x0001 locally") != NULL);
     free(s.line);
     free(k.arena);
 }
@@ -802,6 +860,7 @@ int main(int argc, char **argv) {
     test_ring();
     test_session(fixture);
     test_session_error_result();
+    test_session_answer();
     test_sha256();
     test_relay_wire();
     test_relay_client();

@@ -186,8 +186,16 @@ shim_result_t shim_session_run(shim_session *s, const shim_ops *ops) {
         shim_handle_t req_copies[MAX_PENDING_CLOSE];
         const int nreq_copies = collect_copy_handles(&msg, req, req_copies, 0);
 
-        shim_session_set_static_bufs(ops, s->bank_rsp, s->slot_size);
-        rc = ops->send_sync(ops->ctx, s->real);
+        if (ops->answer && ops->answer(ops->ctx, s->port, cmd)) {
+            rc = 0;
+            s->answered++;
+            char m[64];
+            snprintf(m, sizeof(m), "%s: answered 0x%04x locally", s->port, id);
+            note(s, ops, "Info", m);
+        } else {
+            shim_session_set_static_bufs(ops, s->bank_rsp, s->slot_size);
+            rc = ops->send_sync(ops->ctx, s->real);
+        }
 
         for (int i = 0; i < nreq_copies; i++) {
             ops->close_handle(ops->ctx, req_copies[i]);

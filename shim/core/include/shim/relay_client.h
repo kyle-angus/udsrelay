@@ -15,6 +15,10 @@
 
 #include "shim/relay_wire.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define SHIM_RELAY_NETINFO_SIZE 0x108
 #define SHIM_RELAY_NODEINFO_SIZE 0x28
 #define SHIM_RELAY_MAX_NODES 16
@@ -136,3 +140,7 @@ size_t shim_relay_scan(uint8_t *out, size_t cap, uint32_t comm_id, uint8_t id8);
 size_t shim_relay_join(uint8_t *out, size_t cap, uint32_t network_id, const uint8_t pass_hash[32], uint8_t conn_type,
                        const uint8_t self[SHIM_RELAY_NODEINFO_SIZE]);
 size_t shim_relay_eject(uint8_t *out, size_t cap, uint16_t node);
+
+#ifdef __cplusplus
+}
+#endif

@@ -9,6 +9,14 @@
 #include <3ds.h>
 #include <CTRPluginFramework.hpp>
 
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <poll.h>
+#include <sys/socket.h>
+#include <unistd.h>
+
+#include <cerrno>
 #include <cstdarg>
 #include <cstdio>
 #include <cstring>
@@ -16,6 +24,7 @@
 
 #include "shim/config.h"
 #include "shim/finder.h"
+#include "shim/relay_client.h"
 #include "shim/ring.h"
 #include "shim/session.h"
 #include "shim/trace.h"
@@ -140,8 +149,37 @@ const uint8_t *OpsView(void *, uint32_t addr, uint32_t) { return reinterpret_cas
 shim_time OpsNow(void *) { return Now(); }
 void OpsLog(void *, const char *line, size_t len) { LogLine(line, len); }
 
+// fake_ndm: the exclusive state the game believes it is in. The real NDM never leaves "none",
+// so infrastructure Wi-Fi (and the relay socket) stays up while the game plays locally.
+volatile u32 g_fakeExclusive;
+
+// Answers ndm:u's exclusive-state calls when fake_ndm is on; everything else is forwarded.
+int OpsAnswer(void *, const char *port, uint32_t *cmd) {
+    if (!g_cfg.fake_ndm || std::strcmp(port, "ndm:u") != 0) {
+        return 0;
+    }
+    switch (cmd[0] >> 16) {
+    case 0x0001: // EnterExclusiveState(state, process ID)
+        g_fakeExclusive = cmd[1];
+        cmd[0] = IPC_MakeHeader(0x0001, 1, 0);
+        cmd[1] = 0;
+        return 1;
+    case 0x0002: // LeaveExclusiveState(process ID)
+        g_fakeExclusive = 0;
+        cmd[0] = IPC_MakeHeader(0x0002, 1, 0);
+        cmd[1] = 0;
+        return 1;
+    case 0x0003: // GetExclusiveState
+        cmd[0] = IPC_MakeHeader(0x0003, 2, 0);
+        cmd[1] = 0;
+        cmd[2] = g_fakeExclusive;
+        return 1;
+    }
+    return 0;
+}
+
 const shim_ops g_ops = {nullptr,  OpsCmdbuf, OpsStaticBufs, OpsSendSync, OpsReplyAndReceive,
-                        OpsClose, OpsAddrOf, OpsView,       OpsNow,      OpsLog};
+                        OpsClose, OpsAddrOf, OpsView,       OpsNow,      OpsLog, OpsAnswer};
 
 // ---- sessions -------------------------------------------------------------------------------
 
@@ -342,14 +380,207 @@ void SetWriter(WriterState want) {
     }
 }
 
+// ---- relay check (Phase 4 probe) --------------------------------------------------------
+//
+// With relay= and lobby= set, a thread says HELLO to the relay every 5 s from inside the game
+// and logs what it finds next to the game's own ndm:u calls: whether the plugin can open a
+// socket at all, whether Wi-Fi is up, and whether it stays up through local play.
+
+constexpr u32 kCheckStack = 0x4000;
+constexpr s32 kCheckPriority = 0x30;
+// socInit shares its buffer with soc:U through svcCreateMemoryBlock, which refuses the plugin's
+// own memory (static data at 0x07xxxxxx and the plugin heap at 0x06xxxxxx both fail with
+// 0xE0A01BF5, invalid address): it wants the process's heap region or linear heap. So the
+// buffer is allocated there with svcControlMemory, out of the game's own memory budget.
+constexpr u32 kSocSize = 0x20000;
+constexpr u32 kHeapRegion = 0x08000000, kHeapRegionEnd = 0x10000000;
+
+// Highest address where `size` bytes fit in a free block of [lo, hi), or 0.
+u32 FindFreeVa(u32 lo, u32 hi, u32 size) {
+    u32 best = 0;
+    for (u32 a = lo; a < hi;) {
+        MemInfo mi;
+        PageInfo pi;
+        if (R_FAILED(svcQueryMemory(&mi, &pi, a))) {
+            break;
+        }
+        const u32 end = mi.base_addr + mi.size;
+        if (mi.state == MEMSTATE_FREE) {
+            const u32 top = end < hi ? end : hi;
+            const u32 bottom = mi.base_addr > lo ? mi.base_addr : lo;
+            if (top >= bottom + size) {
+                best = top - size;
+            }
+        }
+        if (end <= a) {
+            break;
+        }
+        a = end;
+    }
+    return best;
+}
+
+// Tries socInit with buffers in the places the kernel might accept, logging each attempt.
+bool SocInitAnywhere() {
+    const MemPerm rw = static_cast<MemPerm>(MEMPERM_READ | MEMPERM_WRITE);
+    struct Attempt {
+        const char *where;
+        u32 addr0;
+        MemOp op;
+    };
+    const u32 va = FindFreeVa(kHeapRegion, kHeapRegionEnd, kSocSize);
+    const Attempt attempts[] = {
+        {"heap region", va, MEMOP_ALLOC},
+        {"linear heap", 0, MEMOP_ALLOC_LINEAR},
+    };
+    for (const Attempt &a : attempts) {
+        if (a.op == MEMOP_ALLOC && !a.addr0) {
+            Note("Warning", "RelayCheck", "no free 0x%lx bytes in the heap region", (unsigned long)kSocSize);
+            continue;
+        }
+        u32 buf = 0;
+        Result rc = svcControlMemory(&buf, a.addr0, 0, kSocSize, a.op, rw);
+        if (R_FAILED(rc)) {
+            Note("Warning", "RelayCheck", "%s: svcControlMemory at 0x%08lx failed 0x%08lx", a.where,
+                 (unsigned long)a.addr0, (unsigned long)rc);
+            continue;
+        }
+        rc = socInit(reinterpret_cast<u32 *>(buf), kSocSize);
+        if (R_SUCCEEDED(rc)) {
+            Note("Info", "RelayCheck", "socInit ok with a %s buffer at 0x%08lx", a.where, (unsigned long)buf);
+            return true;
+        }
+        // Module 6 (OS) is the kernel refusing the buffer; srv refusing soc:U is a different code.
+        Note("Warning", "RelayCheck", "%s buffer at 0x%08lx: socInit failed 0x%08lx (module %lu, description %lu)",
+             a.where, (unsigned long)buf, (unsigned long)rc, (unsigned long)R_MODULE(rc),
+             (unsigned long)R_DESCRIPTION(rc));
+        u32 dummy;
+        svcControlMemory(&dummy, buf, 0, kSocSize, a.op == MEMOP_ALLOC ? MEMOP_FREE : static_cast<MemOp>(MEMOP_LINEAR_FLAG | MEMOP_FREE), MEMPERM_DONTCARE);
+    }
+    return false;
+}
+LightEvent g_run; // signalled while the game is in the foreground; checks park otherwise
+int g_relayFd = -1;
+sockaddr_in g_relayAddr;
+shim_relay_client g_relay;
+volatile int g_lastCheckOk = -1;
+
+void RelaySend(void *, const uint8_t *b, size_t n) {
+    sendto(g_relayFd, b, n, 0, reinterpret_cast<const sockaddr *>(&g_relayAddr), sizeof(g_relayAddr));
+}
+
+bool ResolveRelay() {
+    std::memset(&g_relayAddr, 0, sizeof(g_relayAddr));
+    g_relayAddr.sin_family = AF_INET;
+    g_relayAddr.sin_port = htons(g_cfg.relay_port);
+    if (inet_aton(g_cfg.relay_host, &g_relayAddr.sin_addr)) {
+        return true;
+    }
+    hostent *he = gethostbyname(g_cfg.relay_host);
+    if (!he || he->h_addrtype != AF_INET || !he->h_addr_list[0]) {
+        return false;
+    }
+    std::memcpy(&g_relayAddr.sin_addr, he->h_addr_list[0], sizeof(g_relayAddr.sin_addr));
+    return true;
+}
+
+// One HELLO round trip. Returns the round trip in ms, or -1 with *why set.
+long HelloOnce(const char **why) {
+    shim_relay_ops ops = {nullptr, RelaySend, nullptr, nullptr, nullptr, nullptr};
+    static shim_relay_ops s_ops;
+    s_ops = ops;
+    const uint32_t session = static_cast<uint32_t>(svcGetSystemTick()) | 1;
+    if (shim_relay_client_init(&g_relay, &s_ops, g_cfg.lobby, std::strlen(g_cfg.lobby), session) != 0) {
+        *why = "bad lobby key";
+        return -1;
+    }
+    const u64 start = osGetTime();
+    shim_relay_hello_request(&g_relay, start);
+    while (g_relay.req_state == SHIM_RELAY_REQ_PENDING) {
+        if (!LightEvent_TryWait(&g_run)) {
+            *why = "game left the foreground";
+            return -1;
+        }
+        pollfd pfd = {g_relayFd, POLLIN, 0};
+        if (poll(&pfd, 1, 50) > 0 && (pfd.revents & POLLIN)) {
+            static u8 buf[SHIM_RELAY_MAX_DATAGRAM];
+            const ssize_t n = recv(g_relayFd, buf, sizeof(buf), 0);
+            if (n > 0) {
+                shim_relay_input(&g_relay, buf, static_cast<size_t>(n), osGetTime());
+            }
+        }
+        shim_relay_poll(&g_relay, osGetTime());
+    }
+    if (g_relay.req_state != SHIM_RELAY_REQ_DONE || g_relay.status != SHIM_RELAY_STATUS_OK) {
+        *why = g_relay.stats.bad_tag ? "answers did not verify (wrong lobby key?)" : "no answer";
+        return -1;
+    }
+    return static_cast<long>(osGetTime() - start);
+}
+
+void RelayCheckThread(void *) {
+    Result rc = acInit();
+    if (R_FAILED(rc)) {
+        Note("Error", "RelayCheck", "acInit failed 0x%08lx", (unsigned long)rc);
+    }
+    rc = ndmuInit();
+    const bool haveNdm = R_SUCCEEDED(rc);
+    if (!SocInitAnywhere()) {
+        Note("Error", "RelayCheck", "socInit failed with every buffer; see the lines above");
+        OSD::Notify("UDS shim: socInit failed (see log)", Color::Red);
+        return;
+    }
+    g_relayFd = socket(AF_INET, SOCK_DGRAM, 0);
+    if (g_relayFd < 0) {
+        Note("Error", "RelayCheck", "socket() failed, errno %d", errno);
+        return;
+    }
+    Note("Info", "RelayCheck", "sockets ready; checking %s:%u every 5 s (fake_ndm %d)", g_cfg.relay_host,
+         (unsigned)g_cfg.relay_port, g_cfg.fake_ndm);
+    for (;;) {
+        LightEvent_Wait(&g_run);
+        u32 wifi = 0, acStatus = 0;
+        ACU_GetWifiStatus(&wifi);
+        ACU_GetStatus(&acStatus);
+        ndmExclusiveState real = NDM_EXCLUSIVE_STATE_NONE;
+        if (haveNdm) {
+            NDMU_GetExclusiveState(&real);
+        }
+        const char *why = "";
+        long rtt = -1;
+        if (!ResolveRelay()) {
+            why = "cannot resolve the relay host";
+        } else {
+            rtt = HelloOnce(&why);
+        }
+        const int ok = rtt >= 0;
+        if (ok) {
+            Note("Info", "RelayCheck", "HELLO ok in %ld ms; wifi %lu, ac %lu, ndm exclusive real %d / game %lu", rtt,
+                 (unsigned long)wifi, (unsigned long)acStatus, (int)real, (unsigned long)g_fakeExclusive);
+        } else {
+            Note("Warning", "RelayCheck", "HELLO failed (%s); wifi %lu, ac %lu, ndm exclusive real %d / game %lu",
+                 why, (unsigned long)wifi, (unsigned long)acStatus, (int)real, (unsigned long)g_fakeExclusive);
+        }
+        if (ok != g_lastCheckOk) {
+            g_lastCheckOk = ok;
+            OSD::Notify(ok ? Utils::Format("UDS shim: relay reachable (%ld ms)", rtt)
+                           : Utils::Format("UDS shim: relay unreachable: %s", why),
+                        ok ? Color::Green : Color::Orange);
+        }
+        svcSleepThread(5000 * kNsPerMs);
+    }
+}
+
 void OnProcessEvent(Process::Event event) {
     switch (event) {
     case Process::Event::HOME_EXIT:
     case Process::Event::SWAP_EXIT:
     case Process::Event::SLEEP_EXIT:
+        LightEvent_Signal(&g_run);
         SetWriter(WRITER_RUN);
         break;
     default: // HOME_ENTER, SWAP_ENTER, SLEEP_ENTER, EXIT
+        LightEvent_Clear(&g_run);
         SetWriter(WRITER_PARK);
         break;
     }
@@ -443,9 +674,15 @@ void Start() {
 
     LightEvent_Init(&g_writerIdle, RESET_STICKY);
     LightEvent_Init(&g_writerResume, RESET_ONESHOT);
+    LightEvent_Init(&g_run, RESET_STICKY);
+    LightEvent_Signal(&g_run);
     Process::SetProcessEventCallback(OnProcessEvent);
     if (!threadCreate(WriterThread, nullptr, kWriterStack, kWriterPriority, -2, true)) {
         OSD::Notify("UDS shim: could not start the log writer", Color::Red);
+    }
+    if (g_cfg.relay_host[0] && g_cfg.lobby[0] &&
+        !threadCreate(RelayCheckThread, nullptr, kCheckStack, kCheckPriority, -2, true)) {
+        Note("Error", "Start", "could not start the relay check thread");
     }
 }
 

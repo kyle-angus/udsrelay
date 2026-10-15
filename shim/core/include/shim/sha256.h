@@ -5,6 +5,10 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define SHIM_SHA256_SIZE 32
 #define SHIM_SHA256_BLOCK 64
 
@@ -22,3 +26,7 @@ void shim_sha256(const void *data, size_t n, uint8_t out[SHIM_SHA256_SIZE]);
 
 void shim_hmac_sha256(const void *key, size_t key_len, const void *data, size_t n,
                       uint8_t out[SHIM_SHA256_SIZE]);
+
+#ifdef __cplusplus
+}
+#endif

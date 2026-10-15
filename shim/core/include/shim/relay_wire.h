@@ -8,6 +8,10 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define SHIM_RELAY_VERSION 2
 #define SHIM_RELAY_HEADER_SIZE 12
 #define SHIM_RELAY_TAG_SIZE 16
@@ -64,3 +68,7 @@ long shim_relay_open(const void *key, size_t key_len, const uint8_t *buf, size_t
 /// Builds a sealed HELLO for the lobby into out. Returns its length, or 0 if cap is too small.
 size_t shim_relay_hello(const char *key, size_t key_len, uint32_t session, uint16_t seq, uint8_t *out,
                         size_t cap);
+
+#ifdef __cplusplus
+}
+#endif

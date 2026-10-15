@@ -6,3 +6,13 @@ ports = nwm::UDS, ndm:u
 
 # Bytes of each send/recv/beacon payload to log; -1 logs whole payloads.
 payload_max = 512
+
+# Phase 4 relay check. With relay and lobby set, the shim says HELLO to the relay every 5 s
+# from inside the game and logs whether it got an answer, next to Wi-Fi and NDM state.
+# relay = 192.168.1.20:28300
+# lobby = <the key from the relay's lobbies file>
+
+# Answer ndm:u's EnterExclusiveState/LeaveExclusiveState/GetExclusiveState in the shim instead
+# of passing them to NDM, so infrastructure Wi-Fi stays up while the game plays "locally".
+# The real local wireless (nwm::UDS passthrough) may then fail; that is expected in this check.
+# fake_ndm = 1

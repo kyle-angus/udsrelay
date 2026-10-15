@@ -138,6 +138,49 @@ Phase 2 captures: `battle-hw-01` (two consoles, a full local battle). The first 
 - A full trade and a full battle complete between two consoles with the shim active, with no dropped lines.
 - `compare` shows no commands, results or call-order differences against the Azahar trace beyond the expected ones above, and each remaining difference is written up in the design doc.
 
+## 7. Phase 4 relay check (one console is enough)
+
+Before the shim emulates UDS over the relay, two things need confirming on hardware: that the plugin can open a socket from inside Pokémon X, and that infrastructure Wi-Fi survives the game entering local-wireless mode once the shim fakes NDM's exclusive state.
+
+1. On a PC on the same network as the console, start the relay with a lobby and note the PC's LAN address (System Settings → Network on macOS). Allow incoming UDP 28300 if the firewall asks.
+
+   ```bash
+   go run ./cmd/udsrelay -genkey
+   ```
+
+   ```bash
+   go run ./cmd/udsrelay -listen :28300 -lobby home=<the key>
+   ```
+
+2. On the console, write `sdmc:/udsrelay/shim.ini`:
+
+   ```ini
+   relay = <PC's LAN address>:28300
+   lobby = <the key>
+   fake_ndm = 0
+   ```
+
+3. Install the latest `udsrelay-shim.3gx`, make sure Wi-Fi is on (the HOME menu's Wi-Fi light), launch the game and load the save. Within a few seconds a notification says **relay reachable** or **relay unreachable: why**, and the relay's terminal logs a session. Wait 30 s on the overworld with PSS open, then quit.
+4. Set `fake_ndm = 1`, launch again, wait 30 s with PSS open, then start a local trade search from PSS for 30 s. With the shim answering NDM, real local wireless may not work: an error from the game here is expected and still informative.
+5. Copy both logs off. The `RelayCheck` lines show, every 5 s, whether HELLO got an answer, the Wi-Fi and AC state, and the real NDM exclusive state next to the one the game believes; the `ndm:u` trace lines show when the game asked for local mode.
+
+What the results mean:
+
+| Result | Meaning |
+| --- | --- |
+| `socInit failed 0xe0a01bf5` (module 6) | The kernel refused the socket buffer's address. Fixed by allocating it from the plugin heap; seeing it again means the heap is in an unexpected place. |
+| `socInit failed` with another module | Most likely srv refusing `soc:U` because the game's service access list lacks it. Relay mode would then need a sysmodule outside the game process. |
+| HELLO fails from the start, Wi-Fi 0 | Sockets work but the console is not connected; the shim will have to bring up AC itself before relaying. |
+| HELLO ok at the title screen, fails once PSS starts, `fake_ndm = 0` | The game's EnterExclusiveState drops Wi-Fi, as expected; this is why NDM must be faked. |
+| HELLO keeps working through PSS with `fake_ndm = 1` | Relay mode is feasible from inside the game: the next step is emulating `nwm::UDS` over the relay. |
+
+### Results (2026-10-15, one console, Luma3DS v13.4)
+
+- **Sockets work from inside Pokémon X**, once the socket buffer comes from the game's heap region: `socInit` refused the plugin's own memory (`0xE0A01BF5`, invalid address) and accepted 128 KB allocated with `svcControlMemory` at `0x0ffa0000`. HELLO round trips on the LAN took 30–150 ms (370–610 ms for the first after Wi-Fi comes up).
+- **`fake_ndm = 0`:** when PSS called EnterExclusiveState, real NDM went to local mode, AC dropped (status 3 → 1) and every HELLO failed for 51 s, until LeaveExclusiveState brought Wi-Fi back.
+- **`fake_ndm = 1`:** real NDM stayed in normal mode and HELLO kept working through the game's EnterExclusiveState. Real NWM then refused InitializeWithVersion (`0xE06113F9`) because the console was not in local mode, and the game showed "communication failed". Relay mode avoids this by answering `nwm::UDS` in the shim instead of forwarding it.
+- **Known issue, not the shim:** exiting the game sometimes crashes in `_thread_begin` on core 1 (crash dumps 6 and 8). It is CTRPF's task-scheduler worker for core 1, which never runs while Pokémon X gives core 1 no time, and starts only after the game exit has unmapped the plugin. It happens after the game has closed.
+
 ## Troubleshooting
 
 | Log or symptom | Meaning | Next step |
