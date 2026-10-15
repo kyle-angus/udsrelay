@@ -1,10 +1,10 @@
 // Package relay implements the UDS relay: the UDP wire protocol, the room server both consoles
 // dial outbound, and a Go client for it.
 //
-// Every datagram starts with a 12-byte header, big-endian:
+// Every datagram starts with a 12-byte header, big-endian, and ends with a 16-byte tag:
 //
 //	0  magic   "UR"
-//	2  version 1
+//	2  version 2
 //	3  type    message type (Msg*)
 //	4  session console-chosen session ID, non-zero
 //	8  seq     sender's sequence number
@@ -15,10 +15,18 @@
 // seq and the server answers a repeated seq from a cache, so retries are idempotent. NODE_EVENT is
 // the only server-initiated reliable message: the server sends one at a time per session and
 // retransmits it until the console returns an ACK. DATA and KEEPALIVE are unreliable.
+//
+// The tag is the first 16 bytes of HMAC-SHA256 over the rest of the datagram, keyed by the
+// lobby key. The key never travels: HELLO names the lobby by LobbyID, and the server only
+// serves lobbies it was configured with. A datagram whose tag does not verify is dropped without
+// an answer. Traffic is not encrypted, and a captured datagram can be replayed; the tag stops
+// forged datagrams and strangers using the relay, which is all v2 aims for.
 package relay
 
 import (
 	"context"
+	"crypto/hmac"
+	"crypto/sha256"
 	"encoding/binary"
 	"errors"
 	"fmt"
@@ -26,8 +34,10 @@ import (
 )
 
 const (
-	Version    = 1
+	Version    = 2
 	HeaderSize = 12
+	// TagSize is the truncated HMAC-SHA256 that ends every datagram.
+	TagSize = 16
 	// DataHeaderSize is the DATA payload prefix: src node, dest node, channel, flags.
 	DataHeaderSize = 6
 	// NetInfoSize is the UDS network struct the game passes to BeginHostingNetwork.
@@ -180,6 +190,33 @@ func AppendHeader(b []byte, h Header) []byte {
 	b = binary.BigEndian.AppendUint32(b, h.Session)
 	b = binary.BigEndian.AppendUint16(b, h.Seq)
 	return binary.BigEndian.AppendUint16(b, h.Ack)
+}
+
+// LobbyID names a lobby in HELLO without revealing its key.
+func LobbyID(key string) uint32 {
+	sum := sha256.Sum256([]byte("udsrelay lobby id\x00" + key))
+	return binary.BigEndian.Uint32(sum[:4])
+}
+
+func tag(key, b []byte) []byte {
+	m := hmac.New(sha256.New, key)
+	m.Write(b)
+	return m.Sum(nil)[:TagSize]
+}
+
+// Seal returns a copy of datagram b with its tag appended.
+func Seal(key, b []byte) []byte {
+	out := make([]byte, 0, len(b)+TagSize)
+	return append(append(out, b...), tag(key, b)...)
+}
+
+// Open checks a sealed datagram's tag and returns the datagram without it.
+func Open(key, b []byte) ([]byte, bool) {
+	if len(b) < HeaderSize+TagSize {
+		return nil, false
+	}
+	body := b[:len(b)-TagSize]
+	return body, hmac.Equal(tag(key, body), b[len(b)-TagSize:])
 }
 
 // Packet encodes a header and payload into one datagram.

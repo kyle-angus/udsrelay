@@ -30,7 +30,7 @@ func TestReplayTraces(t *testing.T) {
 			if _, err := os.Stat(dir); err != nil {
 				t.Skipf("trace not present: %v", err)
 			}
-			srv := startRelay(t, relay.Config{})
+			srv := startRelay(t, relay.Config{}, name)
 			rep, err := Replay(ReplayConfig{
 				Relay: srv.Addr().String(),
 				Lobby: name,
@@ -71,7 +71,7 @@ func TestReplayWithLatency(t *testing.T) {
 	if _, err := os.Stat(dir); err != nil {
 		t.Skipf("trace not present: %v", err)
 	}
-	srv := startRelay(t, relay.Config{})
+	srv := startRelay(t, relay.Config{}, "latency")
 	rep, err := Replay(ReplayConfig{
 		Relay:  srv.Addr().String(),
 		Lobby:  "latency",

@@ -63,8 +63,14 @@ type harness struct {
 	srv *Server
 }
 
+// testLobbies are the lobby keys the tests dial.
+var testLobbies = []Lobby{{Name: "lobby", Key: "lobby"}, {Name: "elsewhere", Key: "elsewhere"}, {Name: "l", Key: "l"}}
+
 func newHarness(t *testing.T, cfg Config) *harness {
 	t.Helper()
+	if cfg.Lobbies == nil {
+		cfg.Lobbies = testLobbies
+	}
 	srv, err := Listen("127.0.0.1:0", cfg)
 	if err != nil {
 		t.Fatal(err)
@@ -242,24 +248,50 @@ func TestRetriedRequestsAreIdempotent(t *testing.T) {
 	}
 	defer raw.Close()
 	// Speak the protocol by hand so the same HOST_CREATE can be sent twice.
-	send := func(typ uint8, seq uint16, p []byte) (Header, []byte) {
+	key := []byte("l")
+	recv := func() (Header, []byte) {
 		t.Helper()
-		if _, err := raw.WriteTo(Packet(Header{Type: typ, Session: 42, Seq: seq}, p), h.srv.Addr()); err != nil {
-			t.Fatal(err)
-		}
 		buf := make([]byte, MaxDatagram)
 		raw.SetReadDeadline(time.Now().Add(time.Second))
 		n, _, err := raw.ReadFrom(buf)
 		if err != nil {
 			t.Fatal(err)
 		}
-		h, payload, err := ParseHeader(buf[:n])
+		body, ok := Open(key, buf[:n])
+		if !ok {
+			t.Fatal("reply tag does not verify")
+		}
+		h, payload, err := ParseHeader(body)
 		if err != nil {
 			t.Fatal(err)
 		}
 		return h, append([]byte(nil), payload...)
 	}
-	send(MsgHello, 1, []byte{1, 'l'})
+	send := func(typ uint8, seq uint16, p []byte) (Header, []byte) {
+		t.Helper()
+		if _, err := raw.WriteTo(Seal(key, Packet(Header{Type: typ, Session: 42, Seq: seq}, p)), h.srv.Addr()); err != nil {
+			t.Fatal(err)
+		}
+		return recv()
+	}
+	hello := binary.BigEndian.AppendUint32(nil, LobbyID("l"))
+	// Datagrams without a valid tag get no answer at all: untagged, or sealed with the wrong key.
+	for _, b := range [][]byte{
+		Packet(Header{Type: MsgHello, Session: 42, Seq: 1}, hello),
+		Seal([]byte("wrong"), Packet(Header{Type: MsgHello, Session: 42, Seq: 1}, hello)),
+	} {
+		if _, err := raw.WriteTo(b, h.srv.Addr()); err != nil {
+			t.Fatal(err)
+		}
+	}
+	raw.SetReadDeadline(time.Now().Add(200 * time.Millisecond))
+	if _, _, err := raw.ReadFrom(make([]byte, MaxDatagram)); err == nil {
+		t.Fatal("relay answered a datagram without a valid tag")
+	}
+	if st := h.srv.Stats(); st.BadTag != 2 || st.Sessions != 0 {
+		t.Fatalf("after two bad datagrams: BadTag %d, sessions %d", st.BadTag, st.Sessions)
+	}
+	send(MsgHello, 1, hello)
 	create := append(append(append([]byte{}, pass[:]...), make([]byte, NodeInfoSize)...), netInfo(1, 1, 4)...)
 	h1, p1 := send(MsgHostCreate, 2, create)
 	h2, p2 := send(MsgHostCreate, 2, create)
@@ -278,17 +310,10 @@ func TestRetriedRequestsAreIdempotent(t *testing.T) {
 	}
 	// Unknown sessions are told to start over.
 	hr, _ := func() (Header, []byte) {
-		if _, err := raw.WriteTo(Packet(Header{Type: MsgKeepalive, Session: 77, Seq: 1}, nil), h.srv.Addr()); err != nil {
+		if _, err := raw.WriteTo(Seal(key, Packet(Header{Type: MsgKeepalive, Session: 77, Seq: 1}, nil)), h.srv.Addr()); err != nil {
 			t.Fatal(err)
 		}
-		buf := make([]byte, MaxDatagram)
-		raw.SetReadDeadline(time.Now().Add(time.Second))
-		n, _, err := raw.ReadFrom(buf)
-		if err != nil {
-			t.Fatal(err)
-		}
-		hh, p, _ := ParseHeader(buf[:n])
-		return hh, p
+		return recv()
 	}()
 	if hr.Type != MsgReset {
 		t.Fatalf("unknown session got %s", MsgName(hr.Type))
@@ -463,7 +488,7 @@ func TestResetAfterServerRestart(t *testing.T) {
 		t.Fatal(err)
 	}
 	addr := conn.LocalAddr().String()
-	srv := NewServer(conn, Config{})
+	srv := NewServer(conn, Config{Lobbies: testLobbies})
 	go srv.Serve()
 	rec := &recorder{}
 	c, err := Dial(addr, Options{Lobby: "l", Keepalive: 30 * time.Millisecond, OnReset: rec.onReset})
@@ -476,7 +501,7 @@ func TestResetAfterServerRestart(t *testing.T) {
 	if err != nil {
 		t.Skipf("cannot rebind %s: %v", addr, err)
 	}
-	srv2 := NewServer(conn2, Config{})
+	srv2 := NewServer(conn2, Config{Lobbies: testLobbies})
 	go srv2.Serve()
 	defer srv2.Close()
 	deadline := time.Now().Add(2 * time.Second)
@@ -494,5 +519,51 @@ func TestResetAfterServerRestart(t *testing.T) {
 	}
 	if _, err := c.Host(netInfo(1, 1, 4), pass, node('h')); err != nil {
 		t.Fatalf("host after reset: %v", err)
+	}
+}
+
+// A captured datagram replayed from another address must not move the session there; a newer
+// one (a NAT rebinding) must.
+func TestReplayCannotMoveSession(t *testing.T) {
+	h := newHarness(t, Config{})
+	key := []byte("l")
+	listen := func() net.PacketConn {
+		c, err := net.ListenPacket("udp", "127.0.0.1:0")
+		if err != nil {
+			t.Fatal(err)
+		}
+		t.Cleanup(func() { c.Close() })
+		return c
+	}
+	console, attacker := listen(), listen()
+	pkt := func(typ uint8, seq uint16, p []byte) []byte {
+		return Seal(key, Packet(Header{Type: typ, Session: 9, Seq: seq}, p))
+	}
+	gotReply := func(c net.PacketConn) bool {
+		c.SetReadDeadline(time.Now().Add(200 * time.Millisecond))
+		_, _, err := c.ReadFrom(make([]byte, MaxDatagram))
+		return err == nil
+	}
+	if _, err := console.WriteTo(pkt(MsgHello, 1, binary.BigEndian.AppendUint32(nil, LobbyID("l"))), h.srv.Addr()); err != nil {
+		t.Fatal(err)
+	}
+	if !gotReply(console) {
+		t.Fatal("no HELLO_ACK")
+	}
+	ka := pkt(MsgKeepalive, 2, make([]byte, 8))
+	console.WriteTo(ka, h.srv.Addr())
+	if !gotReply(console) {
+		t.Fatal("no KEEPALIVE_ACK")
+	}
+	attacker.WriteTo(ka, h.srv.Addr()) // replay of seq 2 from elsewhere
+	if gotReply(attacker) {
+		t.Fatal("replayed datagram moved the session to the attacker")
+	}
+	if !gotReply(console) {
+		t.Fatal("console stopped getting replies after the replay")
+	}
+	attacker.WriteTo(pkt(MsgKeepalive, 3, make([]byte, 8)), h.srv.Addr()) // newer: a real rebinding
+	if !gotReply(attacker) {
+		t.Fatal("a newer datagram from a new address did not move the session")
 	}
 }

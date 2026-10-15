@@ -15,6 +15,8 @@ import (
 // Options configure a Client. Callbacks run on the client's read goroutine; they must not block
 // or call back into the client's request methods.
 type Options struct {
+	// Lobby is the lobby key, shared with the relay's lobby list and the other console. It
+	// authenticates every datagram and is never sent.
 	Lobby string
 	// SessionID is chosen at random when zero.
 	SessionID uint32
@@ -42,6 +44,7 @@ type Client struct {
 	opts   Options
 	log    *slog.Logger
 	id     uint32
+	key    []byte
 
 	reqMu sync.Mutex // one request in flight at a time
 
@@ -67,8 +70,8 @@ var ErrClosed = errors.New("relay client closed")
 
 // Dial connects to the relay at addr and says HELLO.
 func Dial(addr string, opts Options) (*Client, error) {
-	if len(opts.Lobby) > MaxLobbyKey {
-		return nil, fmt.Errorf("lobby key longer than %d bytes", MaxLobbyKey)
+	if len(opts.Lobby) == 0 || len(opts.Lobby) > MaxLobbyKey {
+		return nil, fmt.Errorf("lobby key must be 1 to %d bytes", MaxLobbyKey)
 	}
 	server, err := net.ResolveUDPAddr("udp", addr)
 	if err != nil {
@@ -93,7 +96,8 @@ func Dial(addr string, opts Options) (*Client, error) {
 	for id == 0 {
 		id = rand.Uint32()
 	}
-	c := &Client{conn: conn, server: server, opts: opts, log: opts.Logger, id: id, done: make(chan struct{})}
+	c := &Client{conn: conn, server: server, opts: opts, log: opts.Logger, id: id, key: []byte(opts.Lobby),
+		done: make(chan struct{})}
 	c.wg.Add(1)
 	go c.readLoop()
 	if err := c.hello(); err != nil {
@@ -115,7 +119,7 @@ func (c *Client) LocalAddr() net.Addr { return c.conn.LocalAddr() }
 func (c *Client) RTT() time.Duration { return time.Duration(c.rtt.Load()) }
 
 func (c *Client) hello() error {
-	p := append([]byte{byte(len(c.opts.Lobby))}, c.opts.Lobby...)
+	p := binary.BigEndian.AppendUint32(nil, LobbyID(c.opts.Lobby))
 	resp, err := c.request(MsgHello, MsgHelloAck, p)
 	if err != nil {
 		return err
@@ -271,7 +275,7 @@ func (c *Client) send(typ uint8, payload []byte, seq uint16) error {
 		seq = c.seq
 	}
 	c.mu.Unlock()
-	_, err := c.conn.WriteTo(Packet(Header{Type: typ, Session: c.id, Seq: seq}, payload), c.server)
+	_, err := c.conn.WriteTo(Seal(c.key, Packet(Header{Type: typ, Session: c.id, Seq: seq}, payload)), c.server)
 	return err
 }
 
@@ -368,7 +372,11 @@ func (c *Client) readLoop() {
 		if !equalAddr(addr, c.server) {
 			continue
 		}
-		h, p, err := ParseHeader(buf[:n])
+		body, ok := Open(c.key, buf[:n])
+		if !ok {
+			continue // not from our relay, or a different lobby key
+		}
+		h, p, err := ParseHeader(body)
 		if err != nil || h.Session != c.id {
 			continue
 		}
@@ -407,7 +415,7 @@ func (c *Client) readLoop() {
 			c.mu.Lock()
 			if c.waitCh != nil && h.Ack == c.waitSeq {
 				select {
-				case c.waitCh <- append([]byte(nil), buf[:n]...):
+				case c.waitCh <- append([]byte(nil), body...):
 				default:
 				}
 			}
@@ -421,7 +429,7 @@ func (c *Client) ackEvent(seq uint16) {
 	c.seq++
 	s := c.seq
 	c.mu.Unlock()
-	_, _ = c.conn.WriteTo(Packet(Header{Type: MsgAck, Session: c.id, Seq: s, Ack: seq}, nil), c.server)
+	_, _ = c.conn.WriteTo(Seal(c.key, Packet(Header{Type: MsgAck, Session: c.id, Seq: s, Ack: seq}, nil)), c.server)
 }
 
 func (c *Client) keepaliveLoop() {

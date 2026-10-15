@@ -39,7 +39,7 @@ make -C shim/core test
 ```
 
 ```bash
-go run ./cmd/udsrelay
+go run ./cmd/udsrelay -lobby test=test-key
 ```
 
 ```bash

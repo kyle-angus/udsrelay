@@ -20,8 +20,12 @@ const (
 
 var xyPassphrase = []byte("GNgBwMcVotYs\x00")
 
-func startRelay(t *testing.T, cfg relay.Config) *relay.Server {
+// startRelay runs a relay serving the given lobby keys.
+func startRelay(t *testing.T, cfg relay.Config, lobbies ...string) *relay.Server {
 	t.Helper()
+	for _, k := range lobbies {
+		cfg.Lobbies = append(cfg.Lobbies, relay.Lobby{Name: k, Key: k})
+	}
 	srv, err := relay.Listen("127.0.0.1:0", cfg)
 	if err != nil {
 		t.Fatal(err)
@@ -65,7 +69,7 @@ func wantStatus(t *testing.T, c *Console, what string, want ConnectionStatus) {
 // TestPhase3Exit is the Phase 3 exit criterion: two fake consoles host, scan, join, exchange
 // data and see leave events through the relay.
 func TestPhase3Exit(t *testing.T) {
-	srv := startRelay(t, relay.Config{Timeout: 600 * time.Millisecond, KeepaliveInterval: 100 * time.Millisecond})
+	srv := startRelay(t, relay.Config{Timeout: 600 * time.Millisecond, KeepaliveInterval: 100 * time.Millisecond}, "exit")
 	host := newConsole(t, srv, "exit", "Kangus", 0x1111)
 	guest := newConsole(t, srv, "exit", "kangus", 0x2222)
 

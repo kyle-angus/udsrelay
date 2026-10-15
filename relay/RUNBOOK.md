@@ -19,13 +19,27 @@ go test ./...
 
 ## Run the server
 
+Every lobby has a key that the relay and each console in it share; nobody without it can use the relay (see Authentication below). Make one:
+
 ```bash
-go run ./cmd/udsrelay -listen :28300
+go run ./cmd/udsrelay -genkey
+```
+
+Put it in a lobbies file, one `name key` per line (`#` starts a comment), and keep that file private:
+
+```text
+home 3q2-hEXAMPLEkeyOnlyDoNotUse0aBcD
+```
+
+```bash
+go run ./cmd/udsrelay -listen :28300 -lobbies lobbies.txt
 ```
 
 | Flag | Default | Meaning |
 | --- | --- | --- |
 | `-listen` | `:28300` | UDP address. Open this UDP port on the firewall; consoles need nothing opened. |
+| `-lobbies` | none | Lobbies file. The server refuses to start without at least one lobby. |
+| `-lobby` | none | `name=key`, repeatable, for local tests. Keys given this way show up in `ps`. |
 | `-timeout` | `5s` | A console silent this long is dropped and its peers get a node-left event. |
 | `-keepalive` | `1s` | Keepalive interval the server tells consoles to use. |
 | `-stats` | `1m` | Log counters this often. |
@@ -35,15 +49,21 @@ At the default level the log shows sessions, joins, leaves (with the reason: cle
 
 ## Run fake consoles
 
-Two terminals against a local server:
+Three terminals: a local server with a throwaway lobby, then the two consoles using its key.
 
 ```bash
-go run ./cmd/udsfake host -relay 127.0.0.1:28300 -lobby test
+go run ./cmd/udsrelay -listen 127.0.0.1:28300 -lobby test=test-key
 ```
 
 ```bash
-go run ./cmd/udsfake join -relay 127.0.0.1:28300 -lobby test
+go run ./cmd/udsfake host -relay 127.0.0.1:28300 -lobby test-key
 ```
+
+```bash
+go run ./cmd/udsfake join -relay 127.0.0.1:28300 -lobby test-key
+```
+
+`-lobby` on `udsfake` is the key, not the name. A console with a key the relay does not know gets no answer and fails with "HELLO: relay did not answer".
 
 The host opens a trade network as X/Y does (comm ID `0x00055d10`, ID8 `0x01`, 4 nodes) and waits. The joiner scans, joins as node 2, and both send `-packets` self-checking frames on channel 243 at `-rate` frames per second (default 20 at 3.5/s, X/Y's rate) and check what they receive byte for byte. Then the joiner leaves, and the host prints how long the leave took to reach it. Each exits non-zero on a missing or corrupt frame.
 
@@ -78,12 +98,12 @@ The 5 s timeout is the design doc's figure. It is far inside the game's own 23�
 
 ## Wire protocol
 
-UDP, big-endian, version 1. Every datagram starts with a 12-byte header:
+UDP, big-endian, version 2. Every datagram starts with a 12-byte header and ends with a 16-byte authentication tag (see Authentication below):
 
 | Offset | Size | Field |
 | --- | --- | --- |
 | 0 | 2 | magic `UR` |
-| 2 | 1 | version (1) |
+| 2 | 1 | version (2) |
 | 3 | 1 | message type |
 | 4 | 4 | session ID, chosen at random by the console, non-zero |
 | 8 | 2 | sequence number |
@@ -93,7 +113,7 @@ The console retries requests every 250 ms until the response arrives (3 s limit)
 
 | Type | Name | Direction | Payload |
 | --- | --- | --- | --- |
-| 1 | HELLO | → relay | u8 key length, lobby key (≤ 64 bytes) |
+| 1 | HELLO | → relay | u32 lobby ID: the first 4 bytes of SHA-256(`"udsrelay lobby id\0"` + key). The key itself is never sent. |
 | 2 | HELLO_ACK | ← relay | status, u16 keepalive ms, u16 timeout ms |
 | 3 | HOST_CREATE | → relay | SHA-256(passphrase) [32], host NodeInfo [0x28], network struct [0x108] |
 | 4 | HOST_ACK | ← relay | status, u32 network ID |
@@ -118,9 +138,20 @@ The console retries requests every 250 ms until the response arrives (3 s limit)
 
 The relay overwrites a DATA frame's source with the sender's node ID. It routes to one node, or to every other member and spectator for 0xFFFF; spectators cannot send. Overhead is 18 bytes of relay header plus 28 of IP and UDP, so X/Y's largest frame (1349 bytes) makes a 1395-byte IP packet. Payloads up to 1454 bytes fit a 1500-byte MTU, and anything larger, up to UDS's 0x5C6 limit, relies on IP fragmentation; Phase 5 should measure whether that hurts.
 
+## Authentication
+
+The design doc's v1 choice, kept deliberately small: every datagram ends with the first 16 bytes of HMAC-SHA256 over the rest of the datagram (header and payload), keyed by the lobby key. Both directions are tagged.
+
+- The relay only serves lobbies from its lobbies file. A HELLO names its lobby by lobby ID; the relay verifies the tag with that lobby's key and drops the datagram if it does not match. A datagram from a known session is checked against that session's key.
+- Datagrams without a valid tag get no answer at all and count as `BadTag` in the stats, so strangers cannot use the relay or make it send traffic to a spoofed address. A console whose session the relay lost (restart or timeout) still gets RESET, because its tag verifies against one of the configured keys.
+- Consoles drop anything from the relay whose tag does not verify.
+- A session's address only changes when a datagram arrives with a newer sequence number than any seen before. A replayed old datagram from somewhere else is answered to the session's real address and cannot redirect its traffic; a genuine NAT rebinding moves the session with the next keepalive.
+
+What it does not do: encrypt anything, or reject replays outright. A replayed request gets the cached answer (sent to the real console), and a replayed DATA frame is delivered again, which the game sees as a duplicate packet. Closing those gaps means a handshake with per-session keys and an AEAD; the design doc records this as a later step.
+
 ## Not done yet
 
-- **No authentication.** Traffic is in the clear, and anyone who learns a session ID can speak for it. Add the design doc's HMAC keyed by the lobby key before exposing the relay publicly.
+- **Authentication only, not encryption.** Traffic, including each console's NodeInfo (username, friend-code seed) and game data, crosses the internet in the clear. A captured datagram can be replayed; see Authentication.
 - **No reliable data mode.** The design doc's optional per-channel reliable mode is not built. X/Y's hardware battle completed with 3–4% of frames unreceived, so plain UDP may be enough for it.
 - **Join failure result.** No trace shows what NWM returns when ConnectToNetwork fails; the fake returns `0xC8A113EA` as a placeholder.
 - **0x0023's word.** It is not constant on hardware. battle-hw-01 shows `0xebee1fff`, `0x16c31fff`, `0xd3841fff` and `0x36791fff`, one per initialisation; only the low half (`0x1fff`) repeats. The fake returns `0x00881fff` as the design doc says, and the replay compares only the low half.

@@ -22,7 +22,15 @@ type Config struct {
 	Timeout time.Duration
 	// Retransmit is how often an unacknowledged NODE_EVENT is resent. Default 200 ms.
 	Retransmit time.Duration
-	Logger     *slog.Logger
+	// Lobbies the server serves. A console must know a lobby's key to use it: every datagram
+	// carries an HMAC keyed by it. With none configured, every datagram is dropped.
+	Lobbies []Lobby
+	Logger  *slog.Logger
+}
+
+// Lobby is one shared key. Name only labels it in logs; consoles name it by LobbyID(Key).
+type Lobby struct {
+	Name, Key string
 }
 
 func (c *Config) setDefaults() {
@@ -49,7 +57,8 @@ type Server struct {
 
 	mu       sync.Mutex
 	sessions map[uint32]*session
-	rooms    map[uint32]*room // by network ID
+	rooms    map[uint32]*room  // by network ID
+	lobbies  map[uint32]*Lobby // by LobbyID
 	stats    Stats
 	done     chan struct{}
 	closed   bool
@@ -60,6 +69,7 @@ type Stats struct {
 	Sessions, Rooms        int // current
 	DataIn, DataOut        uint64
 	DataDropped            uint64 // undeliverable: no such node, sender not in a room, spectator sender
+	BadTag                 uint64 // datagrams dropped for a missing or wrong HMAC, or an unknown lobby
 	Timeouts               uint64
 	EventsSent, EventsAckd uint64
 }
@@ -67,8 +77,10 @@ type Stats struct {
 type session struct {
 	id       uint32
 	addr     net.Addr
-	lobby    string
+	lobby    string // LobbyID in hex; rooms match on it
+	key      []byte
 	lastSeen time.Time
+	lastIn   uint16 // newest seq received; only a newer datagram may move the session's address
 
 	room      *room
 	node      uint16 // 0 while not in a room or as a spectator
@@ -120,10 +132,19 @@ func (r *room) setNodes() {
 // NewServer wraps a bound packet conn. Call Serve to run it.
 func NewServer(conn net.PacketConn, cfg Config) *Server {
 	cfg.setDefaults()
-	return &Server{
+	s := &Server{
 		conn: conn, cfg: cfg, log: cfg.Logger,
-		sessions: map[uint32]*session{}, rooms: map[uint32]*room{}, done: make(chan struct{}),
+		sessions: map[uint32]*session{}, rooms: map[uint32]*room{}, lobbies: map[uint32]*Lobby{},
+		done: make(chan struct{}),
 	}
+	for i := range cfg.Lobbies {
+		l := &cfg.Lobbies[i]
+		if l.Name == "" {
+			l.Name = hex32(LobbyID(l.Key))
+		}
+		s.lobbies[LobbyID(l.Key)] = l
+	}
+	return s
 }
 
 // Listen binds addr (e.g. ":28300") and returns a server ready to Serve.
@@ -205,8 +226,10 @@ func (s *Server) tick() {
 	}
 }
 
+// write seals b with the session's lobby key and sends it. Callers keep b unsealed, so cached
+// responses and in-flight events can be resent.
 func (s *Server) write(ss *session, b []byte) {
-	if _, err := s.conn.WriteTo(b, ss.addr); err != nil {
+	if _, err := s.conn.WriteTo(Seal(ss.key, b), ss.addr); err != nil {
 		s.log.Debug("write", "session", hex32(ss.id), "err", err)
 	}
 }
@@ -227,7 +250,7 @@ func isRequest(t uint8) bool {
 }
 
 func (s *Server) handle(b []byte, addr net.Addr) {
-	h, p, err := ParseHeader(b)
+	h, _, err := ParseHeader(b)
 	if err != nil || h.Session == 0 {
 		return
 	}
@@ -236,26 +259,42 @@ func (s *Server) handle(b []byte, addr net.Addr) {
 	if s.closed {
 		return
 	}
+	if len(b) < HeaderSize+TagSize {
+		s.stats.BadTag++
+		return
+	}
 	ss := s.sessions[h.Session]
-	if ss == nil {
+	var p []byte
+	if ss != nil {
+		body, ok := Open(ss.key, b)
+		if !ok {
+			s.stats.BadTag++
+			return
+		}
+		p = body[HeaderSize:]
+	} else {
+		lb, body := s.authenticate(h, b)
+		if lb == nil {
+			s.stats.BadTag++
+			return
+		}
 		if h.Type != MsgHello {
 			// Unknown session: the server restarted or timed it out. Tell it to start over.
-			s.write(&session{id: h.Session, addr: addr}, Packet(Header{Type: MsgReset, Session: h.Session, Ack: h.Seq}, nil))
+			s.write(&session{id: h.Session, addr: addr, key: []byte(lb.Key)}, Packet(Header{Type: MsgReset, Session: h.Session, Ack: h.Seq}, nil))
 			return
 		}
-		r := reader{b: p}
-		key := string(r.take(int(r.u8())))
-		if r.err != nil || len(key) > MaxLobbyKey {
-			return
-		}
-		ss = &session{id: h.Session, addr: addr, lobby: key}
+		p = body[HeaderSize:]
+		ss = &session{id: h.Session, addr: addr, lobby: hex32(LobbyID(lb.Key)), key: []byte(lb.Key), lastIn: h.Seq}
 		s.sessions[h.Session] = ss
-		s.log.Info("session", "session", hex32(ss.id), "addr", addr, "lobby", key)
+		s.log.Info("session", "session", hex32(ss.id), "addr", addr, "lobby", lb.Name)
 	}
 	ss.lastSeen = time.Now()
-	if ss.addr.String() != addr.String() {
-		s.log.Info("session moved", "session", hex32(ss.id), "from", ss.addr, "to", addr)
-		ss.addr = addr
+	if seqAfter(h.Seq, ss.lastIn) {
+		ss.lastIn = h.Seq
+		if ss.addr.String() != addr.String() {
+			s.log.Info("session moved", "session", hex32(ss.id), "from", ss.addr, "to", addr)
+			ss.addr = addr
+		}
 	}
 	if isRequest(h.Type) {
 		if ss.haveReq && h.Seq == ss.lastReqSeq {
@@ -280,6 +319,30 @@ func (s *Server) handle(b []byte, addr net.Addr) {
 			s.sendNextEvent(ss)
 		}
 	}
+}
+
+// authenticate finds the lobby a datagram from an unknown session belongs to: a HELLO names it,
+// anything else (a console whose session the server lost) is tried against every lobby key.
+func (s *Server) authenticate(h Header, b []byte) (*Lobby, []byte) {
+	if h.Type == MsgHello {
+		if len(b) < HeaderSize+4+TagSize {
+			return nil, nil
+		}
+		lb := s.lobbies[binary.BigEndian.Uint32(b[HeaderSize:])]
+		if lb == nil {
+			return nil, nil
+		}
+		if body, ok := Open([]byte(lb.Key), b); ok {
+			return lb, body
+		}
+		return nil, nil
+	}
+	for _, lb := range s.lobbies {
+		if body, ok := Open([]byte(lb.Key), b); ok {
+			return lb, body
+		}
+	}
+	return nil, nil
 }
 
 // request handles one new request and returns the datagrams it sent, for the dedup cache.

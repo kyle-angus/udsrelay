@@ -58,7 +58,7 @@ type common struct {
 
 func (c *common) register(fs *flag.FlagSet) {
 	fs.StringVar(&c.relay, "relay", "127.0.0.1:28300", "relay address")
-	fs.StringVar(&c.lobby, "lobby", "test", "lobby key; only consoles sharing it see each other")
+	fs.StringVar(&c.lobby, "lobby", "test-key", "lobby key, as in the relay's lobbies file; it authenticates every datagram and is never sent")
 	fs.Float64Var(&c.loss, "loss", 0, "drop this fraction of datagrams each way (0..1)")
 	fs.DurationVar(&c.delay, "delay", 0, "add this much latency to every datagram sent")
 	fs.BoolVar(&c.verbose, "v", false, "log relay client activity")
