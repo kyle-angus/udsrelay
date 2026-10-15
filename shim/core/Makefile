@@ -13,6 +13,12 @@ build/test_core: $(SRC) tests/test_core.c $(wildcard include/shim/*.h)
 test: build/test_core
 	./build/test_core
 
+# PC-only probe: the relay client over a real UDP socket. internal/relay/probe_test.go builds and
+# runs it against the Go relay.
+build/relay_probe: $(SRC) tests/relay_probe.c $(wildcard include/shim/*.h)
+	@mkdir -p build
+	$(CC) $(CFLAGS) -Iinclude $(SRC) tests/relay_probe.c -o $@
+
 # Regenerates the simulated console log that the Go udstrace tests parse.
 fixtures: build/test_core
 	./build/test_core $(FIXTURE)

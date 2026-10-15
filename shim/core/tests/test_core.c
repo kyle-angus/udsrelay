@@ -12,6 +12,7 @@
 #include "shim/config.h"
 #include "shim/finder.h"
 #include "shim/ipc.h"
+#include "shim/relay_client.h"
 #include "shim/relay_wire.h"
 #include "shim/ring.h"
 #include "shim/session.h"
@@ -626,6 +627,171 @@ static void test_relay_wire(void) {
     CHECK(shim_relay_header_get(buf, n, &h) == -1);
 }
 
+/* -------------------------------------------------------------- relay client */
+
+// A fake transport: records what the client sends and what it reports.
+typedef struct {
+    uint8_t sent[16][SHIM_RELAY_MAX_DATAGRAM];
+    size_t sent_len[16];
+    int nsent;
+    int data, events, resets, scans;
+    shim_relay_event last_event;
+    uint16_t data_src;
+    uint8_t data_payload[16];
+} fake_net;
+
+static void fn_send(void *ctx, const uint8_t *b, size_t n) {
+    fake_net *f = (fake_net *)ctx;
+    if (f->nsent < 16) {
+        memcpy(f->sent[f->nsent], b, n);
+        f->sent_len[f->nsent] = n;
+    }
+    f->nsent++;
+}
+static void fn_data(void *ctx, uint16_t src, uint16_t dst, uint8_t ch, uint8_t fl, const uint8_t *p, size_t n) {
+    fake_net *f = (fake_net *)ctx;
+    (void)dst, (void)ch, (void)fl;
+    f->data++;
+    f->data_src = src;
+    memcpy(f->data_payload, p, n < 16 ? n : 16);
+}
+static void fn_event(void *ctx, const shim_relay_event *e) {
+    fake_net *f = (fake_net *)ctx;
+    f->events++;
+    f->last_event = *e;
+}
+static void fn_reset(void *ctx) { ((fake_net *)ctx)->resets++; }
+static void fn_scan(void *ctx, uint8_t index, uint8_t total, const uint8_t *net, size_t n) {
+    (void)index, (void)total, (void)net, (void)n;
+    ((fake_net *)ctx)->scans++;
+}
+
+// Feeds the client a datagram as the relay would send it.
+static void from_relay(shim_relay_client *c, const char *key, uint8_t type, uint16_t seq, uint16_t ack,
+                       const uint8_t *p, size_t n, uint64_t now) {
+    uint8_t b[SHIM_RELAY_MAX_DATAGRAM];
+    const shim_relay_header h = {type, c->session, seq, ack};
+    shim_relay_header_put(b, &h);
+    memcpy(b + SHIM_RELAY_HEADER_SIZE, p, n);
+    const size_t len = shim_relay_seal(key, strlen(key), b, SHIM_RELAY_HEADER_SIZE + n, sizeof(b));
+    shim_relay_input(c, b, len, now);
+}
+
+static shim_relay_header sent_header(const fake_net *f, int i) {
+    shim_relay_header h = {0, 0, 0, 0};
+    shim_relay_header_get(f->sent[i], f->sent_len[i], &h);
+    return h;
+}
+
+static void test_relay_client(void) {
+    const char *key = "test-key";
+    fake_net f;
+    memset(&f, 0, sizeof(f));
+    const shim_relay_ops ops = {&f, fn_send, fn_data, fn_event, fn_reset, fn_scan};
+    shim_relay_client c;
+    CHECK(shim_relay_client_init(&c, &ops, key, 0, 1) == -1); // empty key
+    CHECK(shim_relay_client_init(&c, &ops, key, 8, 0x01020304) == 0);
+
+    // HELLO goes out sealed and names the lobby; HELLO_ACK sets the keepalive interval.
+    CHECK(shim_relay_hello_request(&c, 1000) == 0);
+    CHECK(f.nsent == 1 && shim_relay_open(key, 8, f.sent[0], f.sent_len[0]) == 16);
+    CHECK(sent_header(&f, 0).type == SHIM_RELAY_HELLO);
+    CHECK(shim_relay_hello_request(&c, 1000) == -1); // one request at a time
+    shim_relay_poll(&c, 1249);
+    CHECK(f.nsent == 1);
+    shim_relay_poll(&c, 1250); // retry
+    CHECK(f.nsent == 2 && memcmp(f.sent[0], f.sent[1], f.sent_len[0]) == 0);
+    const uint8_t hello_ack[] = {0, 0x01, 0xF4, 0x13, 0x88}; // OK, keepalive 500 ms, timeout 5 s
+    from_relay(&c, key, SHIM_RELAY_HELLO_ACK, 1, sent_header(&f, 0).seq, hello_ack, sizeof(hello_ack), 1300);
+    CHECK(c.req_state == SHIM_RELAY_REQ_DONE && c.status == 0 && c.hello_ok && c.keepalive_ms == 500);
+    shim_relay_request_clear(&c);
+
+    // A keepalive every 500 ms, nothing in between.
+    f.nsent = 0;
+    shim_relay_poll(&c, 1500);
+    CHECK(f.nsent == 1 && sent_header(&f, 0).type == SHIM_RELAY_KEEPALIVE);
+    shim_relay_poll(&c, 1999);
+    CHECK(f.nsent == 1);
+
+    // A request that gets no answer fails after 3 s.
+    uint8_t p[512];
+    size_t n = shim_relay_eject(p, sizeof(p), 2);
+    CHECK(shim_relay_request(&c, SHIM_RELAY_EJECT, p, n, 2000) == 0);
+    shim_relay_poll(&c, 4999);
+    CHECK(c.req_state == SHIM_RELAY_REQ_PENDING);
+    shim_relay_poll(&c, 5000);
+    CHECK(c.req_state == SHIM_RELAY_REQ_FAILED);
+    shim_relay_request_clear(&c);
+
+    // A scan collects one datagram per network, ignoring duplicates.
+    f.nsent = 0;
+    n = shim_relay_scan(p, sizeof(p), 0x00055d10, 0x01);
+    CHECK(shim_relay_request(&c, SHIM_RELAY_SCAN_REQ, p, n, 6000) == 0);
+    const uint16_t scan_seq = sent_header(&f, 0).seq;
+    uint8_t net[3 + SHIM_RELAY_NETINFO_SIZE + 2] = {0, 0, 2};
+    from_relay(&c, key, SHIM_RELAY_SCAN_RESP, 2, scan_seq, net, sizeof(net), 6010);
+    from_relay(&c, key, SHIM_RELAY_SCAN_RESP, 3, scan_seq, net, sizeof(net), 6010); // duplicate index 0
+    CHECK(f.scans == 1 && c.req_state == SHIM_RELAY_REQ_PENDING);
+    net[1] = 1;
+    from_relay(&c, key, SHIM_RELAY_SCAN_RESP, 4, scan_seq, net, sizeof(net), 6020);
+    CHECK(f.scans == 2 && c.req_state == SHIM_RELAY_REQ_DONE && c.status == 0);
+    shim_relay_request_clear(&c);
+    // ...and returns what it has if one network's datagram is lost.
+    CHECK(shim_relay_request(&c, SHIM_RELAY_SCAN_REQ, p, n, 7000) == 0);
+    net[1] = 0;
+    from_relay(&c, key, SHIM_RELAY_SCAN_RESP, 5, c.req_seq, net, sizeof(net), 7010);
+    shim_relay_poll(&c, 10000);
+    CHECK(c.req_state == SHIM_RELAY_REQ_DONE && f.scans == 3);
+    shim_relay_request_clear(&c);
+    // A response for another seq is ignored.
+    n = shim_relay_eject(p, sizeof(p), 2);
+    CHECK(shim_relay_request(&c, SHIM_RELAY_EJECT, p, n, 11000) == 0);
+    const uint8_t ok[] = {0};
+    from_relay(&c, key, SHIM_RELAY_EJECT_ACK, 6, (uint16_t)(c.req_seq - 1), ok, 1, 11010);
+    CHECK(c.req_state == SHIM_RELAY_REQ_PENDING);
+    from_relay(&c, key, SHIM_RELAY_EJECT_ACK, 7, c.req_seq, ok, 1, 11020);
+    CHECK(c.req_state == SHIM_RELAY_REQ_DONE);
+    shim_relay_request_clear(&c);
+
+    // NODE_EVENT: always ACKed, delivered once.
+    f.nsent = 0;
+    uint8_t ev[11 + SHIM_RELAY_NODEINFO_SIZE] = {SHIM_RELAY_EV_JOINED, 0, 0xAA, 0xBB, 0xCC, 0xDD, 0, 2, 0, 3, 2};
+    ev[11] = 'k';
+    from_relay(&c, key, SHIM_RELAY_NODE_EVENT, 40, 0, ev, sizeof(ev), 12000);
+    from_relay(&c, key, SHIM_RELAY_NODE_EVENT, 40, 0, ev, sizeof(ev), 12200); // retransmission
+    CHECK(f.events == 1 && f.last_event.node == 2 && f.last_event.bitmask == 3 &&
+          f.last_event.network_id == 0xAABBCCDD && f.last_event.info[0] == 'k');
+    CHECK(f.nsent == 2 && sent_header(&f, 0).type == SHIM_RELAY_ACK && sent_header(&f, 0).ack == 40 &&
+          sent_header(&f, 1).ack == 40);
+    ev[0] = SHIM_RELAY_EV_LEFT;
+    from_relay(&c, key, SHIM_RELAY_NODE_EVENT, 41, 0, ev, sizeof(ev), 12300);
+    CHECK(f.events == 2 && f.last_event.kind == SHIM_RELAY_EV_LEFT);
+
+    // DATA both ways.
+    const uint8_t in[] = {0, 2, 0, 1, 243, 2, 'h', 'i'};
+    from_relay(&c, key, SHIM_RELAY_DATA, 50, 0, in, sizeof(in), 12400);
+    CHECK(f.data == 1 && f.data_src == 2 && memcmp(f.data_payload, "hi", 2) == 0);
+    f.nsent = 0;
+    CHECK(shim_relay_send_data(&c, 2, 243, 2, (const uint8_t *)"yo", 2) == 0);
+    CHECK(f.nsent == 1 && sent_header(&f, 0).type == SHIM_RELAY_DATA &&
+          shim_relay_open(key, 8, f.sent[0], f.sent_len[0]) == SHIM_RELAY_HEADER_SIZE + 8 &&
+          f.sent[0][15] == 2 && f.sent[0][16] == 243 && f.sent[0][18] == 'y');
+
+    // Anything not sealed with our key is dropped.
+    const uint32_t bad = c.stats.bad_tag;
+    from_relay(&c, "other-key", SHIM_RELAY_DATA, 51, 0, in, sizeof(in), 12500);
+    CHECK(f.data == 1 && c.stats.bad_tag == bad + 1);
+
+    // RESET: the request in flight fails at once, on_reset runs, and the next poll says HELLO.
+    n = shim_relay_eject(p, sizeof(p), 2);
+    CHECK(shim_relay_request(&c, SHIM_RELAY_EJECT, p, n, 13000) == 0);
+    from_relay(&c, key, SHIM_RELAY_RESET, 0, c.req_seq, NULL, 0, 13010);
+    CHECK(f.resets == 1 && c.req_state == SHIM_RELAY_REQ_FAILED && !c.hello_ok);
+    f.nsent = 0;
+    shim_relay_poll(&c, 13020);
+    CHECK(c.req_state == SHIM_RELAY_REQ_PENDING && c.req_type == SHIM_RELAY_HELLO && f.nsent == 1);
+}
+
 int main(int argc, char **argv) {
     const char *fixture = argc > 1 ? argv[1] : NULL;
     test_ipc_parse();
@@ -638,6 +804,7 @@ int main(int argc, char **argv) {
     test_session_error_result();
     test_sha256();
     test_relay_wire();
+    test_relay_client();
     if (failures) {
         fprintf(stderr, "%d check(s) failed\n", failures);
         return 1;
