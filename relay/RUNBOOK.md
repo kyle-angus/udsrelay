@@ -15,7 +15,7 @@ The relay is a UDP server that both consoles dial outbound. It keeps rooms (host
 go test ./...
 ```
 
-`TestPhase3Exit` (in `internal/udsfake/exit_test.go`) is the Phase 3 exit criterion. Two fake consoles host, scan, join, exchange data both ways and as broadcast at X/Y sizes, and see leave events: a clean disconnect, a third console that vanishes and is timed out, and the host destroying the network. `TestReplayTraces` replays all six two-console traces in `recon/traces/`, including the hardware battle. `TestReplayWithLatency` replays the hardware battle with 40–60 ms of added latency and takes about 8 s; `go test -short ./...` skips it.
+`TestPhase3Exit` (in `internal/udsfake/exit_test.go`) is the Phase 3 exit criterion. Two fake consoles host, scan, join, exchange data both ways and as broadcast at X/Y sizes, and see leave events: a clean disconnect, a third console that vanishes and is timed out, and the host destroying the network. `TestReplayTraces` replays all six two-console traces in `recon/traces/`, including the hardware battle. `TestReplayTracesShim` replays the same traces through the shim core's C emulator instead of the Go model (it builds `shim/core/build/uds_replay`, so it needs a C compiler). `TestReplayWithLatency` replays the hardware battle with 40–60 ms of added latency and takes about 8 s; `go test -short ./...` skips it.
 
 ## Run the server
 
@@ -156,4 +156,4 @@ What it does not do: encrypt anything, or reject replays outright. A replayed re
 - **Join failure result.** No trace shows what NWM returns when ConnectToNetwork fails; the fake returns `0xC8A113EA` as a placeholder.
 - **0x0023's word.** It is not constant on hardware. battle-hw-01 shows `0xebee1fff`, `0x16c31fff`, `0xd3841fff` and `0x36791fff`, one per initialisation; only the low half (`0x1fff`) repeats. The fake returns `0x00881fff` as the design doc says, and the replay compares only the low half.
 - **Leftover sessions.** A console that leaves stays a session until it goes quiet for the timeout; there is no goodbye message.
-- **Beacons.** Scans return network structs and node lists, not 802.11 beacons. Synthesising beacons (and answering DecryptBeaconData) is the Phase 4 shim's job.
+- **Beacons.** Scans return network structs and node lists, not 802.11 beacons. The Phase 4 shim synthesises the beacons and answers DecryptBeaconData (`shim/core/src/uds.c`).

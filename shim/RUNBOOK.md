@@ -181,6 +181,39 @@ What the results mean:
 - **`fake_ndm = 1`:** real NDM stayed in normal mode and HELLO kept working through the game's EnterExclusiveState. Real NWM then refused InitializeWithVersion (`0xE06113F9`) because the console was not in local mode, and the game showed "communication failed". Relay mode avoids this by answering `nwm::UDS` in the shim instead of forwarding it.
 - **Known issue, not the shim:** exiting the game sometimes crashes in `_thread_begin` on core 1 (crash dumps 6 and 8). It is CTRPF's task-scheduler worker for core 1, which never runs while Pokémon X gives core 1 no time, and starts only after the game exit has unmapped the plugin. It happens after the game has closed.
 
+## 8. Relay mode (Phase 4)
+
+In relay mode the shim answers the game's `nwm::UDS` calls itself, with `shim/core`'s emulator (`src/uds.c`, a C port of `internal/udsfake`'s fake console), and carries hosting, scans, joins and data over the relay. Real NWM never sees a UDS call, and NDM stays in normal mode, so Wi-Fi stays up.
+
+How it is put together:
+
+- One emulator serves both of the game's `nwm::UDS` sessions. Each session thread passes its requests to `shim_uds_handle`. A relay thread, started with the plugin, brings up sockets (section 7's heap-region buffer), feeds the relay socket to the emulator, and runs its retries and keepalives every 20 ms.
+- Calls that need the relay (hosting, scans, joins, leaving, app data) block their session thread until the relay answers, as NWM blocks the game while the radio works. Everything else is answered at once from local state.
+- The emulator creates the status-change event (returned by InitializeWithVersion) and one event per Bind, and signals them on every status change and every frame received.
+- Scans return 802.11 beacons in Azahar's layout, one per network the relay lists. The node list that NWM would encrypt goes into the beacon in plain text, and the shim's DecryptBeaconData reads it back.
+- If the relay does not answer HELLO within 3 s of InitializeWithVersion, the emulator fails it with `0xE06113F9`, what real NWM returned in section 7, so the game shows its usual communication error.
+- Results follow `battle-hw-01`: 0x0021 succeeds, 0x0023 returns a word ending `1fff`, DestroyNetwork with no network and PullPacket after leaving fail with `0xC8A113EA`. Commands it does not know succeed with no output and are logged as `not emulated`.
+
+Tested on a PC only so far: `TestReplayTracesShim` (in `internal/udsfake`) runs each of the six two-console traces through two copies of the emulator (`shim/core/tests/uds_replay.c`) against the Go relay, as the game's side: it sends hardware-shaped IPC requests, parses the beacons and joins through DecryptBeaconData's node list. It checks every reply against the recording, every frame byte for byte, the reply layouts, and that every status change was signalled.
+
+### On two consoles
+
+1. Start the relay on a PC on the same LAN (section 7, step 1).
+2. On both consoles write `sdmc:/udsrelay/shim.ini`:
+
+   ```ini
+   mode = relay
+   relay = <PC's LAN address>:28300
+   lobby = <the key>
+   ```
+
+3. Install the latest `udsrelay-shim.3gx` on both, Wi-Fi on, launch the game. A notification says **relay connected** once HELLO is answered; the relay's terminal logs both sessions.
+4. Open PSS on both and start a link trade from one. The relay logs the hosted networks; the other console should find the trader in its list.
+5. Trade, then battle. The plugin menu's Status shows the relay RTT, the UDS status and node bitmask, and frame counts.
+6. Copy both logs off and redact them as in section 4 (scans now contain only the other console's beacon). `not emulated` lines name commands the emulator does not handle yet.
+
+What to look for: whether the client sees the host's network in PSS, whether the trade completes, and the reason code a client gets when the host quits mid-match (the emulator reports 4, unconfirmed).
+
 ## Troubleshooting
 
 | Log or symptom | Meaning | Next step |
@@ -191,6 +224,8 @@ What the results mean:
 | No "session(s) intercepted" notification | The game opened `nwm::UDS` some other way, or not yet. | Check the log for hook lines; open PSS or start a local trade. |
 | `forwarding 0x.... failed` | The real service rejected the forwarded request. | Usually a static buffer larger than the shim's 0x800-byte slots; raise `kSlotSize` in `shim.cpp`. |
 | Game freezes when local play starts | A forwarding thread is stuck or crashed. | Disable the plugin loader to confirm, then send the log. |
+| `InitializeWithVersion: the relay does not answer` (relay mode) | No HELLO answer within 3 s: Wi-Fi off, wrong address or lobby key, or the relay not running. | Look for `relay did not answer HELLO` lines ("did not verify" means a wrong lobby key) and the relay's terminal; section 7's table applies. |
+| `nwm::UDS command 0x.... not emulated` (relay mode) | The game used a command the emulator does not model; it got success and no data. | Note what the game did next and add the command to `shim/core/src/uds.c`. |
 
 ## Status and risks
 

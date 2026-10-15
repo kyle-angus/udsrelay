@@ -16,8 +16,10 @@
 #include "shim/relay_wire.h"
 #include "shim/ring.h"
 #include "shim/session.h"
+#include "shim/sha1.h"
 #include "shim/sha256.h"
 #include "shim/trace.h"
+#include "shim/uds.h"
 
 static int failures;
 #define CHECK(cond)                                                                    \
@@ -175,6 +177,12 @@ static void test_config(void) {
     const char badrelay[] = "relay = nohost\nrelay = :1\nrelay = h:99999\nrelay = h:12x\nfake_ndm = yes\n";
     CHECK(shim_config_parse(&cfg, badrelay, sizeof(badrelay) - 1) == 5);
     CHECK(strcmp(cfg.relay_host, "relay.example.net") == 0 && cfg.relay_port == 28300); // unchanged
+
+    CHECK(!cfg.relay_mode);
+    const char mode[] = "mode = relay\n";
+    CHECK(shim_config_parse(&cfg, mode, sizeof(mode) - 1) == 0 && cfg.relay_mode == 1);
+    const char modes[] = "mode = Relay\nmode = passthrough\n";
+    CHECK(shim_config_parse(&cfg, modes, sizeof(modes) - 1) == 1 && cfg.relay_mode == 0);
 }
 
 static void test_ring(void) {
@@ -563,15 +571,26 @@ static void test_session_error_result(void) {
     free(k.arena);
 }
 
-// ops->answer replies to ndm:u's EnterExclusiveState itself: the real service never runs.
-static int answer_ndm(void *ctx, const char *port, uint32_t *cmd) {
+// ops->answer replies to ndm:u's EnterExclusiveState itself: the real service never runs. It
+// also answers 0x0003 with a handle of its own, which the session must not close.
+static int answer_ndm(void *ctx, shim_session *s, uint32_t *cmd) {
     (void)ctx;
-    if (strcmp(port, "ndm:u") != 0 || (cmd[0] >> 16) != 0x0001) {
+    if (strcmp(s->port, "ndm:u") != 0) {
         return 0;
     }
-    cmd[0] = SHIM_IPC_MAKE_HEADER(0x0001, 1, 0);
-    cmd[1] = 0;
-    return 1;
+    switch (cmd[0] >> 16) {
+    case 0x0001:
+        cmd[0] = SHIM_IPC_MAKE_HEADER(0x0001, 1, 0);
+        cmd[1] = 0;
+        return 1;
+    case 0x0003:
+        cmd[0] = SHIM_IPC_MAKE_HEADER(0x0003, 1, 2);
+        cmd[1] = 0;
+        cmd[2] = 0;    // copy one handle
+        cmd[3] = 0x77; // the answerer's; never opened in the fake kernel, so closing it shows up
+        return 1;
+    }
+    return 0;
 }
 
 static void test_session_answer(void) {
@@ -582,15 +601,17 @@ static void test_session_answer(void) {
     k.static_bufs = arena_alloc(&k, 0x80);
     k.service = failing_nwm; // would answer 0xC8A0CFEF if it were reached
     k.next_handle = 0x100;
-    fake_msg req[2];
+    fake_msg req[4];
     memset(req, 0, sizeof(req));
     req[0].words[0] = 0x00010042; // EnterExclusiveState(2) + process ID descriptor
     req[0].words[1] = 2;
     req[0].words[2] = 0x20;
     req[1].words[0] = 0x00020002; // LeaveExclusiveState: forwarded
     req[1].words[1] = 0x20;
+    req[2].words[0] = 0x00030000; // answered with a handle
+    req[3] = req[0];              // answered again: no second note
     k.requests = req;
-    k.nrequests = 2;
+    k.nrequests = 4;
     shim_session s;
     memset(&s, 0, sizeof(s));
     s.port = "ndm:u";
@@ -604,10 +625,12 @@ static void test_session_answer(void) {
     shim_ops ops = {&k, f_cmdbuf, f_static, f_send_sync, f_reply_and_receive, f_close,
                     f_addr_of, f_view, f_now, f_log, answer_ndm};
     CHECK(shim_session_run(&s, &ops) == 0);
-    CHECK(k.nreplies == 2 && k.replies[0][0] == 0x00010040 && k.replies[0][1] == 0);
+    CHECK(k.nreplies == 4 && k.replies[0][0] == 0x00010040 && k.replies[0][1] == 0);
     CHECK(k.replies[1][1] == 0xC8A0CFEF); // the second request did reach the service
-    CHECK(s.answered == 1 && s.requests == 2);
-    CHECK(strstr(k.text, "ndm:u: answered 0x0001 locally") != NULL);
+    CHECK(s.answered == 3 && s.requests == 4);
+    CHECK(k.replies[2][3] == 0x77 && k.double_close == 0);
+    const char *first = strstr(k.text, "ndm:u: answered 0x0001 locally");
+    CHECK(first != NULL && strstr(first + strlen("ndm:u: answered"), "answered 0x0001 locally") == NULL);
     free(s.line);
     free(k.arena);
 }
@@ -850,6 +873,132 @@ static void test_relay_client(void) {
     CHECK(c.req_state == SHIM_RELAY_REQ_PENDING && c.req_type == SHIM_RELAY_HELLO && f.nsent == 1);
 }
 
+static void test_sha1(void) {
+    uint8_t out[SHIM_SHA1_SIZE];
+    shim_sha1("abc", 3, out);
+    CHECK(hex_equal(out, 20, "a9993e364706816aba3e25717850c26c9cd0d89d"));
+    const char *two = "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq"; // 56 bytes: two padding blocks
+    shim_sha1(two, strlen(two), out);
+    CHECK(hex_equal(out, 20, "84983e441c3bd26ebaae4aa1f95129e5e54670f1"));
+    shim_sha1("", 0, out);
+    CHECK(hex_equal(out, 20, "da39a3ee5e6b4b0d3255bfef95601890afd80709"));
+}
+
+// Finds Nintendo vendor tag `type` in a beacon frame; returns its body from the OUI on.
+static const uint8_t *find_tag(const uint8_t *frame, size_t n, uint8_t type, size_t *len) {
+    size_t i = 12; // fixed parameters
+    while (i + 2 <= n) {
+        const uint8_t id = frame[i], l = frame[i + 1];
+        if (i + 2 + l > n) {
+            break;
+        }
+        if (id == 0xDD && l >= 4 && frame[i + 2] == 0x00 && frame[i + 3] == 0x1F && frame[i + 4] == 0x32 &&
+            frame[i + 5] == type) {
+            *len = l;
+            return frame + i + 2;
+        }
+        i += 2 + l;
+    }
+    return NULL;
+}
+
+// A synthesised beacon carries the network struct, app data and a correct SHA-1, and the node
+// list it carries comes back out of DecryptBeaconData the way the game would call it.
+static void test_beacon(void) {
+    uint8_t net[SHIM_UDS_NETWORK_MAX];
+    memset(net, 0, sizeof(net));
+    uint8_t *ni = net;
+    memcpy(ni, "\x02\x11\x22\x33\x44\x01", 6);
+    ni[0x06] = 11;
+    memcpy(ni + 0x0C, "\x00\x1F\x32\x15", 4);
+    memcpy(ni + 0x10, "\x00\x05\x5d\x10", 4);
+    ni[0x14] = 1;
+    memcpy(ni + 0x18, "\xb4\x13\x55\x38", 4); // network ID
+    ni[0x1C] = 2;
+    ni[0x1D] = 4;
+    ni[0x3F] = 0xB8;
+    for (int i = 0; i < 0xB8; i++) {
+        ni[0x40 + i] = (uint8_t)(i * 7 + 1);
+    }
+    net[0x108] = 0x00, net[0x109] = 0x05; // nodes 1 and 3
+    uint8_t *n1 = net + 0x10A, *n3 = n1 + 0x28;
+    memcpy(n1, "\x01\x02\x03\x04\x05\x06\x07\x08", 8);
+    memcpy(n1 + 8, "H\0o\0s\0t\0", 8);
+    memcpy(n3, "\x11\x12\x13\x14\x15\x16\x17\x18", 8);
+    memcpy(n3 + 8, "J\0o\0i\0n\0e\0r\0", 12);
+    shim_uds_network parsed;
+    CHECK(shim_uds_parse_network(net, 0x10A + 2 * 0x28, &parsed) == 0);
+    CHECK(parsed.bitmask == 5 && parsed.nodes[0] == n1 && parsed.nodes[2] == n3 && !parsed.nodes[1]);
+    CHECK(shim_uds_parse_network(net, 0x10A + 0x28 + 5, &parsed) == -1);
+    CHECK(shim_uds_parse_network(net, 0x10A + 2 * 0x28, &parsed) == 0);
+
+    uint8_t entry[1024];
+    CHECK(shim_uds_beacon_entry(entry, 100, &parsed) == 0); // too small
+    const size_t n = shim_uds_beacon_entry(entry, sizeof(entry), &parsed);
+    CHECK(n > 0x1C + 12);
+    CHECK(entry[0] == (uint8_t)n && entry[5] == 11 && memcmp(entry + 8, ni, 6) == 0 && entry[0x18] == 0x1C);
+    const uint8_t *frame = entry + 0x1C;
+    const size_t fn = n - 0x1C;
+
+    size_t l;
+    const uint8_t *info = find_tag(frame, fn, 0x15, &l);
+    CHECK(info != NULL && l == 52 + 0xB8);
+    if (!info) {
+        return;
+    }
+    CHECK(memcmp(info, ni + 0x0C, 0x1F) == 0 && info[0x1F + 20] == 0xB8 && memcmp(info + 52, ni + 0x40, 0xB8) == 0);
+    uint8_t body[256], hash[20];
+    memcpy(body, info, l);
+    memset(body + 0x1F, 0, 20);
+    shim_sha1(body, l, hash);
+    CHECK(memcmp(hash, info + 0x1F, 20) == 0);
+
+    // The game rebuilds the struct from the tag and passes the data tags in 0xFE-byte buffers.
+    uint8_t rebuilt[0x108] = {0}, tag0[0xFE] = {0}, tag1[0xFE] = {0};
+    memcpy(rebuilt + 0x0C, info, 0x1F);
+    size_t l0, l1 = 0;
+    const uint8_t *d0 = find_tag(frame, fn, 0x18, &l0);
+    const uint8_t *d1 = find_tag(frame, fn, 0x19, &l1);
+    CHECK(d0 != NULL && d1 == NULL && l0 == 4 + 0x12 + 4 * 0x1E);
+    if (!d0) {
+        return;
+    }
+    memcpy(tag0, d0, l0);
+    uint8_t nodes[16 * 0x28];
+    shim_uds_decrypt_nodes(rebuilt, tag0, sizeof(tag0), tag1, sizeof(tag1), nodes);
+    CHECK(memcmp(nodes, n1, 0x1C) == 0 && nodes[0x20] == 1);
+    CHECK(nodes[0x28 + 0x20] == 0 && nodes[0x28] == 0);
+    CHECK(memcmp(nodes + 2 * 0x28, n3, 0x1C) == 0 && nodes[2 * 0x28 + 0x20] == 3);
+
+    // Sixteen nodes need the second data tag.
+    ni[0x1D] = 16;
+    net[0x108] = 0xFF, net[0x109] = 0xFF;
+    for (int i = 0; i < 16; i++) {
+        uint8_t *node = net + 0x10A + i * 0x28;
+        memset(node, 0, 0x28);
+        node[0] = (uint8_t)(i + 1);
+        node[8] = (uint8_t)('a' + i);
+    }
+    CHECK(shim_uds_parse_network(net, 0x10A + 16 * 0x28, &parsed) == 0);
+    const size_t n16 = shim_uds_beacon_entry(entry, sizeof(entry), &parsed);
+    CHECK(n16 > 0);
+    d0 = find_tag(entry + 0x1C, n16 - 0x1C, 0x18, &l0);
+    d1 = find_tag(entry + 0x1C, n16 - 0x1C, 0x19, &l1);
+    CHECK(d0 && d1 && l0 == 4 + 0xFA && l1 == 4 + 0x12 + 16 * 0x1E - 0xFA);
+    if (!d0 || !d1) {
+        return;
+    }
+    memset(tag0, 0, sizeof(tag0));
+    memset(tag1, 0, sizeof(tag1));
+    memcpy(tag0, d0, l0);
+    memcpy(tag1, d1, l1);
+    memcpy(rebuilt + 0x0C, find_tag(entry + 0x1C, n16 - 0x1C, 0x15, &l), 0x1F);
+    shim_uds_decrypt_nodes(rebuilt, tag0, sizeof(tag0), tag1, sizeof(tag1), nodes);
+    for (int i = 0; i < 16; i++) {
+        CHECK(nodes[i * 0x28] == i + 1 && nodes[i * 0x28 + 8] == 'a' + i && nodes[i * 0x28 + 0x20] == i + 1);
+    }
+}
+
 int main(int argc, char **argv) {
     const char *fixture = argc > 1 ? argv[1] : NULL;
     test_ipc_parse();
@@ -862,6 +1011,8 @@ int main(int argc, char **argv) {
     test_session_error_result();
     test_session_answer();
     test_sha256();
+    test_sha1();
+    test_beacon();
     test_relay_wire();
     test_relay_client();
     if (failures) {

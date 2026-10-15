@@ -186,12 +186,17 @@ shim_result_t shim_session_run(shim_session *s, const shim_ops *ops) {
         shim_handle_t req_copies[MAX_PENDING_CLOSE];
         const int nreq_copies = collect_copy_handles(&msg, req, req_copies, 0);
 
-        if (ops->answer && ops->answer(ops->ctx, s->port, cmd)) {
+        const int answered = ops->answer && ops->answer(ops->ctx, s, cmd);
+        if (answered) {
             rc = 0;
             s->answered++;
-            char m[64];
-            snprintf(m, sizeof(m), "%s: answered 0x%04x locally", s->port, id);
-            note(s, ops, "Info", m);
+            const uint64_t bit = id < 64 ? (uint64_t)1 << id : 0;
+            if (!bit || !(s->answered_noted & bit)) {
+                s->answered_noted |= bit;
+                char m[96];
+                snprintf(m, sizeof(m), "%s: answered 0x%04x locally (noted once per command)", s->port, id);
+                note(s, ops, "Info", m);
+            }
         } else {
             shim_session_set_static_bufs(ops, s->bank_rsp, s->slot_size);
             rc = ops->send_sync(ops->ctx, s->real);
@@ -216,7 +221,9 @@ shim_result_t shim_session_run(shim_session *s, const shim_ops *ops) {
                  shim_trace_msg(s->line, SHIM_TRACE_LINE_MAX, ops->now(ops->ctx), "rsp", s->port,
                                 s->sess, id, NULL, 0, NULL, cmd, 0));
             log_buffers(s, ops, &rsp, cmd, req, 1);
-            npending = collect_copy_handles(&rsp, cmd, pending_close, 0);
+            if (!answered) {
+                npending = collect_copy_handles(&rsp, cmd, pending_close, 0);
+            }
         }
         reply_target = s->server;
     }

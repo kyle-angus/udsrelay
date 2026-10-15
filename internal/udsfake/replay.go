@@ -10,6 +10,7 @@ import (
 	"sort"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"udsrelay/internal/relay"
@@ -36,7 +37,10 @@ type ReplayConfig struct {
 	// change). Default 5 s.
 	Wait time.Duration
 	// Pace replays at recorded speed times Pace; 0 replays as fast as the peer allows.
-	Pace   float64
+	Pace float64
+	// Shim, when set, is the path to shim/core's uds_replay: each console is then the shim
+	// core's C emulator, driven through IPC requests, instead of the Go fake console.
+	Shim   string
 	Impair *relay.Impairment
 	Client relay.Options
 	Logger *slog.Logger
@@ -146,6 +150,65 @@ type script struct {
 	hardware bool
 	calls    []*udstrace.Call
 	sends    [][]byte // payloads of every SendTo, in order
+	// pos is the number of calls this instance has finished replaying; the peer reads it.
+	pos     atomic.Int64
+	running bool // replayed in this process, so pos moves
+}
+
+// isTeardown reports whether a recorded call left a network: Shutdown, or a DestroyNetwork or
+// DisconnectNetwork that succeeded (X/Y also calls DestroyNetwork as a client, and it fails).
+func isTeardown(c *udstrace.Call) bool {
+	switch c.Cmd {
+	case udstrace.CmdShutdown:
+		return true
+	case udstrace.CmdDestroyNetwork, udstrace.CmdDisconnectNetwork:
+		r, ok := c.Result()
+		return !ok || r == 0
+	}
+	return false
+}
+
+// leaves reports whether replaying c now takes the console out of a network that has peers.
+func leaves(c *udstrace.Call, st ConnectionStatus) bool {
+	if st.TotalNodes < 2 {
+		return false
+	}
+	switch c.Cmd {
+	case udstrace.CmdShutdown:
+		return st.Status != StatusNotConnected
+	case udstrace.CmdDestroyNetwork:
+		return st.Status == StatusConnectedAsHost
+	case udstrace.CmdDisconnectNetwork:
+		return st.Status == StatusConnectedAsClient || st.Status == StatusConnectedAsSpectator
+	}
+	return false
+}
+
+func isDataPull(c *udstrace.Call) bool {
+	r, ok := c.Result()
+	return c.Cmd == udstrace.CmdPullPacket && ok && r == 0 && word(c.Reply, 2) > 0
+}
+
+// awaitPeerPulls holds back a teardown until the peer has pulled every frame it recorded
+// pulling before its own next teardown. The recording has the two sides' timing; the replay
+// does not, so without this a host that runs ahead could close the network under a client
+// that still has frames to read (drop-02: the client vanished, and the host only tore down 23 s
+// later).
+func awaitPeerPulls(peer *script, wait time.Duration) {
+	if !peer.running {
+		return
+	}
+	deadline := time.Now().Add(wait)
+	p := int(peer.pos.Load())
+	last := -1
+	for j := p; j < len(peer.calls) && !isTeardown(peer.calls[j]); j++ {
+		if isDataPull(peer.calls[j]) {
+			last = j
+		}
+	}
+	for last >= 0 && int(peer.pos.Load()) <= last && time.Now().Before(deadline) {
+		time.Sleep(5 * time.Millisecond)
+	}
 }
 
 func loadScript(tl TraceLog) (*script, error) {
@@ -224,10 +287,13 @@ func Replay(cfg ReplayConfig) (*Report, error) {
 	for _, l := range cfg.Only {
 		run[l] = true
 	}
+	for _, s := range scripts {
+		s.running = len(run) == 0 || run[s.label]
+	}
 	rep := &Report{}
 	var wg sync.WaitGroup
 	for i, s := range scripts {
-		if len(run) > 0 && !run[s.label] {
+		if !s.running {
 			continue
 		}
 		in := &InstanceReport{Label: s.label, Hardware: s.hardware, Skipped: map[string]int{}}
@@ -279,12 +345,61 @@ func (m *matcher) skipped() int {
 	return n
 }
 
+// ReplayConsole is what a replay drives: the Go fake console (Console) or the shim core's C
+// emulator (ShimConsole).
+type ReplayConsole interface {
+	InitializeWithVersion(self [relay.NodeInfoSize]byte) uint32
+	Shutdown() uint32
+	SetProbeResponseParam() uint32
+	Cmd0023() (uint32, uint32)
+	BeginHostingNetwork(netInfo, passphrase []byte) uint32
+	DestroyNetwork() uint32
+	SetApplicationData(data []byte) uint32
+	GetApplicationData() ([]byte, uint32)
+	GetChannel() (uint32, uint8)
+	RecvBeaconBroadcastData(commID uint32, id8 uint8) ([]relay.Network, uint32)
+	LastScan() []relay.Network
+	DecryptBeaconData(networkID uint32) ([][relay.NodeInfoSize]byte, uint32)
+	ConnectToNetwork(netInfo, passphrase []byte, connType uint8) uint32
+	DisconnectNetwork() uint32
+	EjectClient(node uint16) uint32
+	GetConnectionStatus() ConnectionStatus
+	PeekStatus() ConnectionStatus
+	WaitStatus(ok func(ConnectionStatus) bool, timeout time.Duration) bool
+	Bind(bindID uint32, channel uint8, node uint16, recvBufSize int) uint32
+	Unbind(bindID uint32) uint32
+	SendTo(dst uint16, channel, flags uint8, data []byte) uint32
+	PullPacket(bindID uint32, maxSize int) (Packet, bool, uint32)
+	WaitPacket(bindID uint32, maxSize int, timeout time.Duration) (Packet, bool, uint32)
+	PollPacket(bindID uint32) (int, uint32)
+	Kill()
+	Close() error
+}
+
+func newReplayConsole(cfg ReplayConfig, label string) (ReplayConsole, error) {
+	if cfg.Shim != "" {
+		return NewShimConsole(cfg.Shim, cfg.Relay, cfg.Lobby, label)
+	}
+	return New(Config{Relay: cfg.Relay, Lobby: cfg.Lobby, Impair: cfg.Impair, Client: cfg.Client,
+		Logger: cfg.Logger.With("console", label)})
+}
+
+// maxWaitTimeouts ends an instance's replay early: past this many timed-out waits the two sides
+// have diverged.
+const maxWaitTimeouts = 3
+
 func replayOne(cfg ReplayConfig, s, peer *script, in *InstanceReport) {
-	c, err := New(Config{Relay: cfg.Relay, Lobby: cfg.Lobby, Impair: cfg.Impair, Client: cfg.Client,
-		Logger: cfg.Logger.With("console", s.label)})
+	c, err := newReplayConsole(cfg, s.label)
 	if err != nil {
 		in.Err = err
 		return
+	}
+	if sc, ok := c.(*ShimConsole); ok {
+		defer func() {
+			for _, p := range sc.Problems() {
+				in.Mismatches = append(in.Mismatches, Mismatch{Index: -1, Call: "emulator", Want: "no protocol faults", Got: p})
+			}
+		}()
 	}
 	m := &matcher{sent: peer.sends, matched: make([]bool, len(peer.sends)), last: -1}
 	defer func() { in.Lost = m.skipped() }()
@@ -294,7 +409,19 @@ func replayOne(cfg ReplayConfig, s, peer *script, in *InstanceReport) {
 		first = s.calls[0].Req.Wall
 	}
 	sendIdx := 0
+	defer s.pos.Store(int64(len(s.calls)))
 	for i, call := range s.calls {
+		s.pos.Store(int64(i))
+		if in.WaitTimeouts >= maxWaitTimeouts {
+			// The peer is not doing what the recording says; every further wait would time
+			// out too.
+			in.Err = fmt.Errorf("gave up at call %d of %d after %d waits for the peer timed out", i, len(s.calls),
+				in.WaitTimeouts)
+			break
+		}
+		if isTeardown(call) && leaves(call, c.PeekStatus()) {
+			awaitPeerPulls(peer, cfg.Wait)
+		}
 		offset := time.Duration(call.Req.Wall-first) * time.Microsecond
 		if cfg.Pace > 0 {
 			if d := time.Until(start.Add(time.Duration(float64(offset) / cfg.Pace))); d > 0 {

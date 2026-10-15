@@ -22,6 +22,8 @@ extern "C" {
 #define SHIM_ERR_SESSION_CLOSED ((shim_result_t)0xC920181A)
 
 /// Kernel and platform operations. On the console these wrap svcs and TLS; tests fake them.
+struct shim_session;
+
 typedef struct {
     void *ctx;
     /// The calling thread's IPC command buffer (TLS + 0x80).
@@ -39,11 +41,13 @@ typedef struct {
     shim_time (*now)(void *ctx);
     void (*log)(void *ctx, const char *line, size_t len);
     /// Optional. Called with each request before it is forwarded; returning nonzero means it
-    /// wrote the reply into cmd itself and the real service never sees the request.
-    int (*answer)(void *ctx, const char *port, uint32_t *cmd);
+    /// wrote the reply into cmd itself and the real service never sees the request. Handles in
+    /// such a reply stay the answerer's: the session does not close them. Static buffers in it
+    /// may point into s->bank_rsp, which is not touched again until the reply has been sent.
+    int (*answer)(void *ctx, struct shim_session *s, uint32_t *cmd);
 } shim_ops;
 
-typedef struct {
+typedef struct shim_session {
     const char *port;     ///< service name, e.g. "nwm::UDS"
     int sess;             ///< logged as sess= to tell concurrent sessions apart; < 0 omits it
     shim_handle_t server; ///< server end of the pair given to the game
@@ -60,6 +64,9 @@ typedef struct {
     uint32_t requests;
     uint32_t failures; ///< forwarded requests whose send failed
     uint32_t answered; ///< requests ops->answer replied to without forwarding
+    /// Command IDs (below 64) already noted as answered locally: the note is logged once per
+    /// command, since relay mode answers every nwm::UDS request and the req/rsp lines show each.
+    uint64_t answered_noted;
 } shim_session;
 
 /// Serves the session until the game closes it (returns 0) or the kernel reports an error

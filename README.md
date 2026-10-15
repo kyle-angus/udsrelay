@@ -9,6 +9,7 @@ The first target is Pokémon X/Y: a local trade, then a local battle.
 - Phase 1 (recon in Azahar): done. Traces for idle, trade, battle, two drop cases and an X–Y trade are in `recon/traces/`; findings are in the design doc's Phase 1 entry.
 - Phase 2 (passthrough shim on hardware): done. A full trade and a full battle ran between two consoles through the shim; the battle trace is in `recon/traces/battle-hw-01/`, and the differences from Azahar are in the design doc.
 - Phase 3 (relay server): done. `udsrelay` serves rooms, scan, join, node events, data forwarding and keepalive over UDP. `udsfake` fake consoles pass the exit test and replay all six two-console traces through it with hardware's result codes and byte-for-byte data.
+- Phase 4 (relay mode): built, not yet tested on hardware. The shim core emulates `nwm::UDS` over the relay (`shim/core/src/uds.c`), and the plugin runs it with `mode = relay` in `shim.ini`. All six traces replay through the C emulator against the relay (`TestReplayTracesShim`). See `shim/RUNBOOK.md` section 8.
 
 ## Layout
 
@@ -20,13 +21,13 @@ The first target is Pokémon X/Y: a local trade, then a local battle.
 | `cmd/udstrace` | Turns the logs into a merged timeline and a Markdown command-trace summary |
 | `internal/udstrace` | Parser, request/reply pairing, UDS struct decoders and trace comparison, with tests on synthetic fixtures |
 | `shim/RUNBOOK.md` | How to build the Phase 2 shim, install it on two consoles, and compare its logs against the Azahar trace |
-| `shim/core` | Host-agnostic C: IPC parsing, passthrough forwarding loop, GetServiceHandle finder, trace formatting, and the relay wire protocol (SHA-256, HMAC tags) for Phase 4 |
-| `shim/plugin` | CTRPluginFramework 3GX plugin: hooks GetServiceHandle, runs the forwarding threads, writes logs to SD |
+| `shim/core` | Host-agnostic C: IPC parsing, passthrough forwarding loop, GetServiceHandle finder, trace formatting, the relay wire protocol and client, and the `nwm::UDS` emulator with beacon synthesis for relay mode |
+| `shim/plugin` | CTRPluginFramework 3GX plugin: hooks GetServiceHandle, runs the session threads (forwarding, or the emulator in relay mode) and the relay thread, writes logs to SD |
 | `relay/RUNBOOK.md` | How to run the relay and fake consoles, replay traces, and the wire protocol |
 | `cmd/udsrelay` | The relay server |
 | `cmd/udsfake` | Fake consoles: a scripted host and joiner, and trace replay |
 | `internal/relay` | Wire protocol, server, client library, and a loss/latency wrapper for tests |
-| `internal/udsfake` | Fake console modelling the shim's UDS state machine, trace replay, and the Phase 3 exit test |
+| `internal/udsfake` | Fake console modelling the shim's UDS state machine, trace replay (through the Go model or the shim core's C emulator), and the Phase 3 exit test |
 
 ## Develop
 

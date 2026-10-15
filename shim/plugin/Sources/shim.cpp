@@ -1,10 +1,13 @@
-// Phase 2 passthrough shim: console glue around shim/core.
+// UDS shim: console glue around shim/core.
 //
 // PatchProcess (before the game's first instruction) finds the game's srv:GetServiceHandle
 // client function and MITM-hooks it. When the game obtains a traced service (nwm::UDS, ndm:u
 // by default), the hook swaps the handle it returns for the client end of a session pair the
-// shim serves; a thread per session forwards every request to the real service and logs it.
-// Logs go to the SD card, since infrastructure Wi-Fi is down while real local wireless runs.
+// shim serves; a thread per session handles every request and logs it. Logs go to the SD card.
+//
+// mode = passthrough (Phase 2) forwards every request to the real service. mode = relay
+// (Phase 4) answers nwm::UDS in the shim with shim/core's emulator over the relay, and fakes
+// ndm:u's exclusive state so infrastructure Wi-Fi stays up; a relay thread runs the socket.
 
 #include <3ds.h>
 #include <CTRPluginFramework.hpp>
@@ -28,6 +31,7 @@
 #include "shim/ring.h"
 #include "shim/session.h"
 #include "shim/trace.h"
+#include "shim/uds.h"
 
 #include "luma_svc.hpp"
 #include "shim_plugin.hpp"
@@ -153,9 +157,18 @@ void OpsLog(void *, const char *line, size_t len) { LogLine(line, len); }
 // so infrastructure Wi-Fi (and the relay socket) stays up while the game plays locally.
 volatile u32 g_fakeExclusive;
 
-// Answers ndm:u's exclusive-state calls when fake_ndm is on; everything else is forwarded.
-int OpsAnswer(void *, const char *port, uint32_t *cmd) {
-    if (!g_cfg.fake_ndm || std::strcmp(port, "ndm:u") != 0) {
+shim_uds g_uds; // relay mode's nwm::UDS emulator, shared by every nwm::UDS session
+bool g_udsReady;
+
+// In relay mode, answers every nwm::UDS request from the emulator, with the session's reply bank
+// as scratch for static-buffer replies. Answers ndm:u's exclusive-state calls when fake_ndm is
+// on. Everything else is forwarded.
+int OpsAnswer(void *, shim_session *s, uint32_t *cmd) {
+    if (g_udsReady && std::strcmp(s->port, "nwm::UDS") == 0) {
+        shim_uds_handle(&g_uds, cmd, s->bank_rsp);
+        return 1;
+    }
+    if (!g_cfg.fake_ndm || std::strcmp(s->port, "ndm:u") != 0) {
         return 0;
     }
     switch (cmd[0] >> 16) {
@@ -571,6 +584,111 @@ void RelayCheckThread(void *) {
     }
 }
 
+// ---- relay mode (Phase 4) ----------------------------------------------------------------
+//
+// The emulator's ops on the console. Session threads block in OpsUdsWait while a relay request
+// is in flight; the relay thread feeds the socket to the emulator. Both park while the game is
+// out of the foreground, like the log writer.
+
+constexpr u32 kRelayStack = 0x4000;
+constexpr s32 kRelayPriority = kSessionPriority; // keeps up with the session threads it serves
+
+LightLock g_udsLock;
+CondVar g_udsCv;
+volatile u32 g_relayUp; // for the status menu
+
+u64 MonotonicMs() { return svcGetSystemTick() / (SYSCLOCK_ARM11 / 1000); }
+
+uint64_t OpsUdsNow(void *) { return MonotonicMs(); }
+void OpsUdsLock(void *) { LightLock_Lock(&g_udsLock); }
+void OpsUdsUnlock(void *) { LightLock_Unlock(&g_udsLock); }
+void OpsUdsWait(void *, uint32_t ms) {
+    CondVar_WaitTimeout(&g_udsCv, &g_udsLock, static_cast<s64>(ms) * static_cast<s64>(kNsPerMs));
+    if (!LightEvent_TryWait(&g_run)) { // park, holding nothing, until the game is back
+        LightLock_Unlock(&g_udsLock);
+        LightEvent_Wait(&g_run);
+        LightLock_Lock(&g_udsLock);
+    }
+}
+void OpsUdsWake(void *) { CondVar_Broadcast(&g_udsCv); }
+shim_handle_t OpsUdsCreateEvent(void *) {
+    Handle h = 0;
+    return R_SUCCEEDED(svcCreateEvent(&h, RESET_ONESHOT)) ? h : 0;
+}
+void OpsUdsSignal(void *, shim_handle_t h) { svcSignalEvent(h); }
+uint8_t *OpsUdsMem(void *, uint32_t addr, uint32_t) { return reinterpret_cast<u8 *>(addr); }
+void OpsUdsLog(void *, const char *level, const char *msg) { Note(level, "UDS", "%s", msg); }
+
+const shim_uds_ops g_udsOps = {nullptr,   OpsUdsNow,         OpsUdsLock,   OpsUdsUnlock, OpsUdsWait,
+                               OpsUdsWake, RelaySend,        OpsUdsCreateEvent, OpsUdsSignal, OpsClose,
+                               OpsAddrOf, OpsUdsMem,         OpsUdsLog};
+
+// Brings up sockets and feeds the relay to the emulator until the process ends.
+void RelayThread(void *) {
+    if (!SocInitAnywhere()) {
+        Note("Error", "Relay", "socInit failed with every buffer; local play will fail to start");
+        OSD::Notify("UDS shim: socInit failed (see log)", Color::Red);
+        return;
+    }
+    g_relayFd = socket(AF_INET, SOCK_DGRAM, 0);
+    if (g_relayFd < 0) {
+        Note("Error", "Relay", "socket() failed, errno %d", errno);
+        return;
+    }
+    while (!ResolveRelay()) {
+        Note("Warning", "Relay", "cannot resolve %s; retrying in 5 s", g_cfg.relay_host);
+        svcSleepThread(5000 * kNsPerMs);
+        LightEvent_Wait(&g_run);
+    }
+    Note("Info", "Relay", "relay mode: %s:%u", g_cfg.relay_host, (unsigned)g_cfg.relay_port);
+    static u8 buf[SHIM_RELAY_MAX_DATAGRAM];
+    u64 lastPoll = 0;
+    for (;;) {
+        LightEvent_Wait(&g_run);
+        pollfd pfd = {g_relayFd, POLLIN, 0};
+        if (poll(&pfd, 1, 20) > 0 && (pfd.revents & POLLIN)) {
+            const ssize_t n = recv(g_relayFd, buf, sizeof(buf), 0);
+            if (n > 0) {
+                shim_uds_net_input(&g_uds, buf, static_cast<size_t>(n));
+            }
+        }
+        if (MonotonicMs() - lastPoll >= 20) {
+            shim_uds_net_poll(&g_uds);
+            lastPoll = MonotonicMs();
+            const u32 up = shim_uds_relay_up(&g_uds);
+            if (up != g_relayUp) {
+                g_relayUp = up;
+                OSD::Notify(up ? "UDS shim: relay connected" : "UDS shim: relay lost",
+                            up ? Color::Green : Color::Orange);
+            }
+        }
+    }
+}
+
+// Sets up the emulator. Runs from Start(), before the hooks, so the first nwm::UDS request
+// finds it ready.
+bool StartRelayMode() {
+    if (!g_cfg.relay_host[0] || !g_cfg.lobby[0]) {
+        Note("Error", "Start", "mode = relay needs relay and lobby in %s; falling back to passthrough", kConfigPath);
+        OSD::Notify("UDS shim: mode = relay needs relay and lobby", Color::Red);
+        return false;
+    }
+    LightLock_Init(&g_udsLock);
+    CondVar_Init(&g_udsCv);
+    const u32 session = (static_cast<u32>(svcGetSystemTick()) ^ static_cast<u32>(svcGetSystemTick() >> 32) * 2654435761u) | 1;
+    if (shim_uds_init(&g_uds, &g_udsOps, g_cfg.lobby, std::strlen(g_cfg.lobby), session) != 0) {
+        Note("Error", "Start", "bad lobby key; falling back to passthrough");
+        return false;
+    }
+    if (!threadCreate(RelayThread, nullptr, kRelayStack, kRelayPriority, -2, true)) {
+        Note("Error", "Start", "could not start the relay thread; falling back to passthrough");
+        return false;
+    }
+    g_cfg.fake_ndm = 1; // real NDM must stay out of local mode or Wi-Fi drops
+    g_udsReady = true;
+    return true;
+}
+
 void OnProcessEvent(Process::Event event) {
     switch (event) {
     case Process::Event::HOME_EXIT:
@@ -666,32 +784,47 @@ void Start() {
         }
         std::strcat(ports, g_cfg.ports[i]);
     }
-    Note("Info", "Start", "udsrelay shim %s for title %s; tracing %s; payload_max %ld", kShimVersion, g_proc, ports,
-         g_cfg.payload_max);
-
-    StartWorkers(); // before the hooks, so a slot is ready by the time the game opens a service
-    InstallHooks();
-
     LightEvent_Init(&g_writerIdle, RESET_STICKY);
     LightEvent_Init(&g_writerResume, RESET_ONESHOT);
     LightEvent_Init(&g_run, RESET_STICKY);
     LightEvent_Signal(&g_run);
+
+    const bool relayMode = g_cfg.relay_mode && StartRelayMode();
+    Note("Info", "Start", "udsrelay shim %s for title %s; mode %s; tracing %s; payload_max %ld; fake_ndm %d",
+         kShimVersion, g_proc, relayMode ? "relay" : "passthrough", ports, g_cfg.payload_max, g_cfg.fake_ndm);
+
+    StartWorkers(); // before the hooks, so a slot is ready by the time the game opens a service
+    InstallHooks();
+
     Process::SetProcessEventCallback(OnProcessEvent);
     if (!threadCreate(WriterThread, nullptr, kWriterStack, kWriterPriority, -2, true)) {
         OSD::Notify("UDS shim: could not start the log writer", Color::Red);
     }
-    if (g_cfg.relay_host[0] && g_cfg.lobby[0] &&
+    if (!relayMode && g_cfg.relay_host[0] && g_cfg.lobby[0] &&
         !threadCreate(RelayCheckThread, nullptr, kCheckStack, kCheckPriority, -2, true)) {
         Note("Error", "Start", "could not start the relay check thread");
     }
 }
 
 std::string StatusText() {
-    return Utils::Format(
+    std::string text = Utils::Format(
         "Hooks installed: %d\nSessions intercepted: %lu\nActive sessions: %lu\nLog: %s\nBytes written: %lu\n"
         "Dropped lines: %lu",
         g_hookCount, (unsigned long)g_attachCount, (unsigned long)g_activeSessions, g_logPath,
         (unsigned long)g_bytesWritten, (unsigned long)g_droppedLines);
+    if (g_udsReady) {
+        LightLock_Lock(&g_udsLock);
+        const shim_uds_status st = g_uds.st;
+        const u32 rtt = g_uds.relay.rtt_ms, in = g_uds.relay.stats.data_in, out = g_uds.relay.stats.data_out;
+        const u32 dropped = g_uds.stats.dropped, unknown = g_uds.stats.unknown;
+        LightLock_Unlock(&g_udsLock);
+        text += Utils::Format("\nRelay: %s, RTT %lu ms\nUDS status %lu, node %u, nodes 0x%04x\n"
+                              "Frames in %lu, out %lu, dropped %lu\nUnknown commands: %lu",
+                              g_relayUp ? "connected" : "not connected", (unsigned long)rtt, (unsigned long)st.status,
+                              (unsigned)st.node_id, (unsigned)st.bitmask, (unsigned long)in, (unsigned long)out,
+                              (unsigned long)dropped, (unsigned long)unknown);
+    }
+    return text;
 }
 
 } // namespace udsrelay
