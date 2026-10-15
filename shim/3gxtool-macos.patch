@@ -1,0 +1,31 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index bb567c4..187ee6a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -36,7 +36,9 @@ add_subdirectory(extern/yaml-cpp)
+ add_subdirectory(extern/dynalo)
+ 
+ set(CMAKE_CXX_STANDARD 14)
++if(NOT APPLE)
+ set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")
++endif()
+ 
+ include_directories(includes)
+ include_directories(yaml-cpp/include)
+diff --git a/sources/ElfConvert.cpp b/sources/ElfConvert.cpp
+index 385edad..1eeca8f 100644
+--- a/sources/ElfConvert.cpp
++++ b/sources/ElfConvert.cpp
+@@ -290,9 +290,9 @@ void     ElfConvert::_GetSymbols(void)
+                 {
+                     // Make sure for the descriptor to be before the actual symbol
+                     // eg: $a then _myFunc
+-                    if (le_word(left->st_value) == le_word(right->st_value)
+-                        && _elfSymNames[le_word(left->st_name)] == '$')
+-                        return true;
++                    if (le_word(left->st_value) == le_word(right->st_value))
++                        return _elfSymNames[le_word(left->st_name)] == '$'
++                            && _elfSymNames[le_word(right->st_name)] != '$';
+                     return le_word(left->st_value) < le_word(right->st_value);
+                 });
+ 

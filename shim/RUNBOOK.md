@@ -43,18 +43,16 @@ The logic lives in `shim/core` (host-agnostic C), tested on a PC against a fake 
    git clone --recursive https://gitlab.com/thepixellizeross/3gxtool.git ~/src/3gxtool
    ```
 
-   It does not build on macOS as-is, so apply two small patches first. The bundled dynalo library only recognises Linux and Windows, but its Linux backend is plain `dlopen`, so let macOS use it:
+   It does not build or run reliably on macOS as-is, so patch it first. The bundled dynalo library only recognises Linux and Windows, but its Linux backend is plain `dlopen`, so let macOS use it:
 
    ```bash
    sed -i '' 's/defined(_LINUX)$/defined(_LINUX) || defined(__APPLE__)/' ~/src/3gxtool/extern/dynalo/include/dynalo/detail/config.hpp
    ```
 
-   The project links with `-static`, which macOS does not support, so limit that to other platforms:
+   [`shim/3gxtool-macos.patch`](3gxtool-macos.patch) limits the `-static` link flags (which macOS does not support) to other platforms, and fixes the symbol-sort comparator. As shipped, it can say two `$` mapping symbols at the same address each sort before the other; macOS's libc++ then reads past the array and 3gxtool segfaults on some ELFs. From this repository's root:
 
    ```bash
-   sed -i '' 's/^set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")$/if(NOT APPLE)\
-   set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")\
-   endif()/' ~/src/3gxtool/CMakeLists.txt
+   git -C ~/src/3gxtool apply "$PWD/shim/3gxtool-macos.patch"
    ```
 
    ```bash
@@ -63,7 +61,11 @@ The logic lives in `shim/core` (host-agnostic C), tested on a PC against a fake 
 
    The policy flag is needed because the bundled yaml-cpp declares a CMake minimum below 3.5, which CMake 4 rejects.
 
-   Put the resulting `3gxtool` binary on your `PATH`, for example in `/opt/devkitpro/tools/bin`.
+   Install the resulting binary in `/opt/devkitpro/tools/bin`. devkitPro's make rules put that folder first on `PATH`, so a copy anywhere else is ignored during the build.
+
+   ```bash
+   sudo cp ~/src/3gxtool/build/3gxtool /opt/devkitpro/tools/bin/
+   ```
 
 4. Set the environment (add to your shell profile):
 

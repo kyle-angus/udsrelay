@@ -20,7 +20,9 @@ int main(void) {
     *menu += new MenuEntry("Status", nullptr, [](MenuEntry *) { MessageBox("UDS Relay shim", udsrelay::StatusText())(); },
                            "Hooks, intercepted sessions and log file.");
     menu->Run();
-    delete menu;
+    // Run() returns as the game exits. Deliberately no `delete menu`: after a trip through the
+    // HOME menu the plugin heap can already be corrupt by then (seen with the shim disabled too),
+    // and freeing it crashes in _free_r. The kernel reclaims the memory with the process.
     return 0;
 }
 

@@ -44,8 +44,14 @@ constexpr const char *kDir = "/udsrelay";
 constexpr const char *kLogDir = "/udsrelay/logs";
 constexpr const char *kConfigPath = "/udsrelay/shim.ini";
 
+// Each slot has a worker thread started by Start(). The GetServiceHandle hook runs on the
+// game's own threads, where libctru's threadCreate faults (it copies stdio pointers from the
+// caller's libctru thread vars, which game threads lack), so the hook only fills in a slot and
+// signals its worker.
 struct SessionSlot {
     volatile bool used;
+    bool ready; // worker thread running
+    LightEvent start;
     char port[SHIM_PORT_NAME_MAX + 1];
     shim_session session;
     u8 bankReq[SHIM_STATIC_SLOTS * kSlotSize];
@@ -69,6 +75,16 @@ int g_hookCount;
 LightLock g_slotLock;
 SessionSlot g_slots[kMaxSessions];
 Handle g_attachedReal[kMaxSessions]; // real handles already intercepted (guarded by g_slotLock)
+
+// The writer parks (blocked in the kernel, touching no memory) while the game is in the HOME
+// menu, swapped out, asleep or exiting: Luma may save and scramble plugin memory then, and
+// writes made meanwhile come back as garbage. The log is flushed every second, so exit does no
+// file I/O; the kernel closes the file with the process.
+enum WriterState : u32 { WRITER_RUN, WRITER_PARK };
+volatile u32 g_writerWant = WRITER_RUN;
+volatile bool g_writerAlive;
+LightEvent g_writerIdle;   // writer reached the state g_writerWant asked for
+LightEvent g_writerResume; // wakes a parked writer
 
 volatile u32 g_attachCount;
 volatile u32 g_activeSessions;
@@ -129,26 +145,45 @@ const shim_ops g_ops = {nullptr,  OpsCmdbuf, OpsStaticBufs, OpsSendSync, OpsRepl
 
 // ---- sessions -------------------------------------------------------------------------------
 
-void SessionThread(void *arg) {
+// Waits for Attach to hand this slot a session, forwards it until the game closes it, then
+// frees the slot and waits again.
+void SessionWorker(void *arg) {
     SessionSlot *slot = static_cast<SessionSlot *>(arg);
-    __atomic_add_fetch(&g_activeSessions, 1, __ATOMIC_SEQ_CST);
-    const shim_result_t rc = shim_session_run(&slot->session, &g_ops);
-    Note(rc ? "Error" : "Info", "SessionThread", "%s session ended after %lu requests (%lu failed), result 0x%08lx",
-         slot->port, (unsigned long)slot->session.requests, (unsigned long)slot->session.failures,
-         (unsigned long)rc);
-    __atomic_sub_fetch(&g_activeSessions, 1, __ATOMIC_SEQ_CST);
-    LightLock_Lock(&g_slotLock);
-    for (int i = 0; i < kMaxSessions; i++) {
-        if (&g_slots[i] == slot) {
-            g_attachedReal[i] = 0;
+    for (;;) {
+        LightEvent_Wait(&slot->start);
+        __atomic_add_fetch(&g_activeSessions, 1, __ATOMIC_SEQ_CST);
+        const shim_result_t rc = shim_session_run(&slot->session, &g_ops);
+        Note(rc ? "Error" : "Info", "SessionWorker",
+             "%s session ended after %lu requests (%lu failed), result 0x%08lx", slot->port,
+             (unsigned long)slot->session.requests, (unsigned long)slot->session.failures, (unsigned long)rc);
+        __atomic_sub_fetch(&g_activeSessions, 1, __ATOMIC_SEQ_CST);
+        LightLock_Lock(&g_slotLock);
+        for (int i = 0; i < kMaxSessions; i++) {
+            if (&g_slots[i] == slot) {
+                g_attachedReal[i] = 0;
+            }
         }
+        slot->used = false;
+        LightLock_Unlock(&g_slotLock);
     }
-    slot->used = false;
-    LightLock_Unlock(&g_slotLock);
 }
 
-// Creates a session pair for `real` and starts its forwarding thread. On success the game
-// gets *client in place of `real`.
+// Starts one worker per slot. Runs from PatchProcess, on a thread libctru set up.
+void StartWorkers() {
+    int started = 0;
+    for (int i = 0; i < kMaxSessions; i++) {
+        SessionSlot *slot = &g_slots[i];
+        LightEvent_Init(&slot->start, RESET_ONESHOT);
+        slot->ready = threadCreate(SessionWorker, slot, kSessionStack, kSessionPriority, -2, true) != nullptr;
+        started += slot->ready;
+    }
+    if (started < kMaxSessions) {
+        Note("Error", "StartWorkers", "started %d of %d session workers", started, kMaxSessions);
+    }
+}
+
+// Creates a session pair for `real` and wakes the slot's worker to forward it. On success the
+// game gets *client in place of `real`. Called from the game's threads: no threadCreate here.
 bool Attach(const char *name, Handle real, Handle *client) {
     LightLock_Lock(&g_slotLock);
     int idx = -1;
@@ -157,7 +192,7 @@ bool Attach(const char *name, Handle real, Handle *client) {
             LightLock_Unlock(&g_slotLock);
             return false; // already intercepted (nested GetServiceHandle hooks)
         }
-        if (!g_slots[i].used && idx < 0) {
+        if (g_slots[i].ready && !g_slots[i].used && idx < 0) {
             idx = i;
         }
     }
@@ -188,17 +223,8 @@ bool Attach(const char *name, Handle real, Handle *client) {
     slot->session.line = slot->line;
     slot->used = true;
     g_attachedReal[idx] = real;
-
-    if (!threadCreate(SessionThread, slot, kSessionStack, kSessionPriority, -2, true)) {
-        slot->used = false;
-        g_attachedReal[idx] = 0;
-        LightLock_Unlock(&g_slotLock);
-        svcCloseHandle(server);
-        svcCloseHandle(*client);
-        Note("Error", "Attach", "could not start the %s session thread", name);
-        return false;
-    }
     LightLock_Unlock(&g_slotLock);
+    LightEvent_Signal(&slot->start);
     __atomic_add_fetch(&g_attachCount, 1, __ATOMIC_SEQ_CST);
     Note("Info", "Attach", "intercepted %s: real 0x%08lx, game now holds 0x%08lx", name, (unsigned long)real,
          (unsigned long)*client);
@@ -261,9 +287,17 @@ void WriterThread(void *) {
         OSD::Notify(Utils::Format("UDS shim: cannot open %s; not logging", g_logPath), Color::Red);
         return;
     }
+    g_writerAlive = true;
     u32 lastAttach = 0;
     u64 lastFlush = osGetTime();
     for (;;) {
+        const u32 want = g_writerWant;
+        if (want == WRITER_PARK) {
+            file.Flush();
+            LightEvent_Signal(&g_writerIdle);
+            LightEvent_Wait(&g_writerResume);
+            continue;
+        }
         LightLock_Lock(&g_logLock);
         const size_t n = shim_ring_pop(&g_ring, chunk, sizeof(chunk));
         const u32 dropped = g_ring.dropped_lines;
@@ -289,6 +323,34 @@ void WriterThread(void *) {
         if (!n) {
             svcSleepThread(50 * kNsPerMs);
         }
+    }
+}
+
+// Asks the writer to park or run. Parking waits at most 100 ms (the writer polls every 50 ms):
+// this runs inside CTRPF's event callback, which Luma expects to answer promptly.
+void SetWriter(WriterState want) {
+    if (!g_writerAlive || g_writerWant == want) {
+        return;
+    }
+    LightEvent_Clear(&g_writerIdle);
+    g_writerWant = want;
+    if (want == WRITER_RUN) {
+        LightEvent_Signal(&g_writerResume);
+    } else {
+        LightEvent_WaitTimeout(&g_writerIdle, 100 * kNsPerMs);
+    }
+}
+
+void OnProcessEvent(Process::Event event) {
+    switch (event) {
+    case Process::Event::HOME_EXIT:
+    case Process::Event::SWAP_EXIT:
+    case Process::Event::SLEEP_EXIT:
+        SetWriter(WRITER_RUN);
+        break;
+    default: // HOME_ENTER, SWAP_ENTER, SLEEP_ENTER, EXIT
+        SetWriter(WRITER_PARK);
+        break;
     }
 }
 
@@ -375,8 +437,12 @@ void Start() {
     Note("Info", "Start", "udsrelay shim %s for title %s; tracing %s; payload_max %ld", kShimVersion, g_proc, ports,
          g_cfg.payload_max);
 
+    StartWorkers(); // before the hooks, so a slot is ready by the time the game opens a service
     InstallHooks();
 
+    LightEvent_Init(&g_writerIdle, RESET_STICKY);
+    LightEvent_Init(&g_writerResume, RESET_ONESHOT);
+    Process::SetProcessEventCallback(OnProcessEvent);
     if (!threadCreate(WriterThread, nullptr, kWriterStack, kWriterPriority, -2, true)) {
         OSD::Notify("UDS shim: could not start the log writer", Color::Red);
     }
