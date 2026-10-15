@@ -213,13 +213,29 @@ func TestRedact(t *testing.T) {
 		pfx + "kind=blob wall=3 port=nwm::UDS sess=1 cmd=0x001e tag=netinfo conn_type=1 size=264 hex=98b6e921b8300b01\n" +
 		// NodeInfo's friend-code seed is words 2-3 of InitializeWithVersion.
 		pfx + `kind=req wall=4 port=nwm::UDS sess=0 cmd=0x001b name="InitializeWithVersion" tid=0 proc="p" hdr=0x001b0302 words=0x001b0302,0x00014000,0x0310beb0,0x0afb0002,0x0061006b` + "\n" +
-		pfx + "kind=blob wall=5 port=nwm::UDS sess=1 cmd=0x0017 tag=send dest=0x0002 chan=243 flags=0x02 size=2 hex=0201\n"
+		pfx + "kind=blob wall=5 port=nwm::UDS sess=1 cmd=0x0017 tag=send dest=0x0002 chan=243 flags=0x02 size=2 hex=0201\n" +
+		// The peer's seed, from DecryptBeaconData's node list (node 2 here), and both seeds in
+		// the game's own data frames. Only byte-aligned matches count.
+		pfx + "kind=blob wall=6 port=nwm::UDS sess=1 cmd=0x001f tag=beacon_nodes size=640 hex=" +
+		strings.Repeat("00", 0x28) + "1122334455667788" + strings.Repeat("00", 0x20) + "\n" +
+		pfx + "kind=blob wall=7 port=nwm::UDS sess=1 cmd=0x0017 tag=send dest=0x0002 chan=243 flags=0x02 size=12 hex=aab0be1003" + "0200fb0a" + "cc\n" +
+		pfx + "kind=blob wall=8 port=nwm::UDS sess=2 cmd=0x0014 tag=recv bind=2 src=0x0002 size=9 hex=011122334455667788\n" +
+		pfx + "kind=blob wall=9 port=nwm::UDS sess=2 cmd=0x0014 tag=recv bind=2 src=0x0002 size=9 hex=a1122334455667788b\n"
 	var out bytes.Buffer
 	n, err := Redact(strings.NewReader(in), &out)
-	if err != nil || n != 4 {
-		t.Fatalf("Redact = %d, %v; want 4 lines", n, err)
+	if err != nil || n != 7 {
+		t.Fatalf("Redact = %d, %v; want 7 lines", n, err)
 	}
 	got := out.String()
+	for _, want := range []string{
+		"size=12 redacted=seed hex=aa0000000000000000cc\n",
+		"size=9 redacted=seed hex=010000000000000000\n",
+		"size=9 hex=a1122334455667788b\n", // not byte-aligned: not the seed
+	} {
+		if !strings.Contains(got, want) {
+			t.Errorf("missing %q in:\n%s", want, got)
+		}
+	}
 	for _, secret := range []string{"4d6f6f6e6b", "00aa", "98b6e921b830", "0310beb0", "0afb0002"} {
 		if strings.Contains(got, secret) {
 			t.Errorf("%s left in:\n%s", secret, got)
@@ -236,7 +252,7 @@ func TestRedact(t *testing.T) {
 		}
 	}
 	recs, err := Parse(strings.NewReader(got), "console")
-	if err != nil || len(recs) != 5 || recs[0].Size != 12 || len(recs[0].Data) != 0 || recs[3].Words[2] != 0 {
+	if err != nil || len(recs) != 9 || recs[0].Size != 12 || len(recs[0].Data) != 0 || recs[3].Words[2] != 0 {
 		t.Errorf("redacted log does not parse cleanly: %v %+v", err, recs)
 	}
 }

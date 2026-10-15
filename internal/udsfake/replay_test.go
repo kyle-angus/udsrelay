@@ -23,6 +23,7 @@ func TestReplayTraces(t *testing.T) {
 		"drop-01":      {"host.log", "client.log"},
 		"drop-02":      {"host.log", "client.log"},
 		"battle-hw-01": {"console-host.log", "console-client.log"},
+		"relay-hw-01":  {"console-host.log", "console-client.log"},
 	}
 	for name, files := range traces {
 		t.Run(name, func(t *testing.T) {
@@ -108,6 +109,7 @@ func TestReplayTracesShim(t *testing.T) {
 		"drop-01":      {"host.log", "client.log"},
 		"drop-02":      {"host.log", "client.log"},
 		"battle-hw-01": {"console-host.log", "console-client.log"},
+		"relay-hw-01":  {"console-host.log", "console-client.log"},
 	}
 	for name, files := range traces {
 		t.Run(name, func(t *testing.T) {

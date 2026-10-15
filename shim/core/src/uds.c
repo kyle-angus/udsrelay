@@ -248,12 +248,56 @@ static void not_connected(shim_uds *u, uint32_t reason) {
     signal_binds(u);
 }
 
+// Stores a frame in chunks from the pool. Returns its first chunk, or NONE if the pool is short.
+static uint16_t store_frame(shim_uds *u, uint16_t src, const uint8_t *p, size_t n) {
+    const unsigned need = n ? (unsigned)((n + SHIM_UDS_CHUNK_DATA - 1) / SHIM_UDS_CHUNK_DATA) : 1;
+    if (need > u->free_count) {
+        return NONE;
+    }
+    const uint16_t first = u->free_head;
+    uint16_t c = first, last = NONE;
+    for (unsigned k = 0; k < need; k++) {
+        const size_t off = (size_t)k * SHIM_UDS_CHUNK_DATA;
+        const size_t len = n - off < SHIM_UDS_CHUNK_DATA ? n - off : SHIM_UDS_CHUNK_DATA;
+        if (n) {
+            memcpy(u->chunks[c].data, p + off, len);
+        }
+        last = c;
+        c = u->chunks[c].next;
+    }
+    u->free_head = c;
+    u->free_count -= need;
+    u->chunks[last].next = NONE;
+    u->chunks[first].next_frame = NONE;
+    u->chunks[first].src = src;
+    u->chunks[first].len = (uint16_t)n;
+    return first;
+}
+
+// Copies a stored frame out (if out is not NULL) and returns its chunks to the pool.
+static void take_frame(shim_uds *u, uint16_t first, uint8_t *out) {
+    const size_t n = u->chunks[first].len;
+    size_t off = 0;
+    uint16_t c = first;
+    while (c != NONE) {
+        const uint16_t next = u->chunks[c].next;
+        if (out && off < n) {
+            const size_t len = n - off < SHIM_UDS_CHUNK_DATA ? n - off : SHIM_UDS_CHUNK_DATA;
+            memcpy(out + off, u->chunks[c].data, len);
+            off += len;
+        }
+        u->chunks[c].next = u->free_head;
+        u->free_head = c;
+        u->free_count++;
+        c = next;
+    }
+}
+
 static void free_queue(shim_uds *u, shim_uds_bind *b) {
     while (b->head != NONE) {
-        const uint16_t i = b->head;
-        b->head = u->packets[i].next;
-        u->packets[i].next = u->free_head;
-        u->free_head = i;
+        const uint16_t f = b->head;
+        b->head = u->chunks[f].next_frame;
+        take_frame(u, f, NULL);
     }
     b->tail = NONE;
     b->count = b->queued_bytes = 0;
@@ -308,22 +352,19 @@ static void r_data(void *ctx, uint16_t src, uint16_t dst, uint8_t channel, uint8
         if (!b->used || b->channel != channel || (b->node != SHIM_RELAY_BROADCAST && b->node != src)) {
             continue;
         }
-        if (b->queued_bytes + n > b->buf_size || u->free_head == NONE) {
+        if (b->queued_bytes + n > b->buf_size) {
             continue;
         }
-        const uint16_t s = u->free_head;
-        shim_uds_packet *pk = &u->packets[s];
-        u->free_head = pk->next;
-        pk->next = NONE;
-        pk->src = src;
-        pk->len = (uint16_t)n;
-        memcpy(pk->data, p, n);
-        if (b->tail == NONE) {
-            b->head = s;
-        } else {
-            u->packets[b->tail].next = s;
+        const uint16_t f = store_frame(u, src, p, n);
+        if (f == NONE) {
+            continue;
         }
-        b->tail = s;
+        if (b->tail == NONE) {
+            b->head = f;
+        } else {
+            u->chunks[b->tail].next_frame = f;
+        }
+        b->tail = f;
         b->count++;
         b->queued_bytes += (uint32_t)n;
         b->received++;
@@ -409,10 +450,11 @@ int shim_uds_init(shim_uds *u, const shim_uds_ops *ops, const char *key, size_t 
     for (int i = 0; i < SHIM_UDS_MAX_BINDS; i++) {
         u->binds[i].head = u->binds[i].tail = NONE;
     }
-    for (int i = 0; i < SHIM_UDS_PACKET_SLOTS; i++) {
-        u->packets[i].next = (uint16_t)(i + 1 < SHIM_UDS_PACKET_SLOTS ? i + 1 : NONE);
+    for (int i = 0; i < SHIM_UDS_CHUNKS; i++) {
+        u->chunks[i].next = (uint16_t)(i + 1 < SHIM_UDS_CHUNKS ? i + 1 : NONE);
     }
     u->free_head = 0;
+    u->free_count = SHIM_UDS_CHUNKS;
     // A locally administered MAC for the beacons, from the session ID.
     const uint8_t mac[6] = {0x02, (uint8_t)(session >> 24), (uint8_t)(session >> 16), (uint8_t)(session >> 8),
                             (uint8_t)session, 0x01};
@@ -943,20 +985,17 @@ static void pull_packet(shim_uds *u, uint32_t *cmd, uint8_t *out) {
     if (!in_network(u) || !b) {
         result = SHIM_UDS_RESULT_INVALID_STATE;
     } else if (b->head != NONE) {
-        shim_uds_packet *pk = &u->packets[b->head];
-        if (max && pk->len > max) {
+        const uint16_t f = b->head;
+        if (max && u->chunks[f].len > max) {
             result = SHIM_UDS_RESULT_INVALID_STATE; // what NWM does here is untested; keep the frame
         } else {
-            size = pk->len;
-            src = pk->src;
-            memcpy(out, pk->data, size);
-            const uint16_t s = b->head;
-            b->head = pk->next;
+            size = u->chunks[f].len;
+            src = u->chunks[f].src;
+            b->head = u->chunks[f].next_frame;
             if (b->head == NONE) {
                 b->tail = NONE;
             }
-            pk->next = u->free_head;
-            u->free_head = s;
+            take_frame(u, f, out);
             b->count--;
             b->queued_bytes -= size;
         }

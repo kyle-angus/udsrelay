@@ -43,8 +43,11 @@ extern "C" {
 #define SHIM_UDS_OUT_SIZE 0x5C8
 #define SHIM_UDS_MAX_FRAME 0x5C8
 #define SHIM_UDS_MAX_BINDS 16
-/// Received frames waiting in bind queues, across all binds.
-#define SHIM_UDS_PACKET_SLOTS 32
+/// Received frames wait in bind queues in fixed chunks from one pool: 512 chunks of 120 bytes
+/// hold about 64 KB, several times one X/Y bind's 0x2E30-byte buffer. Each bind is limited to
+/// the buffer size the game asked for, as NWM limits it, not to a frame count.
+#define SHIM_UDS_CHUNK_DATA 120
+#define SHIM_UDS_CHUNKS 512
 #define SHIM_UDS_MAX_SCAN 8
 /// One network as the relay sends it: struct, u16 bitmask, a NodeInfo per node.
 #define SHIM_UDS_NETWORK_MAX (SHIM_RELAY_NETINFO_SIZE + 2 + SHIM_RELAY_MAX_NODES * SHIM_RELAY_NODEINFO_SIZE)
@@ -95,12 +98,14 @@ typedef struct {
     uint16_t bitmask;
 } shim_uds_status;
 
+/// One chunk of a queued frame. A frame's first chunk also carries its source, its length and
+/// the link to the next frame in the queue.
 typedef struct {
-    uint16_t next; ///< next slot in the same queue, or SHIM_UDS_NONE
-    uint16_t src;
-    uint16_t len;
-    uint8_t data[SHIM_UDS_MAX_FRAME];
-} shim_uds_packet;
+    uint16_t next;       ///< next chunk of the same frame, or 0xFFFF
+    uint16_t next_frame; ///< first chunk of the next queued frame, or 0xFFFF (first chunks only)
+    uint16_t src, len;   ///< first chunks only
+    uint8_t data[SHIM_UDS_CHUNK_DATA];
+} shim_uds_chunk;
 
 typedef struct {
     int used;
@@ -108,7 +113,7 @@ typedef struct {
     uint8_t channel;
     uint16_t node; ///< 0xFFFF: from any node
     uint32_t buf_size, queued_bytes, count, received;
-    uint16_t head, tail;
+    uint16_t head, tail; ///< first chunks of the oldest and newest queued frames
     shim_handle_t event;
 } shim_uds_bind;
 
@@ -132,8 +137,8 @@ typedef struct {
     uint32_t word23;
 
     shim_uds_bind binds[SHIM_UDS_MAX_BINDS];
-    shim_uds_packet packets[SHIM_UDS_PACKET_SLOTS];
-    uint16_t free_head;
+    shim_uds_chunk chunks[SHIM_UDS_CHUNKS];
+    uint16_t free_head, free_count;
 
     // The scan in flight (filled by the relay's on_scan callback).
     uint8_t scan[SHIM_UDS_MAX_SCAN][SHIM_UDS_NETWORK_MAX];

@@ -95,7 +95,7 @@ The build script copies `shim/core` and `shim/plugin` to `/tmp/udsrelay-shim-bui
 3. Check the plugin menu (Select by default) → Status: hooks installed, sessions intercepted, bytes written and dropped lines.
 4. Quit the game from the HOME menu. The log flushes every second, so at most the last second is lost.
 5. Copy the new log from `sdmc:/udsrelay/logs/` off each console (SD card reader, or ftpd) before the next session, under a name that includes the session, for example `trade-hw-02-host.log`. Two sessions copied to the same name overwrite each other.
-6. Redact each log into `recon/traces/<session>/`. The game's first scan returns every nearby Wi-Fi access point, so the raw logs contain third-party network names and MAC addresses. They also carry your consoles' own MACs and friend-code seeds. `redact` empties every beacon payload, zeroes the host MAC in netinfo and the NodeInfo friend-code seeds, and keeps the rest:
+6. Redact each log into `recon/traces/<session>/`. The game's first scan returns every nearby Wi-Fi access point, so the raw logs contain third-party network names and MAC addresses. They also carry your consoles' own MACs and friend-code seeds. `redact` empties every beacon payload, zeroes the host MAC in netinfo and the NodeInfo friend-code seeds (also where X/Y puts them in its own data frames during a trade), and keeps the rest:
 
    ```bash
    go run ./cmd/udstrace redact ~/Desktop/trade-hw-02-host.log recon/traces/trade-hw-02/console-host.log
@@ -194,7 +194,7 @@ How it is put together:
 - If the relay does not answer HELLO within 3 s of InitializeWithVersion, the emulator fails it with `0xE06113F9`, what real NWM returned in section 7, so the game shows its usual communication error.
 - Results follow `battle-hw-01`: 0x0021 succeeds, 0x0023 returns a word ending `1fff`, DestroyNetwork with no network and PullPacket after leaving fail with `0xC8A113EA`. Commands it does not know succeed with no output and are logged as `not emulated`.
 
-On a PC, `TestReplayTracesShim` (in `internal/udsfake`) runs each of the six two-console traces through two copies of the emulator (`shim/core/tests/uds_replay.c`) against the Go relay, as the game's side: it sends hardware-shaped IPC requests, parses the beacons and joins through DecryptBeaconData's node list. It checks every reply against the recording, every frame byte for byte, the reply layouts, and that every status change was signalled.
+On a PC, `TestReplayTracesShim` (in `internal/udsfake`) runs each of the seven two-console traces, including `relay-hw-01` from this mode on hardware, through two copies of the emulator (`shim/core/tests/uds_replay.c`) against the Go relay, as the game's side: it sends hardware-shaped IPC requests, parses the beacons and joins through DecryptBeaconData's node list. It checks every reply against the recording, every frame byte for byte, the reply layouts, and that every status change was signalled.
 
 ### On two consoles
 
@@ -217,7 +217,8 @@ What to look for: whether the client sees the host's network in PSS, whether the
 ### Results (2026-10-15, two consoles on one LAN, Pokémon X, Luma3DS v13.4)
 
 - **0.3.0:** PSS found the other console and a full trade completed over the relay, but both consoles then froze on a black screen (music still playing). After DisconnectNetwork or DestroyNetwork and the Unbinds, the game waits for its receive thread, which waits on the bind event. Real NWM signals the bind events on teardown and Unbind, so the thread pulls once, gets `0xC8A113EA` and exits (`battle-hw-01` shows that pull). The emulator did not signal them.
-- **0.3.1** signals every bind's event on Unbind, Shutdown, DestroyNetwork, DisconnectNetwork and a lost network. A full trade and a full battle completed over the relay, each returning to PSS normally, with no warnings and no unhandled commands in the host's log (884 frames sent, 776 received). The replay test now checks these signals.
+- **0.3.1** signals every bind's event on Unbind, Shutdown, DestroyNetwork, DisconnectNetwork and a lost network. A full trade and a full battle completed over the relay, each returning to PSS normally, with no warnings and no unhandled commands in either log. The host sent 884 frames and the client received 883; the client sent 773 and the host received all 773. The replay test now checks these signals. The redacted logs are `recon/traces/relay-hw-01/`.
+- **0.3.2** came from replaying `relay-hw-01`. Received frames were capped at 32 across all binds, where NWM limits each bind to the buffer size the game asks for (0x2E30 bytes in X/Y, roughly 180 of its frames). The replay delivers frames in bursts, as internet latency will, and lost frames past the cap. The queue now holds 64 KB of 120-byte chunks with NWM's per-bind byte limit. Not yet run on hardware.
 - Still unconfirmed: the reason code a client sees when the host quits mid-match, and play across two networks (Phase 5).
 
 ## Troubleshooting

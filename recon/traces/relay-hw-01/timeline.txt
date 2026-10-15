@@ -1,0 +1,1306 @@
+      ?  client    · debug note x6 (through ?)
+  +0.000s  client  ndm:u OverrideDefaultDaemons(words=0xf) -> OK
+  +0.007s  client  ndm:u SuspendDaemons(words=0x6) -> OK
+  +3.072s  client  ndm:u ResumeDaemons(words=0x2) -> OK
+  +3.073s  client  ndm:u ResumeDaemons(words=0x4) -> OK
+      ?  host      · debug note x5 (through ?)
+  +3.390s  host    ndm:u OverrideDefaultDaemons(words=0xf) -> OK
+  +3.390s  host    ndm:u SuspendDaemons(words=0x6) -> OK
+  +3.390s  host      · debug note x1 (through +3.390s)
+  +5.478s  host    ndm:u ResumeDaemons(words=0x2) -> OK
+  +5.479s  host    ndm:u ResumeDaemons(words=0x4) -> OK
+ +23.278s  host    ndm:u EnterExclusiveState(state=LocalCommunications) -> OK
+ +23.278s  host      · debug note x3 (through +23.278s)
+ +23.284s  host    InitializeWithVersion(shmem=0x14000 user="P1" version=0x400) -> OK +event handle
+ +23.318s  client  ndm:u EnterExclusiveState(state=LocalCommunications) -> OK
+ +23.318s  client    · debug note x3 (through +23.319s)
+ +23.326s  client  InitializeWithVersion(shmem=0x14000 user="P2" version=0x400) -> OK +event handle
+ +23.284s  host      · debug note x1 (through +23.284s)
+ +23.329s  host    SetProbeResponseParam(words=0x321f00,0x0) -> OK
+ +23.329s  host      · debug note x1 (through +23.329s)
+ +23.332s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +23.326s  client    · debug note x1 (through +23.326s)
+ +23.369s  client  SetProbeResponseParam(words=0x321f00,0x0) -> OK
+ +23.369s  client    · debug note x1 (through +23.369s)
+ +23.370s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +23.371s  client    · debug note x2 (through +23.371s)
+ +23.951s  client  DestroyNetwork() -> OK
+ +23.951s  client    · debug note x1 (through +23.951s)
+ +24.000s  client  cmd_0023() -> OK words=0x32031fff
+ +24.000s  client    · debug note x1 (through +24.000s)
+ +24.000s  client  cmd_0023() -> OK words=0x32031fff
+ +24.001s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0xffffffff id8=0xff) -> OK words=0x4000c,0x4001a48
+ +24.001s  client    · debug note x1 (through +24.001s)
+ +24.028s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +24.054s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +24.054s  client    · debug note x1 (through +24.054s)
+ +24.056s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +24.057s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +24.057s  client    · debug note x1 (through +24.057s)
+ +24.464s  client  DestroyNetwork() -> OK
+ +24.513s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +24.542s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +24.544s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +24.545s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +23.332s  host      · debug note x2 (through +23.332s)
+ +25.104s  host    DestroyNetwork() -> OK
+ +25.104s  host      · debug note x1 (through +25.104s)
+ +25.139s  host    cmd_0023() -> OK words=0x909c1fff
+ +25.139s  host      · debug note x1 (through +25.139s)
+ +25.140s  host    cmd_0023() -> OK words=0x909c1fff
+ +25.141s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0xffffffff id8=0xff) -> OK words=0x4000c,0x4001a48
+ +25.141s  host      · debug note x1 (through +25.141s)
+ +25.172s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +25.195s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +25.196s  host      · debug note x1 (through +25.196s)
+ +25.198s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +25.223s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +25.225s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +25.226s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +25.226s  host      · debug note x1 (through +25.226s)
+ +25.636s  host    DestroyNetwork() -> OK
+ +25.646s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +25.674s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +25.677s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +25.677s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +25.678s  host      · debug note x1 (through +25.678s)
+ +26.091s  host    DestroyNetwork() -> OK
+ +26.124s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +26.148s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +26.150s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +26.151s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +24.545s  client    · debug note x1 (through +24.545s)
+ +26.315s  client  DestroyNetwork() -> OK
+ +26.339s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +26.368s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +26.372s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +26.400s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +26.402s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +26.424s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +26.432s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +26.450s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +26.452s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +26.453s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +26.151s  host      · debug note x1 (through +26.151s)
+ +26.947s  host    DestroyNetwork() -> OK
+ +26.968s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +26.995s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +26.998s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +27.028s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +27.031s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +27.031s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +26.454s  client    · debug note x1 (through +26.454s)
+ +27.637s  client  DestroyNetwork() -> OK
+ +27.689s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +27.711s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +27.723s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +27.741s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +27.743s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +27.769s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +27.772s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +27.772s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +27.773s  client    · debug note x1 (through +27.773s)
+ +28.563s  client  DestroyNetwork() -> OK
+ +27.032s  host      · debug note x1 (through +27.032s)
+ +28.588s  host    DestroyNetwork() -> OK
+ +28.602s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +28.608s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +28.632s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +28.639s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +28.656s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +28.662s  client  SetProbeResponseParam(words=0x321f00,0x40000) -> OK
+ +28.662s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +28.682s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +28.685s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +28.714s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +28.716s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +28.717s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +28.717s  host      · debug note x1 (through +28.717s)
+ +29.122s  host    DestroyNetwork() -> OK
+ +29.192s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +29.219s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +29.221s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +29.222s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +29.223s  host      · debug note x1 (through +29.223s)
+ +30.019s  host    DestroyNetwork() -> OK
+ +30.039s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +30.069s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +30.071s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +30.093s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +30.095s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +30.095s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +28.663s  client    · debug note x1 (through +28.663s)
+ +30.228s  client  DestroyNetwork() -> OK
+ +30.244s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +30.277s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +30.280s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +30.299s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +30.301s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +30.326s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +30.328s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +30.352s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +30.359s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +30.359s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +30.096s  host      · debug note x1 (through +30.096s)
+ +30.889s  host    DestroyNetwork() -> OK
+ +30.909s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +30.938s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +30.941s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +30.964s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +30.971s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +30.972s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +30.360s  client    · debug note x1 (through +30.360s)
+ +31.149s  client  DestroyNetwork() -> OK
+ +31.170s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +31.196s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +31.200s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +31.229s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +31.231s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +31.232s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +30.972s  host      · debug note x1 (through +30.972s)
+ +32.145s  host    DestroyNetwork() -> OK
+ +32.216s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +32.245s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +32.248s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +32.275s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +32.278s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +32.308s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +32.312s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +32.312s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +31.232s  client    · debug note x1 (through +31.232s)
+ +32.792s  client  DestroyNetwork() -> OK
+ +32.907s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +32.939s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +32.942s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +32.967s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +32.969s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +32.993s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +33.001s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +33.021s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +33.023s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +33.024s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +32.313s  host      · debug note x1 (through +32.313s)
+ +33.101s  host    DestroyNetwork() -> OK
+ +33.128s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +33.152s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +33.161s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +33.181s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +33.183s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +33.184s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +33.024s  client    · debug note x1 (through +33.024s)
+ +34.590s  client  DestroyNetwork() -> OK
+ +34.655s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +34.687s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +34.690s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +34.710s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +34.713s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +34.740s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +34.742s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +33.184s  host      · debug note x1 (through +33.184s)
+ +34.753s  host    DestroyNetwork() -> OK
+ +34.768s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +34.771s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +34.773s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +34.774s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +34.798s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +34.802s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +34.823s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +34.831s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +34.851s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +34.853s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +34.883s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +34.885s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +34.885s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +34.774s  client    · debug note x1 (through +34.774s)
+ +35.951s  client  DestroyNetwork() -> OK
+ +35.980s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +36.009s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +36.011s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +36.041s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +36.043s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +34.886s  host      · debug note x1 (through +34.886s)
+ +36.060s  host    DestroyNetwork() -> OK
+ +36.064s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +36.066s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +36.066s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +36.085s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +36.109s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +36.111s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +36.137s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +36.140s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +36.169s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +36.171s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +36.172s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +36.067s  client    · debug note x1 (through +36.067s)
+ +36.477s  client  DestroyNetwork() -> OK
+ +36.598s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +36.628s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +36.631s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +36.632s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +36.172s  host      · debug note x1 (through +36.172s)
+ +37.347s  host    DestroyNetwork() -> OK
+ +37.412s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +36.632s  client    · debug note x1 (through +36.632s)
+ +37.424s  client  DestroyNetwork() -> OK
+ +37.440s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +37.446s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +37.465s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +37.470s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +37.492s  host    SetProbeResponseParam(words=0x321f00,0x40000) -> OK
+ +37.493s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +37.501s  client  SetProbeResponseParam(words=0x321f00,0x40000) -> OK
+ +37.502s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +37.494s  host      · debug note x1 (through +37.494s)
+ +39.064s  host    DestroyNetwork() -> OK
+ +37.502s  client    · debug note x1 (through +37.502s)
+ +39.072s  client  DestroyNetwork() -> OK
+ +39.085s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +39.093s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +39.117s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +39.120s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +39.146s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +39.151s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +39.177s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +39.179s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +39.202s  host    SetProbeResponseParam(words=0x321f00,0x40000) -> OK
+ +39.203s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +39.206s  client  SetProbeResponseParam(words=0x321f00,0x40000) -> OK
+ +39.206s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +39.204s  host      · debug note x1 (through +39.204s)
+ +39.614s  host    DestroyNetwork() -> OK
+ +39.672s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +39.703s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +39.705s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +39.711s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +39.207s  client    · debug note x1 (through +39.207s)
+ +40.389s  client  DestroyNetwork() -> OK
+ +40.412s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +40.442s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +40.444s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +40.476s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +40.479s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +40.511s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +40.512s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +40.513s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +39.711s  host      · debug note x1 (through +39.711s)
+ +40.885s  host    DestroyNetwork() -> OK
+ +40.900s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +40.922s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +40.924s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +40.949s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +40.952s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +40.973s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +40.981s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +40.981s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +40.514s  client    · debug note x1 (through +40.514s)
+ +41.693s  client  DestroyNetwork() -> OK
+ +41.714s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +41.746s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +41.748s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +41.792s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +41.794s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +41.825s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +41.827s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +41.827s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +40.982s  host      · debug note x1 (through +40.982s)
+ +42.155s  host    DestroyNetwork() -> OK
+ +42.203s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +42.227s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +42.229s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +42.256s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +42.259s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +42.286s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +42.288s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +42.289s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +41.828s  client    · debug note x1 (through +41.828s)
+ +43.398s  client  DestroyNetwork() -> OK
+ +43.455s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +43.487s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +43.490s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +43.543s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +43.546s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +43.561s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +43.562s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +43.588s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +43.591s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +43.591s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +42.290s  host      · debug note x1 (through +42.290s)
+ +43.850s  host    DestroyNetwork() -> OK
+ +43.925s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +43.950s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +43.957s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +43.976s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +43.978s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +44.009s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +44.011s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +44.041s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +44.042s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +44.043s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +44.044s  host      · debug note x1 (through +44.044s)
+ +44.835s  host    DestroyNetwork() -> OK
+ +44.964s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +44.994s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +44.996s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +45.019s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +45.026s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +45.027s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +43.592s  client    · debug note x1 (through +43.592s)
+ +45.158s  client  DestroyNetwork() -> OK
+ +45.195s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +45.225s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +45.228s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +45.252s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +45.255s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +45.285s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +45.289s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +45.319s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +45.321s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +45.322s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +45.322s  client    · debug note x1 (through +45.322s)
+ +46.494s  client  DestroyNetwork() -> OK
+ +46.527s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +46.557s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +46.559s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +46.579s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +46.581s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +45.028s  host      · debug note x1 (through +45.028s)
+ +46.584s  host    DestroyNetwork() -> OK
+ +46.598s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +46.606s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +46.608s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +46.609s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +46.625s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +46.632s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +46.651s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +46.653s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +46.682s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +46.684s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +46.703s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +46.705s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +46.706s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +46.609s  client    · debug note x1 (through +46.609s)
+ +47.408s  client  DestroyNetwork() -> OK
+ +47.450s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +47.480s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +47.483s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +46.706s  host      · debug note x1 (through +46.706s)
+ +47.501s  host    DestroyNetwork() -> OK
+ +47.507s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +47.510s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +47.511s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +47.533s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +47.555s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +47.557s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +47.586s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +47.588s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +47.588s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +47.511s  client    · debug note x1 (through +47.511s)
+ +47.920s  client  DestroyNetwork() -> OK
+ +47.961s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +47.589s  host      · debug note x1 (through +47.589s)
+ +47.991s  host    DestroyNetwork() -> OK
+ +47.994s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +47.996s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +47.997s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +48.003s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +48.034s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +48.037s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +48.038s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +48.038s  host      · debug note x1 (through +48.038s)
+ +48.443s  host    DestroyNetwork() -> OK
+ +48.547s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +48.578s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +48.587s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +48.587s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +47.997s  client    · debug note x1 (through +47.997s)
+ +48.788s  client  DestroyNetwork() -> OK
+ +48.884s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +48.930s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +48.932s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +48.945s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +48.948s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +48.948s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +48.588s  host      · debug note x1 (through +48.588s)
+ +49.379s  host    DestroyNetwork() -> OK
+ +49.473s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +49.496s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +49.498s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +49.525s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +49.526s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +49.527s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +48.949s  client    · debug note x1 (through +48.949s)
+ +50.509s  client  DestroyNetwork() -> OK
+ +50.624s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +50.652s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +50.654s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +50.685s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +50.688s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +49.528s  host      · debug note x1 (through +49.528s)
+ +50.708s  host    DestroyNetwork() -> OK
+ +50.718s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +50.720s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +50.727s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +50.739s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +50.741s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +50.741s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +50.752s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +50.761s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +50.778s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +50.781s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +50.809s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +50.811s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +50.812s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +50.812s  host      · debug note x1 (through +50.812s)
+ +51.600s  host    DestroyNetwork() -> OK
+ +51.722s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +51.751s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +51.753s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +51.779s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +51.782s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +51.783s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +50.742s  client    · debug note x1 (through +50.742s)
+ +51.921s  client  DestroyNetwork() -> OK
+ +51.941s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +51.972s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +51.974s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +51.994s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +51.997s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +52.025s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +52.027s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +52.028s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +51.783s  host      · debug note x1 (through +51.783s)
+ +53.342s  host    DestroyNetwork() -> OK
+ +53.468s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +53.501s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +53.504s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +53.524s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +53.526s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +53.555s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +53.557s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +53.585s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +53.587s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +53.588s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +52.028s  client    · debug note x1 (through +52.028s)
+ +53.593s  client  DestroyNetwork() -> OK
+ +53.626s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +53.659s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +53.662s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +53.680s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +53.682s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +53.710s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +53.712s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +53.735s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +53.742s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +53.743s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +53.588s  host      · debug note x1 (through +53.588s)
+ +54.765s  host    DestroyNetwork() -> OK
+ +54.794s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +54.822s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +54.825s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +54.860s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +54.862s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +54.890s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +54.893s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +54.893s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +54.894s  host      · debug note x1 (through +54.894s)
+ +55.310s  host    DestroyNetwork() -> OK
+ +53.743s  client    · debug note x1 (through +53.743s)
+ +55.314s  client  DestroyNetwork() -> OK
+ +55.338s  host    DestroyNetwork() -> 0xC8A113EA (desc=1002 module=68 summary=5 level=25)
+ +55.346s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +55.369s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +55.383s  host    Shutdown() -> OK
+ +55.383s  host      · debug note x3 (through +55.384s)
+ +55.385s  host    ndm:u LeaveExclusiveState(words=0x20,0x29) -> OK
+ +55.399s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +55.430s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +55.456s  client  SetProbeResponseParam(words=0x321f00,0x40000) -> OK
+ +55.457s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +55.385s  host      · debug note x1 (through +55.385s)
+ +56.020s  host    ndm:u EnterExclusiveState(state=LocalCommunications) -> OK
+ +56.020s  host      · debug note x2 (through +56.020s)
+ +56.024s  host    InitializeWithVersion(shmem=0x14000 user="P1" version=0x400) -> OK +event handle
+ +56.024s  host      · debug note x1 (through +56.024s)
+ +56.025s  host    GetConnectionStatus() -> OK NotConnected reason=None node=1 nodes=0/0 bitmask=0x0000 changed=0x0000
+ +56.025s  host      · debug note x1 (through +56.025s)
+ +56.086s  host    Bind(bind=2 recv_buf=0x2e30 chan=243 node=broadcast) -> OK +event handle
+ +56.086s  host      · debug note x1 (through +56.086s)
+ +56.087s  host    SetProbeResponseParam(words=0x321f00,0x0) -> OK
+ +56.087s  host      · debug note x1 (through +56.087s)
+ +56.087s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x01 max_nodes=4 appdata=0B passphrase=13B) -> OK
+ +56.088s  host      · debug note x2 (through +56.088s)
+ +56.122s  host    GetConnectionStatus() -> OK ConnectedAsHost reason=ConnectionEstablished node=1 nodes=1/4 bitmask=0x0001 changed=0x0001
+ +56.123s  host      · GetChannel x1, debug note x1 (through +56.123s)
+ +56.145s  host    SetApplicationData(size=184) -> OK
+ +56.146s  host      · debug note x1 (through +56.146s)
+ +56.186s  host    SetApplicationData(size=184) -> OK
+ +55.457s  client    · debug note x1 (through +55.457s)
+ +57.021s  client  DestroyNetwork() -> OK
+ +57.074s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +57.103s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +57.106s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +57.128s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +57.136s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +57.156s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +57.158s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +57.184s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +57.187s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +57.187s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +57.188s  client    · debug note x1 (through +57.188s)
+ +57.596s  client  DestroyNetwork() -> OK
+ +57.607s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
+ +57.632s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
+ +57.634s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
+ +57.635s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +57.635s  client    · debug note x1 (through +57.635s)
+ +59.200s  client  DestroyNetwork() -> OK
+ +59.212s  client  DestroyNetwork() -> 0xC8A113EA (desc=1002 module=68 summary=5 level=25)
+ +59.252s  client  Shutdown() -> OK
+ +59.252s  client    · debug note x3 (through +59.252s)
+ +59.253s  client  ndm:u LeaveExclusiveState(words=0x20,0x28) -> OK
+ +59.253s  client    · debug note x1 (through +59.253s)
+ +59.922s  client  ndm:u EnterExclusiveState(state=LocalCommunications) -> OK
+ +59.922s  client    · debug note x2 (through +59.922s)
+ +59.927s  client  InitializeWithVersion(shmem=0x14000 user="P2" version=0x400) -> OK +event handle
+ +59.927s  client    · debug note x1 (through +59.927s)
+ +59.928s  client  GetConnectionStatus() -> OK NotConnected reason=None node=1 nodes=0/0 bitmask=0x0000 changed=0x0000
+ +59.928s  client    · debug note x1 (through +59.928s)
+ +59.990s  client  RecvBeaconBroadcastData(out_size=0x8000 comm_id=0x00055d10 id8=0x01) -> OK words=0x8000c,0x4001000
+ +59.990s  client    · debug note x1 (through +59.990s)
+ +60.045s  client  Bind(bind=2 recv_buf=0x2e30 chan=243 node=broadcast) -> OK +event handle
+ +60.045s  client    · debug note x1 (through +60.045s)
+ +60.045s  client  ConnectToNetwork(conn_type=1 comm_id=0x00055d10 id8=0x01 max_nodes=4 appdata=184B passphrase=13B) -> OK
+ +60.046s  client    · debug note x2 (through +60.046s)
+ +60.076s  client  GetConnectionStatus() -> OK ConnectedAsClient reason=ConnectionEstablished node=2 nodes=2/4 bitmask=0x0003 changed=0x0003
+ +56.197s  host      · debug note x1 (through +56.197s)
+ +60.078s  host    GetConnectionStatus() -> OK ConnectedAsHost reason=ConnectionEstablished node=1 nodes=2/4 bitmask=0x0003 changed=0x0002
+ +60.079s  client  DestroyNetwork() -> 0xC8A113EA (desc=1002 module=68 summary=5 level=25)
+ +60.141s  host      · PullPacket x229, PullPacket empty x207, SendTo x286, debug note x3 (through +132.276s)
++132.290s  host    GetConnectionStatus() -> OK ConnectedAsHost reason=ConnectionEstablished node=1 nodes=1/4 bitmask=0x0001 changed=0x0002
+ +60.079s  client    · PullPacket x285, PullPacket empty x281, SendTo x229, debug note x3 (through +132.289s)
++132.291s  client  DisconnectNetwork() -> OK
++132.311s  client    · PullPacket x1, debug note x1 (through +132.311s)
++132.317s  client  GetConnectionStatus() -> OK NotConnected reason=reason_2 node=2 nodes=0/0 bitmask=0x0000 changed=0x0000
++132.317s  client  PullPacket(bind=2 max=0x5dc) -> 0xC8A113EA (desc=1002 module=68 summary=5 level=25)
++132.318s  client  Unbind(bind=2) -> OK words=0x2,0xf3ffff,0x11e,0x0
++132.318s  client    · debug note x1 (through +132.318s)
++132.319s  client  Unbind(bind=1) -> OK words=0x1,0x0,0x0,0x0
++132.668s  client  Bind(bind=4 recv_buf=0x2e30 chan=243 node=broadcast) -> OK +event handle
++132.782s  client  Unbind(bind=4) -> OK words=0x4,0xf3ffff,0x0,0x0
++132.783s  client  Unbind(bind=3) -> OK words=0x3,0x0,0x0,0x0
++132.784s  client  Shutdown() -> OK
++132.784s  client    · debug note x3 (through +132.784s)
++132.785s  client  ndm:u LeaveExclusiveState(words=0x20,0x28) -> OK
++134.040s  host    DestroyNetwork() -> OK
++134.040s  host      · debug note x1 (through +134.040s)
++134.061s  host    PullPacket(bind=2 max=0x5dc) -> 0xC8A113EA (desc=1002 module=68 summary=5 level=25)
++134.061s  host    GetConnectionStatus() -> OK NotConnected reason=reason_2 node=1 nodes=0/0 bitmask=0x0000 changed=0x0000
++134.062s  host    Unbind(bind=2) -> OK words=0x2,0xf3ffff,0xe5,0x0
++134.062s  host      · debug note x1 (through +134.062s)
++134.063s  host    Unbind(bind=1) -> OK words=0x1,0x0,0x0,0x0
++134.466s  host    Bind(bind=4 recv_buf=0x2e30 chan=243 node=broadcast) -> OK +event handle
++134.580s  host    Unbind(bind=4) -> OK words=0x4,0xf3ffff,0x0,0x0
++134.581s  host    Unbind(bind=3) -> OK words=0x3,0x0,0x0,0x0
++134.581s  host    Shutdown() -> OK
++134.581s  host      · debug note x3 (through +134.582s)
++134.583s  host    ndm:u LeaveExclusiveState(words=0x20,0x29) -> OK
++140.782s  client  ndm:u EnterExclusiveState(state=LocalCommunications) -> OK
++140.782s  client    · debug note x2 (through +140.782s)
++140.802s  client  InitializeWithVersion(shmem=0x14000 user="P2" version=0x400) -> OK +event handle
++140.802s  client    · debug note x1 (through +140.802s)
++140.834s  client  SetProbeResponseParam(words=0x321f00,0x3700) -> OK
++140.834s  client    · debug note x1 (through +140.834s)
++140.835s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++141.459s  host    ndm:u EnterExclusiveState(state=LocalCommunications) -> OK
++141.459s  host      · debug note x2 (through +141.459s)
++141.479s  host    InitializeWithVersion(shmem=0x14000 user="P1" version=0x400) -> OK +event handle
++141.479s  host      · debug note x1 (through +141.479s)
++141.512s  host    SetProbeResponseParam(words=0x321f00,0x3700) -> OK
++141.512s  host      · debug note x1 (through +141.512s)
++141.513s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++140.835s  client    · debug note x2 (through +140.835s)
++142.481s  client  DestroyNetwork() -> OK
++142.481s  client    · debug note x1 (through +142.481s)
++142.617s  client  cmd_0023() -> OK words=0x26651fff
++142.617s  client    · debug note x1 (through +142.617s)
++142.617s  client  cmd_0023() -> OK words=0x26651fff
++142.618s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0xffffffff id8=0xff) -> OK words=0x4000c,0x4001a48
++142.618s  client    · debug note x1 (through +142.618s)
++142.636s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++142.660s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++142.661s  client    · debug note x1 (through +142.661s)
++142.663s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++142.686s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++142.689s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++142.712s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++142.714s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++141.513s  host      · debug note x2 (through +141.513s)
++142.735s  host    DestroyNetwork() -> OK
++142.743s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++142.745s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++142.746s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++142.735s  host      · debug note x1 (through +142.735s)
++142.755s  host    cmd_0023() -> OK words=0xe45b1fff
++142.755s  host      · debug note x1 (through +142.755s)
++142.756s  host    cmd_0023() -> OK words=0xe45b1fff
++142.757s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0xffffffff id8=0xff) -> OK words=0x4000c,0x4001a48
++142.757s  host      · debug note x1 (through +142.757s)
++142.786s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++142.819s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++142.820s  host      · debug note x1 (through +142.820s)
++142.821s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++142.850s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++142.853s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++142.854s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++142.746s  client    · debug note x1 (through +142.746s)
++143.538s  client  DestroyNetwork() -> OK
++143.564s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++143.584s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++143.586s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++143.612s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++143.614s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++143.614s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++143.615s  client    · debug note x1 (through +143.615s)
++144.021s  client  DestroyNetwork() -> OK
++142.854s  host      · debug note x1 (through +142.854s)
++144.028s  host    DestroyNetwork() -> OK
++144.091s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++144.109s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++144.117s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++144.140s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++144.146s  client  SetProbeResponseParam(words=0x321f00,0x40000) -> OK
++144.146s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++144.163s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++144.165s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++144.165s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++144.166s  host      · debug note x1 (through +144.166s)
++144.574s  host    DestroyNetwork() -> OK
++144.599s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++144.629s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++144.631s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++144.631s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++144.147s  client    · debug note x1 (through +144.147s)
++145.326s  client  DestroyNetwork() -> OK
++145.449s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++145.474s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++145.476s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++145.505s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++145.507s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++145.526s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++145.537s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++145.538s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++144.632s  host      · debug note x1 (through +144.632s)
++145.811s  host    DestroyNetwork() -> OK
++145.932s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++145.960s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++145.963s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++145.986s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++145.993s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++146.013s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++146.015s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++146.016s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++145.538s  client    · debug note x1 (through +145.538s)
++146.325s  client  DestroyNetwork() -> OK
++146.370s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++146.396s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++146.404s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++146.424s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++146.426s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++146.427s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++146.427s  client    · debug note x1 (through +146.427s)
++147.222s  client  DestroyNetwork() -> OK
++147.245s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++147.273s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++147.276s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++147.303s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++147.307s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++147.307s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++146.016s  host      · debug note x1 (through +146.016s)
++147.580s  host    DestroyNetwork() -> OK
++147.602s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++147.635s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++147.637s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++147.657s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++147.659s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++147.702s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++147.704s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++147.725s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++147.736s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++147.736s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++147.737s  host      · debug note x1 (through +147.737s)
++148.140s  host    DestroyNetwork() -> OK
++148.185s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++148.194s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++148.203s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++148.204s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++147.308s  client    · debug note x1 (through +147.308s)
++148.481s  client  DestroyNetwork() -> OK
++148.625s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++148.650s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++148.652s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++148.697s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++148.699s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++148.725s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++148.728s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++148.729s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++148.204s  host      · debug note x1 (through +148.204s)
++148.990s  host    DestroyNetwork() -> OK
++149.104s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++149.130s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++149.138s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++149.157s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++149.159s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++149.160s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++148.729s  client    · debug note x1 (through +148.729s)
++149.520s  client  DestroyNetwork() -> OK
++149.648s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++149.660s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++149.663s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++149.683s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++149.685s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++149.686s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++149.686s  client    · debug note x1 (through +149.686s)
++150.099s  client  DestroyNetwork() -> OK
++150.156s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++150.184s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++150.185s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++150.186s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++149.160s  host      · debug note x1 (through +149.160s)
++150.342s  host    DestroyNetwork() -> OK
++150.358s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++150.392s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++150.394s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++150.414s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++150.416s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++150.440s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++150.443s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++150.443s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++150.187s  client    · debug note x1 (through +150.187s)
++151.753s  client  DestroyNetwork() -> OK
++151.801s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++151.834s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++151.836s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++151.867s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++151.870s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++151.891s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++151.893s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++151.920s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++151.922s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++151.923s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++150.444s  host      · debug note x1 (through +150.444s)
++152.006s  host    DestroyNetwork() -> OK
++152.079s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++152.102s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++152.112s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++152.133s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++152.136s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++152.161s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++152.164s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++152.187s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++152.194s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++152.195s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++152.196s  host      · debug note x1 (through +152.196s)
++152.603s  host    DestroyNetwork() -> OK
++152.689s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++152.716s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++152.718s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++152.719s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++151.924s  client    · debug note x1 (through +151.924s)
++153.491s  client  DestroyNetwork() -> OK
++153.505s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++152.720s  host      · debug note x1 (through +152.720s)
++153.524s  host    DestroyNetwork() -> OK
++153.537s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++153.538s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++153.540s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++153.564s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++153.566s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++153.566s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++153.590s  host    SetProbeResponseParam(words=0x321f00,0x40000) -> OK
++153.591s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++153.591s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++153.623s  client  SetProbeResponseParam(words=0x321f00,0x40000) -> OK
++153.623s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++153.592s  host      · debug note x1 (through +153.592s)
++154.774s  host    DestroyNetwork() -> OK
++154.791s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++153.624s  client    · debug note x1 (through +153.624s)
++154.800s  client  DestroyNetwork() -> OK
++154.810s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++154.819s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++154.837s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++154.844s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++154.866s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++154.870s  host    SetProbeResponseParam(words=0x321f00,0x40000) -> OK
++154.871s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++154.896s  client  SetProbeResponseParam(words=0x321f00,0x40000) -> OK
++154.896s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++154.872s  host      · debug note x1 (through +154.872s)
++155.670s  host    DestroyNetwork() -> OK
++155.688s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++155.722s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++155.724s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++155.745s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++155.747s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++155.748s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++154.897s  client    · debug note x1 (through +154.897s)
++156.081s  client  DestroyNetwork() -> OK
++156.198s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++156.231s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++156.233s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++156.252s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++156.255s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++156.280s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++156.282s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++156.283s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++155.749s  host      · debug note x1 (through +155.749s)
++157.312s  host    DestroyNetwork() -> OK
++157.325s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++157.352s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++157.359s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++157.378s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++157.380s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++157.409s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++157.411s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++157.432s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++157.434s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++157.435s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++156.283s  client    · debug note x1 (through +156.283s)
++157.844s  client  DestroyNetwork() -> OK
++157.938s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++157.968s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++157.970s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++157.995s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++157.997s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++158.021s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++158.023s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++158.046s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++158.049s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++158.050s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++157.435s  host      · debug note x1 (through +157.435s)
++158.614s  host    DestroyNetwork() -> OK
++158.730s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++158.762s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++158.765s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++158.785s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++158.787s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++158.815s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++158.817s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++158.817s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++158.050s  client    · debug note x1 (through +158.050s)
++158.842s  client  DestroyNetwork() -> OK
++158.869s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++158.898s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++158.900s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++158.929s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++158.931s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++158.931s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++158.818s  host      · debug note x1 (through +158.818s)
++159.230s  host    DestroyNetwork() -> OK
++159.350s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++159.372s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++159.382s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++159.383s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++158.932s  client    · debug note x1 (through +158.932s)
++159.724s  client  DestroyNetwork() -> OK
++159.782s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++159.810s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++159.812s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++159.837s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++159.838s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++159.839s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++159.383s  host      · debug note x1 (through +159.383s)
++160.940s  host    DestroyNetwork() -> OK
++160.987s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++161.012s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++161.020s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++161.041s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++161.044s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++161.070s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++161.073s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++161.102s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++161.104s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++161.105s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++159.840s  client    · debug note x1 (through +159.840s)
++161.404s  client  DestroyNetwork() -> OK
++161.522s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++161.551s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++161.554s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++161.580s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++161.582s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++161.606s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++161.608s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++161.639s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++161.641s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++161.641s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++161.105s  host      · debug note x1 (through +161.105s)
++161.893s  host    DestroyNetwork() -> OK
++161.914s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++161.940s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++161.944s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++161.972s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++161.977s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++161.977s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++161.978s  host      · debug note x1 (through +161.978s)
++162.773s  host    DestroyNetwork() -> OK
++162.827s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++162.860s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++162.862s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++162.893s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++162.895s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++162.895s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++161.642s  client    · debug note x1 (through +161.642s)
++163.204s  client  DestroyNetwork() -> OK
++163.268s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++163.300s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++163.304s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++163.325s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++163.333s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++163.352s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++163.355s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++163.384s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++163.387s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++163.387s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++163.388s  client    · debug note x1 (through +163.388s)
++163.791s  client  DestroyNetwork() -> OK
++163.803s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++163.833s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++163.835s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++163.835s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++162.896s  host      · debug note x1 (through +162.896s)
++164.069s  host    DestroyNetwork() -> OK
++164.133s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++164.163s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++164.165s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++164.187s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++164.189s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++164.214s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++164.216s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++164.217s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++164.218s  host      · debug note x1 (through +164.218s)
++165.397s  host    DestroyNetwork() -> OK
++163.836s  client    · debug note x1 (through +163.836s)
++165.399s  client  DestroyNetwork() -> OK
++165.415s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++165.424s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++165.443s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++165.457s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++165.468s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++165.483s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++165.500s  host    SetProbeResponseParam(words=0x321f00,0x40000) -> OK
++165.500s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++165.509s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++165.539s  client  SetProbeResponseParam(words=0x321f00,0x40000) -> OK
++165.540s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++165.501s  host      · debug note x1 (through +165.501s)
++165.906s  host    DestroyNetwork() -> OK
++165.922s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++165.955s  host    SetProbeResponseParam(words=0x321f00,0x40000) -> OK
++165.956s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++165.540s  client    · debug note x1 (through +165.540s)
++165.957s  client  DestroyNetwork() -> OK
++165.983s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++166.008s  client  SetProbeResponseParam(words=0x321f00,0x40000) -> OK
++166.009s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++166.010s  client    · debug note x1 (through +166.010s)
++166.424s  client  DestroyNetwork() -> OK
++166.442s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++166.466s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++166.469s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++166.469s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++165.957s  host      · debug note x1 (through +165.957s)
++167.523s  host    DestroyNetwork() -> OK
++167.639s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++167.676s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++167.678s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++167.706s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++167.709s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++167.730s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++167.739s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++167.765s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++167.773s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++167.773s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++166.470s  client    · debug note x1 (through +166.470s)
++168.033s  client  DestroyNetwork() -> OK
++168.082s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++168.105s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++168.109s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++168.132s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++168.135s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++168.157s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++168.164s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++168.188s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++168.190s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++168.191s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++168.192s  client    · debug note x1 (through +168.192s)
++168.985s  client  DestroyNetwork() -> OK
++169.103s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++169.135s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++169.137s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++169.168s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++169.170s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++169.170s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++167.774s  host      · debug note x1 (through +167.774s)
++169.333s  host    DestroyNetwork() -> OK
++169.380s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++169.412s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++169.414s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++169.459s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++169.461s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++169.480s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++169.482s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++169.511s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++169.514s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++169.514s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++169.515s  host      · debug note x1 (through +169.515s)
++169.921s  host    DestroyNetwork() -> OK
++169.934s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++169.171s  client    · debug note x1 (through +169.171s)
++169.959s  client  DestroyNetwork() -> OK
++169.962s  host    SetProbeResponseParam(words=0x321f00,0x40000) -> OK
++169.963s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++169.974s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++170.002s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++170.028s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++170.035s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++170.036s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++170.036s  client    · debug note x1 (through +170.036s)
++170.441s  client  DestroyNetwork() -> OK
++170.537s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++170.562s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++170.564s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++170.565s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++170.565s  client    · debug note x1 (through +170.565s)
++171.360s  client  DestroyNetwork() -> OK
++171.457s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++171.490s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++171.493s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++171.514s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++171.516s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++171.517s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++169.963s  host      · debug note x1 (through +169.963s)
++171.534s  host    DestroyNetwork() -> OK
++171.557s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++171.584s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++171.587s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++171.609s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++171.618s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++171.638s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++171.640s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++171.666s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++171.669s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++171.670s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++171.670s  host      · debug note x1 (through +171.670s)
++172.078s  host    DestroyNetwork() -> OK
++172.144s  host    DestroyNetwork() -> 0xC8A113EA (desc=1002 module=68 summary=5 level=25)
++172.179s  host    Shutdown() -> OK
++172.179s  host      · debug note x3 (through +172.179s)
++172.180s  host    ndm:u LeaveExclusiveState(words=0x20,0x29) -> OK
++171.517s  client    · debug note x1 (through +171.517s)
++172.313s  client  DestroyNetwork() -> OK
++172.367s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++172.395s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++172.428s  client  SetProbeResponseParam(words=0x321f00,0x40000) -> OK
++172.429s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++172.815s  host    ndm:u EnterExclusiveState(state=LocalCommunications) -> OK
++172.816s  host      · debug note x2 (through +172.816s)
++172.821s  host    InitializeWithVersion(shmem=0x14000 user="P1" version=0x400) -> OK +event handle
++172.821s  host      · debug note x1 (through +172.821s)
++172.822s  host    GetConnectionStatus() -> OK NotConnected reason=None node=1 nodes=0/0 bitmask=0x0000 changed=0x0000
++172.822s  host      · debug note x1 (through +172.822s)
++172.881s  host    Bind(bind=2 recv_buf=0x2e30 chan=243 node=broadcast) -> OK +event handle
++172.881s  host      · debug note x1 (through +172.881s)
++172.882s  host    SetProbeResponseParam(words=0x321f00,0x0) -> OK
++172.882s  host      · debug note x1 (through +172.882s)
++172.882s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x01 max_nodes=4 appdata=0B passphrase=13B) -> OK
++172.883s  host      · debug note x2 (through +172.883s)
++172.907s  host    GetConnectionStatus() -> OK ConnectedAsHost reason=ConnectionEstablished node=1 nodes=1/4 bitmask=0x0001 changed=0x0001
++172.908s  host      · GetChannel x1, debug note x1 (through +172.908s)
++172.940s  host    SetApplicationData(size=184) -> OK
++172.940s  host      · debug note x1 (through +172.940s)
++172.965s  host    SetApplicationData(size=184) -> OK
++172.429s  client    · debug note x1 (through +172.429s)
++173.226s  client  DestroyNetwork() -> OK
++173.300s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++173.330s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++173.332s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++173.368s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++173.370s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++173.370s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++173.371s  client    · debug note x1 (through +173.371s)
++174.550s  client  DestroyNetwork() -> OK
++174.580s  client  DestroyNetwork() -> 0xC8A113EA (desc=1002 module=68 summary=5 level=25)
++174.626s  client  Shutdown() -> OK
++174.626s  client    · debug note x3 (through +174.626s)
++174.627s  client  ndm:u LeaveExclusiveState(words=0x20,0x28) -> OK
++175.280s  client  ndm:u EnterExclusiveState(state=LocalCommunications) -> OK
++175.280s  client    · debug note x2 (through +175.280s)
++175.284s  client  InitializeWithVersion(shmem=0x14000 user="P2" version=0x400) -> OK +event handle
++175.284s  client    · debug note x1 (through +175.284s)
++175.285s  client  GetConnectionStatus() -> OK NotConnected reason=None node=1 nodes=0/0 bitmask=0x0000 changed=0x0000
++175.285s  client    · debug note x1 (through +175.285s)
++175.349s  client  RecvBeaconBroadcastData(out_size=0x8000 comm_id=0x00055d10 id8=0x01) -> OK words=0x8000c,0x4001000
++172.985s  host      · debug note x1 (through +172.985s)
++175.450s  host    GetConnectionStatus() -> OK ConnectedAsHost reason=ConnectionEstablished node=1 nodes=2/4 bitmask=0x0003 changed=0x0002
++175.349s  client    · debug note x1 (through +175.349s)
++175.453s  client  Bind(bind=2 recv_buf=0x2e30 chan=243 node=broadcast) -> OK +event handle
++175.453s  client    · debug note x1 (through +175.453s)
++175.453s  client  ConnectToNetwork(conn_type=1 comm_id=0x00055d10 id8=0x01 max_nodes=4 appdata=184B passphrase=13B) -> OK
++175.454s  client    · debug note x2 (through +175.454s)
++175.478s  client  GetConnectionStatus() -> OK ConnectedAsClient reason=ConnectionEstablished node=2 nodes=2/4 bitmask=0x0003 changed=0x0003
++175.481s  client  DestroyNetwork() -> 0xC8A113EA (desc=1002 module=68 summary=5 level=25)
++175.535s  host      · PullPacket x544, PullPacket empty x513, SendTo x598, debug note x3 (through +318.101s)
++318.104s  host    GetConnectionStatus() -> OK ConnectedAsHost reason=ConnectionEstablished node=1 nodes=1/4 bitmask=0x0001 changed=0x0002
++175.481s  client    · PullPacket x597, PullPacket empty x590, SendTo x544, debug note x3 (through +318.114s)
++318.124s  client  DisconnectNetwork() -> OK
++318.124s  client    · debug note x1 (through +318.124s)
++318.131s  client  PullPacket(bind=2 max=0x5dc) -> 0xC8A113EA (desc=1002 module=68 summary=5 level=25)
++318.132s  client  GetConnectionStatus() -> OK NotConnected reason=reason_2 node=2 nodes=0/0 bitmask=0x0000 changed=0x0000
++318.133s  client  PullPacket(bind=2 max=0x5dc) -> 0xC8A113EA (desc=1002 module=68 summary=5 level=25)
++318.133s  client  Unbind(bind=2) -> OK words=0x2,0xf3ffff,0x255,0x0
++318.133s  client    · debug note x1 (through +318.133s)
++318.134s  client  Unbind(bind=1) -> OK words=0x1,0x0,0x0,0x0
++318.508s  client  Bind(bind=4 recv_buf=0x2e30 chan=243 node=broadcast) -> OK +event handle
++318.622s  client  Unbind(bind=4) -> OK words=0x4,0xf3ffff,0x0,0x0
++318.623s  client  Unbind(bind=3) -> OK words=0x3,0x0,0x0,0x0
++318.624s  client  Shutdown() -> OK
++318.624s  client    · debug note x3 (through +318.624s)
++318.625s  client  ndm:u LeaveExclusiveState(words=0x20,0x28) -> OK
++319.980s  host    DestroyNetwork() -> OK
++319.980s  host      · debug note x1 (through +319.980s)
++320.011s  host    PullPacket(bind=2 max=0x5dc) -> 0xC8A113EA (desc=1002 module=68 summary=5 level=25)
++320.012s  host    GetConnectionStatus() -> OK NotConnected reason=reason_2 node=1 nodes=0/0 bitmask=0x0000 changed=0x0000
++320.013s  host    Unbind(bind=2) -> OK words=0x2,0xf3ffff,0x220,0x0
++320.013s  host      · debug note x1 (through +320.013s)
++320.013s  host    Unbind(bind=1) -> OK words=0x1,0x0,0x0,0x0
++320.389s  host    Bind(bind=4 recv_buf=0x2e30 chan=243 node=broadcast) -> OK +event handle
++320.503s  host    Unbind(bind=4) -> OK words=0x4,0xf3ffff,0x0,0x0
++320.504s  host    Unbind(bind=3) -> OK words=0x3,0x0,0x0,0x0
++320.505s  host    Shutdown() -> OK
++320.505s  host      · debug note x3 (through +320.505s)
++320.506s  host    ndm:u LeaveExclusiveState(words=0x20,0x29) -> OK
++321.171s  client  ndm:u EnterExclusiveState(state=LocalCommunications) -> OK
++321.172s  client    · debug note x2 (through +321.172s)
++321.192s  client  InitializeWithVersion(shmem=0x14000 user="P2" version=0x400) -> OK +event handle
++321.192s  client    · debug note x1 (through +321.192s)
++321.225s  client  SetProbeResponseParam(words=0x321f00,0x700) -> OK
++321.225s  client    · debug note x1 (through +321.225s)
++321.226s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++321.226s  client    · debug note x2 (through +321.226s)
++321.665s  client  DestroyNetwork() -> OK
++321.665s  client    · debug note x1 (through +321.665s)
++321.781s  client  cmd_0023() -> OK words=0x4151fff
++321.781s  client    · debug note x1 (through +321.781s)
++321.781s  client  cmd_0023() -> OK words=0x4151fff
++321.782s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0xffffffff id8=0xff) -> OK words=0x4000c,0x4001a48
++321.782s  client    · debug note x1 (through +321.782s)
++321.809s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++321.835s  client  SetProbeResponseParam(words=0x321f00,0x40000) -> OK
++321.835s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++321.953s  host    ndm:u EnterExclusiveState(state=LocalCommunications) -> OK
++321.953s  host      · debug note x2 (through +321.953s)
++321.974s  host    InitializeWithVersion(shmem=0x14000 user="P1" version=0x400) -> OK +event handle
++321.974s  host      · debug note x1 (through +321.974s)
++322.019s  host    SetProbeResponseParam(words=0x321f00,0x700) -> OK
++322.019s  host      · debug note x1 (through +322.019s)
++322.020s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++321.836s  client    · debug note x1 (through +321.836s)
++322.663s  client  DestroyNetwork() -> OK
++322.705s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++322.732s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++322.733s  client    · debug note x1 (through +322.733s)
++322.734s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++322.765s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++322.769s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++322.769s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++322.021s  host      · debug note x2 (through +322.021s)
++323.192s  host    DestroyNetwork() -> OK
++323.192s  host      · debug note x1 (through +323.192s)
++323.292s  host    cmd_0023() -> OK words=0x76f31fff
++323.292s  host      · debug note x1 (through +323.292s)
++323.293s  host    cmd_0023() -> OK words=0x76f31fff
++323.294s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0xffffffff id8=0xff) -> OK words=0x4000c,0x4001a48
++323.294s  host      · debug note x1 (through +323.294s)
++323.317s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++323.353s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++323.353s  host      · debug note x1 (through +323.353s)
++323.358s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++323.359s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++323.360s  host      · debug note x1 (through +323.360s)
++324.144s  host    DestroyNetwork() -> OK
++324.213s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++324.237s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++324.245s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++324.265s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++324.267s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++324.267s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++322.770s  client    · debug note x1 (through +322.770s)
++324.328s  client  DestroyNetwork() -> OK
++324.340s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++324.373s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++324.376s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++324.394s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++324.396s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++324.421s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++324.424s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++324.453s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++324.457s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++324.458s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++324.458s  client    · debug note x1 (through +324.458s)
++324.866s  client  DestroyNetwork() -> OK
++324.888s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++324.921s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++324.924s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++324.924s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++324.268s  host      · debug note x1 (through +324.268s)
++325.063s  host    DestroyNetwork() -> OK
++325.132s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++325.165s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++325.168s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++325.188s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++325.191s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++325.191s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++324.925s  client    · debug note x1 (through +324.925s)
++325.716s  client  DestroyNetwork() -> OK
++325.778s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++325.811s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++325.814s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++325.844s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++325.846s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++325.847s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++325.192s  host      · debug note x1 (through +325.192s)
++326.755s  host    DestroyNetwork() -> OK
++326.873s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++326.903s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++326.906s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++326.927s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++326.929s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++326.954s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++326.957s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++326.978s  host    DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++326.980s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++326.981s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++325.847s  client    · debug note x1 (through +325.847s)
++327.029s  client  DestroyNetwork() -> OK
++327.060s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++327.082s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++327.084s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++327.111s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++327.113s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x4001a48
++327.137s  client  DecryptBeaconData(words=0x420402,0x70be150,0x3f8802,0x70be950,0x3f8c02,0x70bf150) -> OK words=0xa00002,0x70c5950
++327.144s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> OK
++327.144s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++326.981s  host      · debug note x1 (through +326.981s)
++328.158s  host    DestroyNetwork() -> OK
++328.204s  host    DestroyNetwork() -> 0xC8A113EA (desc=1002 module=68 summary=5 level=25)
++328.250s  host    Shutdown() -> OK
++328.250s  host      · debug note x3 (through +328.251s)
++328.252s  host    ndm:u LeaveExclusiveState(words=0x20,0x29) -> OK
++327.145s  client    · debug note x1 (through +327.145s)
++328.321s  client  DestroyNetwork() -> OK
++328.341s  client  DestroyNetwork() -> 0xC8A113EA (desc=1002 module=68 summary=5 level=25)
++328.392s  client  Shutdown() -> OK
++328.392s  client    · debug note x3 (through +328.392s)
++328.393s  client  ndm:u LeaveExclusiveState(words=0x20,0x28) -> OK
++328.394s  client  Plugin <Warning> UDS: relay reset our session
++328.394s  client    · debug note x1 (through +328.394s)

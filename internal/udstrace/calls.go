@@ -20,6 +20,9 @@ type Call struct {
 	Wake         *Record
 	// Reply holds the reply words including the header, or nil if never seen.
 	Reply []uint32
+	// ReplyWall is when the reply was logged (0 if never seen). With several sessions busy at
+	// once, a call's effect lands when it replies, so this orders concurrent calls.
+	ReplyWall uint64
 }
 
 // Result returns the reply's result code, if a reply was seen.
@@ -97,13 +100,13 @@ func Build(recs []Record) []Item {
 				// the request, such as ndm:u's one-word-in, one-word-out commands.
 				c.AwaitingWake = true
 			} else {
-				c.Reply = r.Words
+				c.Reply, c.ReplyWall = r.Words, r.Wall
 			}
 		case "wake":
 			for j := len(calls) - 1; j >= 0; j-- {
 				c := calls[j]
 				if c.AwaitingWake && c.Wake == nil && c.Cmd == r.Cmd && c.Port == r.Port {
-					c.Wake, c.Reply = r, r.Words
+					c.Wake, c.Reply, c.ReplyWall = r, r.Words, r.Wall
 					break
 				}
 			}

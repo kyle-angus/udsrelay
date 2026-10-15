@@ -17,16 +17,30 @@ import (
 //   - netinfo payloads keep everything but the host MAC (bytes 0-5), which is zeroed.
 //   - NodeInfo friend-code seeds are zeroed: words 2-3 of InitializeWithVersion requests and of
 //     GetNodeInformation replies. The seed identifies a console's friend code.
+//   - Every seed the log reveals (the two places above, and each node in DecryptBeaconData's
+//     node list) is also zeroed wherever it appears in a payload: X/Y sends each console's seed
+//     in one of its own data frames during a trade.
 //
 // Changed lines gain redacted=<what>; everything else is kept. It returns how many lines changed.
 func Redact(r io.Reader, w io.Writer) (int, error) {
 	sc := bufio.NewScanner(r)
 	sc.Buffer(make([]byte, 0, 64*1024), 16*1024*1024)
+	var lines []string
+	for sc.Scan() {
+		lines = append(lines, sc.Text())
+	}
+	if err := sc.Err(); err != nil {
+		return 0, err
+	}
+	seeds := collectSeeds(lines)
 	bw := bufio.NewWriter(w)
 	n := 0
-	for sc.Scan() {
-		line := sc.Text()
-		if out, ok := redactLine(line); ok {
+	for _, line := range lines {
+		out, ok := redactLine(line)
+		if scrubbed, found := scrubSeeds(out, seeds); found {
+			out, ok = scrubbed, true
+		}
+		if ok {
 			line = out
 			n++
 		}
@@ -34,10 +48,91 @@ func Redact(r io.Reader, w io.Writer) (int, error) {
 			return n, err
 		}
 	}
-	if err := sc.Err(); err != nil {
-		return n, err
-	}
 	return n, bw.Flush()
+}
+
+// collectSeeds finds every friend-code seed the log shows, as the 16 hex digits of its
+// little-endian bytes.
+func collectSeeds(lines []string) map[string]bool {
+	seeds := map[string]bool{}
+	add := func(hexLE string) {
+		if len(hexLE) == 16 && hexLE != "0000000000000000" {
+			seeds[strings.ToLower(hexLE)] = true
+		}
+	}
+	for _, line := range lines {
+		if !strings.Contains(line, "UDSTRACE v=1 ") || !strings.Contains(line, "port="+PortUDS+" ") {
+			continue
+		}
+		kind := field(line, "kind")
+		m := cmdField.FindStringSubmatch(line)
+		if m == nil {
+			continue
+		}
+		cmd := strings.ToLower(m[1])
+		switch {
+		case (kind == "req" && cmd == "001b") || (kind == "rsp" && cmd == "000d"):
+			wm := wordsField.FindStringSubmatch(line)
+			if wm == nil {
+				continue
+			}
+			words := strings.Split(wm[1], ",")
+			if len(words) > 3 {
+				add(wordLE(words[2]) + wordLE(words[3]))
+			}
+		case kind == "blob" && field(line, "tag") == "beacon_nodes":
+			hm := hexField.FindStringSubmatch(line)
+			if hm == nil {
+				continue
+			}
+			const nodeHex = 2 * 0x28
+			for i := 0; i+16 <= len(hm[1]); i += nodeHex {
+				add(hm[1][i : i+16])
+			}
+		}
+	}
+	return seeds
+}
+
+// wordLE renders a 0x-prefixed word as the hex of its little-endian bytes.
+func wordLE(w string) string {
+	w = strings.TrimPrefix(strings.ToLower(w), "0x")
+	if len(w) != 8 {
+		return ""
+	}
+	return w[6:8] + w[4:6] + w[2:4] + w[0:2]
+}
+
+// scrubSeeds zeroes byte-aligned occurrences of any seed in the line's hex payload.
+func scrubSeeds(line string, seeds map[string]bool) (string, bool) {
+	m := hexField.FindStringSubmatchIndex(line)
+	if m == nil || m[3] == m[2] || len(seeds) == 0 {
+		return line, false
+	}
+	payload := []byte(strings.ToLower(line[m[2]:m[3]]))
+	found := false
+	for seed := range seeds {
+		for from := 0; ; {
+			i := strings.Index(string(payload[from:]), seed)
+			if i < 0 {
+				break
+			}
+			i += from
+			if i%2 == 0 {
+				copy(payload[i:], "0000000000000000")
+				found = true
+			}
+			from = i + 1
+		}
+	}
+	if !found {
+		return line, false
+	}
+	out := line[:m[2]] + string(payload) + line[m[3]:]
+	if !strings.Contains(out, " redacted=seed") {
+		out = mark(out, "seed")
+	}
+	return out, true
 }
 
 var (

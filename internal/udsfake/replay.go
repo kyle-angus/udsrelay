@@ -230,8 +230,18 @@ func loadScript(tl TraceLog) (*script, error) {
 			s.hardware = true
 		}
 		s.calls = append(s.calls, it.Call)
-		if it.Call.Cmd == udstrace.CmdSendTo {
-			s.sends = append(s.sends, sendPayload(it.Call))
+	}
+	// The console serves the game's two sessions at once, so one call can arrive while another
+	// is still waiting on the relay or the radio (a PullPacket that gets a frame while
+	// DisconnectNetwork waits for its acknowledgement). The replay runs one call at a time, in
+	// the order the calls completed. Azahar logs are already in that order.
+	sort.SliceStable(s.calls, func(i, j int) bool {
+		a, b := s.calls[i].ReplyWall, s.calls[j].ReplyWall
+		return a != 0 && b != 0 && a < b
+	})
+	for _, c := range s.calls {
+		if c.Cmd == udstrace.CmdSendTo {
+			s.sends = append(s.sends, sendPayload(c))
 		}
 	}
 	return s, nil
@@ -319,9 +329,11 @@ type matcher struct {
 }
 
 // match finds the earliest unmatched peer frame equal to p, allowing for loss and reordering.
+// The search reaches a window past the newest match, so a frame that was never pulled does
+// not stop later ones matching.
 func (m *matcher) match(p []byte) bool {
 	const window = 256
-	for j := m.first; j < len(m.sent) && j < m.first+window; j++ {
+	for j := m.first; j < len(m.sent) && j < max(m.first, m.last+1)+window; j++ {
 		if !m.matched[j] && bytes.Equal(m.sent[j], p) {
 			m.matched[j] = true
 			m.last = max(m.last, j)
