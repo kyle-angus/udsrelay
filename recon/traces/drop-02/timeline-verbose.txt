@@ -1,0 +1,1308 @@
+      ?  host    Network <Info> HandleJoinRequest: User host is a moderator
+      ?  host    Network <Info> SendStatusMessage: [127.0.0.1] host has joined.
+      ?  host    Network <Info> HandleGameNamePacket: host is not playing
+      ?  host    Network <Info> SendStatusMessage: [127.0.0.1] client has joined.
+      ?  host    Network <Info> HandleGameNamePacket: client is not playing
+      ?  host    Network <Info> HandleGameNamePacket: host is playing Pokémon X
+  +0.000s  host    ndm:u OverrideDefaultDaemons(words=0xf) -> OK
+  +0.000s  host    Service.NDM <Warning> OverrideDefaultDaemons: (STUBBED) bit_mask=0x0000000F
+  +0.000s  host    ndm:u SuspendDaemons(words=0x6) -> OK
+  +0.000s  host    Service.NDM <Warning> SuspendDaemons: (STUBBED) bit_mask=0x00000006
+  +0.569s  host    ndm:u ResumeDaemons(words=0x2) -> OK
+  +0.569s  host    Service.NDM <Warning> ResumeDaemons: (STUBBED) bit_mask=0x00000002
+  +0.569s  host    ndm:u ResumeDaemons(words=0x4) -> OK
+  +0.569s  host    Service.NDM <Warning> ResumeDaemons: (STUBBED) bit_mask=0x00000004
+  +0.569s  host    Network <Info> HandleGameNamePacket: client is playing Pokémon X
+  +0.987s  client  ndm:u OverrideDefaultDaemons(words=0xf) -> OK
+  +0.987s  client  Service.NDM <Warning> OverrideDefaultDaemons: (STUBBED) bit_mask=0x0000000F
+  +0.988s  client  ndm:u SuspendDaemons(words=0x6) -> OK
+  +0.988s  client  Service.NDM <Warning> SuspendDaemons: (STUBBED) bit_mask=0x00000006
+  +1.538s  client  ndm:u ResumeDaemons(words=0x2) -> OK
+  +1.538s  client  Service.NDM <Warning> ResumeDaemons: (STUBBED) bit_mask=0x00000002
+  +1.538s  client  ndm:u ResumeDaemons(words=0x4) -> OK
+  +1.538s  client  Service.NDM <Warning> ResumeDaemons: (STUBBED) bit_mask=0x00000004
+  +9.976s  host    ndm:u EnterExclusiveState(state=LocalCommunications) -> OK
+  +9.976s  host    Service.NDM <Warning> EnterExclusiveState: (STUBBED) exclusive_state=0x00000002
+  +9.978s  host    InitializeWithVersion(shmem=0x14000 user="host" version=0x400) -> OK +event handle
+  +9.978s  client  ndm:u EnterExclusiveState(state=LocalCommunications) -> OK
+  +9.978s  client  Service.NDM <Warning> EnterExclusiveState: (STUBBED) exclusive_state=0x00000002
+  +9.979s  client  InitializeWithVersion(shmem=0x14000 user="client" version=0x400) -> OK +event handle
+ +10.026s  host    SetProbeResponseParam(words=0x321f00,0x0) -> UNIMPLEMENTED in Azahar
+ +10.026s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +10.026s  host    signal NWM::connection_status_event
+ +10.026s  client  SetProbeResponseParam(words=0x321f00,0x0) -> UNIMPLEMENTED in Azahar
+ +10.026s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +10.026s  client  signal NWM::connection_status_event
+ +10.864s  host    DestroyNetwork() -> OK
+ +10.864s  host    signal NWM::connection_status_event
+ +10.865s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +11.167s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +11.168s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +11.464s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +11.464s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +11.464s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +11.464s  host    signal NWM::connection_status_event
+ +11.564s  client  DestroyNetwork() -> OK
+ +11.564s  client  signal NWM::connection_status_event
+ +11.564s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +11.868s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +11.869s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +12.166s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +12.166s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +12.467s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +12.467s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +12.768s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +12.769s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +12.769s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +12.769s  client  signal NWM::connection_status_event
+ +13.003s  host    DestroyNetwork() -> OK
+ +13.003s  host    signal NWM::connection_status_event
+ +13.003s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +13.303s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +13.303s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +13.606s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +13.606s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +13.906s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +13.906s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +14.207s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +14.207s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +14.207s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +14.207s  host    signal NWM::connection_status_event
+ +14.305s  client  DestroyNetwork() -> OK
+ +14.305s  client  signal NWM::connection_status_event
+ +14.305s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +14.608s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +14.608s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +14.908s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +14.908s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +15.207s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +15.207s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +15.374s  host    DestroyNetwork() -> OK
+ +15.374s  host    signal NWM::connection_status_event
+ +15.374s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +15.507s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +15.507s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +15.507s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +15.507s  client  signal NWM::connection_status_event
+ +15.676s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +15.676s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +15.977s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +15.977s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +16.275s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +16.275s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +16.275s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +16.275s  host    signal NWM::connection_status_event
+ +16.276s  client  DestroyNetwork() -> OK
+ +16.276s  client  signal NWM::connection_status_event
+ +16.276s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +16.580s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +16.580s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +16.664s  host    DestroyNetwork() -> OK
+ +16.664s  host    signal NWM::connection_status_event
+ +16.664s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +16.880s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +16.880s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +16.880s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +16.880s  client  signal NWM::connection_status_event
+ +16.965s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +16.965s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +16.965s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +16.965s  host    signal NWM::connection_status_event
+ +17.265s  client  DestroyNetwork() -> OK
+ +17.265s  client  signal NWM::connection_status_event
+ +17.265s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +17.566s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +17.566s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +17.566s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +17.566s  client  signal NWM::connection_status_event
+ +17.732s  host    DestroyNetwork() -> OK
+ +17.732s  host    signal NWM::connection_status_event
+ +17.732s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +18.032s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +18.032s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +18.333s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +18.333s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +18.333s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +18.333s  host    signal NWM::connection_status_event
+ +18.717s  host    DestroyNetwork() -> OK
+ +18.717s  host    signal NWM::connection_status_event
+ +18.717s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +18.718s  client  DestroyNetwork() -> OK
+ +18.718s  client  signal NWM::connection_status_event
+ +18.718s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +19.018s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +19.018s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +19.018s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +19.018s  host    signal NWM::connection_status_event
+ +19.019s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +19.019s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +19.319s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +19.621s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +19.621s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +19.621s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +19.621s  client  signal NWM::connection_status_event
+ +20.007s  client  DestroyNetwork() -> OK
+ +20.007s  client  signal NWM::connection_status_event
+ +20.007s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +20.306s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +20.307s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +20.307s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +20.307s  client  signal NWM::connection_status_event
+ +20.557s  host    DestroyNetwork() -> OK
+ +20.557s  host    signal NWM::connection_status_event
+ +20.557s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +20.691s  client  DestroyNetwork() -> OK
+ +20.691s  client  signal NWM::connection_status_event
+ +20.691s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +20.856s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +20.856s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +20.990s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +20.990s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +20.990s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +20.990s  client  signal NWM::connection_status_event
+ +21.159s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +21.159s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +21.460s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +21.460s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +21.760s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +21.760s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +21.760s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +21.760s  host    signal NWM::connection_status_event
+ +22.144s  client  DestroyNetwork() -> OK
+ +22.144s  client  signal NWM::connection_status_event
+ +22.144s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +22.448s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +22.448s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +22.745s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +22.746s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +22.912s  host    DestroyNetwork() -> OK
+ +22.912s  host    signal NWM::connection_status_event
+ +22.912s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +23.046s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +23.047s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +23.047s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +23.047s  client  signal NWM::connection_status_event
+ +23.215s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +23.215s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +23.431s  client  DestroyNetwork() -> OK
+ +23.431s  client  signal NWM::connection_status_event
+ +23.431s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +23.516s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +23.516s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +23.732s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +23.732s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +23.732s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +23.733s  client  signal NWM::connection_status_event
+ +23.814s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +23.814s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +23.814s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +23.814s  host    signal NWM::connection_status_event
+ +24.203s  host    DestroyNetwork() -> OK
+ +24.203s  host    signal NWM::connection_status_event
+ +24.203s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +24.500s  client  DestroyNetwork() -> OK
+ +24.500s  client  signal NWM::connection_status_event
+ +24.500s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +24.503s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +24.503s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +24.503s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +24.503s  host    signal NWM::connection_status_event
+ +24.803s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +24.803s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +25.105s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +25.105s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +25.105s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +25.105s  client  signal NWM::connection_status_event
+ +25.272s  host    DestroyNetwork() -> OK
+ +25.272s  host    signal NWM::connection_status_event
+ +25.272s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +25.573s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +25.574s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +25.871s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +25.871s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +25.871s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +25.871s  host    signal NWM::connection_status_event
+ +26.257s  client  DestroyNetwork() -> OK
+ +26.257s  client  signal NWM::connection_status_event
+ +26.257s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +26.557s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +26.557s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +26.640s  host    DestroyNetwork() -> OK
+ +26.640s  host    signal NWM::connection_status_event
+ +26.640s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +26.858s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +26.858s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +26.941s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +26.941s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +27.160s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +27.160s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +27.160s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +27.160s  client  signal NWM::connection_status_event
+ +27.245s  host    SetProbeResponseParam(words=0x321f00,0x40000) -> UNIMPLEMENTED in Azahar
+ +27.245s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +27.245s  host    signal NWM::connection_status_event
+ +28.396s  host    DestroyNetwork() -> OK
+ +28.396s  host    signal NWM::connection_status_event
+ +28.396s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +28.695s  client  DestroyNetwork() -> OK
+ +28.695s  client  signal NWM::connection_status_event
+ +28.695s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +28.697s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +28.697s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +28.998s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +28.998s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +28.998s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +28.998s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +29.297s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +29.298s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +29.298s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +29.298s  host    signal NWM::connection_status_event
+ +29.299s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +29.600s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +29.685s  host    DestroyNetwork() -> OK
+ +29.685s  host    signal NWM::connection_status_event
+ +29.685s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +29.899s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +29.900s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +29.900s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +29.900s  client  signal NWM::connection_status_event
+ +29.986s  host    SetProbeResponseParam(words=0x321f00,0x40000) -> UNIMPLEMENTED in Azahar
+ +29.986s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +29.986s  host    signal NWM::connection_status_event
+ +31.135s  host    DestroyNetwork() -> OK
+ +31.135s  host    signal NWM::connection_status_event
+ +31.136s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +31.437s  client  DestroyNetwork() -> OK
+ +31.437s  client  signal NWM::connection_status_event
+ +31.437s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +31.438s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +31.438s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +31.740s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +31.740s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +31.740s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +31.740s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +32.038s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +32.038s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +32.038s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +32.038s  host    signal NWM::connection_status_event
+ +32.038s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +32.341s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +32.641s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +32.641s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +32.641s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +32.641s  client  signal NWM::connection_status_event
+ +32.807s  host    DestroyNetwork() -> OK
+ +32.807s  host    signal NWM::connection_status_event
+ +32.807s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +33.028s  client  DestroyNetwork() -> OK
+ +33.028s  client  signal NWM::connection_status_event
+ +33.028s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +33.107s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +33.107s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +33.327s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +33.327s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +33.327s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +33.327s  client  signal NWM::connection_status_event
+ +33.410s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +33.410s  host    DestroyNetwork() -> 0xC8A111EA (desc=490 module=68 summary=5 level=25)
+ +33.410s  host    Service.NWM <Warning> DestroyNetworkHLE: called with status 3
+ +33.460s  host    Shutdown() -> OK
+ +33.461s  host    ndm:u LeaveExclusiveState(words=0x20,0xb) -> OK
+ +33.461s  host    Service.NDM <Warning> LeaveExclusiveState: (STUBBED)
+ +33.933s  host    ndm:u EnterExclusiveState(state=LocalCommunications) -> OK
+ +33.933s  host    Service.NDM <Warning> EnterExclusiveState: (STUBBED) exclusive_state=0x00000002
+ +33.933s  host    InitializeWithVersion(shmem=0x14000 user="host" version=0x400) -> OK +event handle
+ +33.933s  host    GetConnectionStatus() -> OK NotConnected reason=None node=0 nodes=0/0 bitmask=0x0000 changed=0x0000
+ +33.934s  host    GetConnectionStatus() -> OK NotConnected reason=None node=0 nodes=0/0 bitmask=0x0000 changed=0x0000
+ +33.982s  host    Bind(bind=2 recv_buf=0x2e30 chan=243 node=broadcast) -> OK +event handle
+ +33.982s  host    SetProbeResponseParam(words=0x321f00,0x0) -> UNIMPLEMENTED in Azahar
+ +33.982s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x01 max_nodes=4 appdata=0B passphrase=13B) -> OK
+ +33.982s  host    signal NWM::connection_status_event
+ +33.982s  host    GetConnectionStatus() -> OK ConnectedAsHost reason=ConnectionEstablished node=1 nodes=1/4 bitmask=0x0001 changed=0x0001
+ +33.982s  host    GetChannel() -> OK channel=11
+ +34.024s  host    SetApplicationData(size=184) -> OK
+ +34.029s  host    SetApplicationData(size=184) -> OK
+ +34.097s  client  DestroyNetwork() -> OK
+ +34.097s  client  signal NWM::connection_status_event
+ +34.097s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +34.398s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +34.697s  client  SetProbeResponseParam(words=0x321f00,0x40000) -> UNIMPLEMENTED in Azahar
+ +34.697s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +34.697s  client  signal NWM::connection_status_event
+ +36.234s  client  DestroyNetwork() -> OK
+ +36.234s  client  signal NWM::connection_status_event
+ +36.234s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +36.537s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +36.537s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +36.839s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +36.840s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +37.140s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +37.140s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +37.441s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +37.441s  client  DestroyNetwork() -> 0xC8A111EA (desc=490 module=68 summary=5 level=25)
+ +37.441s  client  Service.NWM <Warning> DestroyNetworkHLE: called with status 3
+ +37.489s  client  Shutdown() -> OK
+ +37.489s  client  ndm:u LeaveExclusiveState(words=0x20,0xb) -> OK
+ +37.489s  client  Service.NDM <Warning> LeaveExclusiveState: (STUBBED)
+ +37.947s  client  ndm:u EnterExclusiveState(state=LocalCommunications) -> OK
+ +37.947s  client  Service.NDM <Warning> EnterExclusiveState: (STUBBED) exclusive_state=0x00000002
+ +37.947s  client  InitializeWithVersion(shmem=0x14000 user="client" version=0x400) -> OK +event handle
+ +37.947s  client  GetConnectionStatus() -> OK NotConnected reason=None node=0 nodes=0/0 bitmask=0x0000 changed=0x0000
+ +37.947s  client  GetConnectionStatus() -> OK NotConnected reason=None node=0 nodes=0/0 bitmask=0x0000 changed=0x0000
+ +38.007s  client  RecvBeaconBroadcastData(out_size=0x8000 comm_id=0x00055d10 id8=0x01) -> OK words=0x8000c,0x0
+ +38.307s  client  Bind(bind=2 recv_buf=0x2e30 chan=243 node=broadcast) -> OK +event handle
+ +38.308s  client  ConnectToNetwork(conn_type=1 comm_id=0x00055d10 id8=0x01 max_nodes=4 appdata=184B passphrase=13B) -> OK
+ +38.328s  host    signal NWM::connection_status_event
+ +38.328s  client  signal NWM::connection_status_event
+ +38.328s  client  signal HLE Pause Event: uds::ConnectToNetwork
+ +38.342s  client  GetConnectionStatus() -> OK ConnectedAsClient reason=ConnectionEstablished node=2 nodes=2/4 bitmask=0x0003 changed=0x0003
+ +38.343s  host    GetConnectionStatus() -> OK ConnectedAsHost reason=ConnectionEstablished node=1 nodes=2/4 bitmask=0x0003 changed=0x0002
+ +38.346s  client  DestroyNetwork() -> 0xC8A111EA (desc=490 module=68 summary=5 level=25)
+ +38.346s  client  Service.NWM <Warning> DestroyNetworkHLE: called with status 9
+ +38.391s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +38.399s  client  SendTo(dest=1 chan=243 size=73 flags=0x02) -> OK [send 02010201010039000000000000000000…]
+ +38.417s  host    signal NWM::BindNodeEvent2
+ +38.427s  host    PullPacket(bind=2 max=0x5dc) -> OK size=73 src=2 [recv 02010201010039000000000000000000…]
+ +38.427s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +38.447s  host    SendTo(dest=2 chan=243 size=73 flags=0x02) -> OK [send 02010102010039000000000000000000…]
+ +38.455s  client  signal NWM::BindNodeEvent2
+ +38.476s  client  PullPacket(bind=2 max=0x5dc) -> OK size=73 src=1 [recv 02010102010039000000000000000000…]
+ +38.476s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +38.476s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +38.499s  client  SendTo(dest=1 chan=243 size=89 flags=0x02) -> OK [send 02010201010049000000000000000000…]
+ +38.512s  host    signal NWM::BindNodeEvent2
+ +38.527s  host    PullPacket(bind=2 max=0x5dc) -> OK size=89 src=2 [recv 02010201010049000000000000000000…]
+ +38.527s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +38.549s  host    SendTo(dest=2 chan=243 size=77 flags=0x02) -> OK [send 0201010201003d000000000000000000…]
+ +38.566s  client  signal NWM::BindNodeEvent2
+ +38.576s  client  PullPacket(bind=2 max=0x5dc) -> OK size=77 src=1 [recv 0201010201003d000000000000000000…]
+ +38.576s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +38.613s  client  SendTo(dest=1 chan=243 size=110 flags=0x02) -> OK [send 0201020101005e000000000000000000…]
+ +38.621s  host    signal NWM::BindNodeEvent2
+ +38.625s  host    PullPacket(bind=2 max=0x5dc) -> OK size=110 src=2 [recv 0201020101005e000000000000000000…]
+ +38.625s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +38.658s  host    SendTo(dest=2 chan=243 size=53 flags=0x02) -> OK [send 02010102010025000000000000000000…]
+ +38.660s  client  signal NWM::BindNodeEvent2
+ +38.662s  host    SendTo(dest=2 chan=243 size=73 flags=0x02) -> OK [send 02010102010039000000000000000000…]
+ +38.676s  client  PullPacket(bind=2 max=0x5dc) -> OK size=53 src=1 [recv 02010102010025000000000000000000…]
+ +38.676s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +38.678s  client  signal NWM::BindNodeEvent2
+ +38.692s  client  PullPacket(bind=2 max=0x5dc) -> OK size=73 src=1 [recv 02010102010039000000000000000000…]
+ +38.692s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +38.710s  client  SendTo(dest=1 chan=243 size=73 flags=0x02) -> OK [send 02010201010039000000000000000000…]
+ +38.719s  host    signal NWM::BindNodeEvent2
+ +38.727s  host    PullPacket(bind=2 max=0x5dc) -> OK size=73 src=2 [recv 02010201010039000000000000000000…]
+ +38.727s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +38.748s  host    SendTo(dest=2 chan=243 size=85 flags=0x02) -> OK [send 02010102010045000000000000000000…]
+ +38.757s  client  signal NWM::BindNodeEvent2
+ +38.760s  client  PullPacket(bind=2 max=0x5dc) -> OK size=85 src=1 [recv 02010102010045000000000000000000…]
+ +38.760s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +38.781s  client  SendTo(dest=1 chan=243 size=73 flags=0x02) -> OK [send 02010201010039000000000000000000…]
+ +38.796s  host    signal NWM::BindNodeEvent2
+ +38.811s  host    PullPacket(bind=2 max=0x5dc) -> OK size=73 src=2 [recv 02010201010039000000000000000000…]
+ +38.811s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +38.851s  host    SendTo(dest=2 chan=243 size=78 flags=0x02) -> OK [send 0201010201003e000000000000000000…]
+ +38.851s  host    SendTo(dest=2 chan=243 size=162 flags=0x02) -> OK [send 02010102010092000000000000000000…]
+ +38.851s  host    SendTo(dest=2 chan=243 size=74 flags=0x02) -> OK [send 0201010201003a000000000000000000…]
+ +38.853s  client  signal NWM::BindNodeEvent2
+ +38.853s  client  signal NWM::BindNodeEvent2
+ +38.853s  client  signal NWM::BindNodeEvent2
+ +38.860s  client  PullPacket(bind=2 max=0x5dc) -> OK size=78 src=1 [recv 0201010201003e000000000000000000…]
+ +38.860s  client  PullPacket(bind=2 max=0x5dc) -> OK size=162 src=1 [recv 02010102010092000000000000000000…]
+ +38.860s  client  PullPacket(bind=2 max=0x5dc) -> OK size=74 src=1 [recv 0201010201003a000000000000000000…]
+ +38.860s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +38.860s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +38.895s  client  SendTo(dest=1 chan=243 size=65 flags=0x02) -> OK [send 02010201010031000000000000000000…]
+ +38.895s  client  SendTo(dest=1 chan=243 size=61 flags=0x02) -> OK [send 0201020101002d000000000000000000…]
+ +38.895s  client  SendTo(dest=1 chan=243 size=61 flags=0x02) -> OK [send 0201020101002d000000000000000000…]
+ +38.896s  client  SendTo(dest=1 chan=243 size=53 flags=0x02) -> OK [send 02010201010025000000000000000000…]
+ +38.912s  host    signal NWM::BindNodeEvent2
+ +38.912s  host    signal NWM::BindNodeEvent2
+ +38.912s  host    signal NWM::BindNodeEvent2
+ +38.912s  host    signal NWM::BindNodeEvent2
+ +38.928s  host    PullPacket(bind=2 max=0x5dc) -> OK size=65 src=2 [recv 02010201010031000000000000000000…]
+ +38.928s  host    PullPacket(bind=2 max=0x5dc) -> OK size=61 src=2 [recv 0201020101002d000000000000000000…]
+ +38.928s  host    PullPacket(bind=2 max=0x5dc) -> OK size=61 src=2 [recv 0201020101002d000000000000000000…]
+ +38.928s  host    PullPacket(bind=2 max=0x5dc) -> OK size=53 src=2 [recv 02010201010025000000000000000000…]
+ +38.928s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +38.928s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +38.946s  host    SendTo(dest=2 chan=243 size=212 flags=0x02) -> OK [send 020101020100c4000000000000000000…]
+ +38.948s  host    SendTo(dest=2 chan=243 size=119 flags=0x02) -> OK [send 02010102010067000000000000000000…]
+ +38.948s  host    SendTo(dest=2 chan=243 size=82 flags=0x02) -> OK [send 02010102010042000000000000000000…]
+ +38.950s  host    SendTo(dest=2 chan=243 size=82 flags=0x02) -> OK [send 02010102010042000000000000000000…]
+ +38.950s  host    SendTo(dest=2 chan=243 size=82 flags=0x02) -> OK [send 02010102010042000000000000000000…]
+ +38.950s  host    SendTo(dest=2 chan=243 size=82 flags=0x02) -> OK [send 02010102010042000000000000000000…]
+ +38.950s  host    SendTo(dest=2 chan=243 size=82 flags=0x02) -> OK [send 02010102010042000000000000000000…]
+ +38.950s  host    SendTo(dest=2 chan=243 size=82 flags=0x02) -> OK [send 02010102010042000000000000000000…]
+ +38.950s  host    SendTo(dest=2 chan=243 size=72 flags=0x02) -> OK [send 02010102010038000000000000000000…]
+ +38.950s  host    SendTo(dest=2 chan=243 size=72 flags=0x02) -> OK [send 02010102010038000000000000000000…]
+ +38.952s  client  signal NWM::BindNodeEvent2
+ +38.952s  client  signal NWM::BindNodeEvent2
+ +38.952s  client  signal NWM::BindNodeEvent2
+ +38.952s  client  signal NWM::BindNodeEvent2
+ +38.952s  client  signal NWM::BindNodeEvent2
+ +38.952s  client  signal NWM::BindNodeEvent2
+ +38.952s  client  signal NWM::BindNodeEvent2
+ +38.952s  client  signal NWM::BindNodeEvent2
+ +38.952s  client  signal NWM::BindNodeEvent2
+ +38.952s  client  signal NWM::BindNodeEvent2
+ +38.960s  host    SendTo(dest=2 chan=243 size=53 flags=0x02) -> OK [send 02010102010025000000000000000000…]
+ +38.961s  client  PullPacket(bind=2 max=0x5dc) -> OK size=212 src=1 [recv 020101020100c4000000000000000000…]
+ +38.961s  client  PullPacket(bind=2 max=0x5dc) -> OK size=119 src=1 [recv 02010102010067000000000000000000…]
+ +38.961s  client  PullPacket(bind=2 max=0x5dc) -> OK size=82 src=1 [recv 02010102010042000000000000000000…]
+ +38.961s  client  PullPacket(bind=2 max=0x5dc) -> OK size=82 src=1 [recv 02010102010042000000000000000000…]
+ +38.961s  client  PullPacket(bind=2 max=0x5dc) -> OK size=82 src=1 [recv 02010102010042000000000000000000…]
+ +38.961s  client  PullPacket(bind=2 max=0x5dc) -> OK size=82 src=1 [recv 02010102010042000000000000000000…]
+ +38.961s  client  PullPacket(bind=2 max=0x5dc) -> OK size=82 src=1 [recv 02010102010042000000000000000000…]
+ +38.961s  client  PullPacket(bind=2 max=0x5dc) -> OK size=82 src=1 [recv 02010102010042000000000000000000…]
+ +38.961s  client  PullPacket(bind=2 max=0x5dc) -> OK size=72 src=1 [recv 02010102010038000000000000000000…]
+ +38.961s  client  PullPacket(bind=2 max=0x5dc) -> OK size=72 src=1 [recv 02010102010038000000000000000000…]
+ +38.961s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +38.961s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +38.972s  client  signal NWM::BindNodeEvent2
+ +38.983s  client  SendTo(dest=1 chan=243 size=75 flags=0x02) -> OK [send 0201020101003b000000000000000000…]
+ +38.983s  client  SendTo(dest=1 chan=243 size=75 flags=0x02) -> OK [send 0201020101003b000000000000000000…]
+ +38.983s  client  SendTo(dest=1 chan=243 size=75 flags=0x02) -> OK [send 0201020101003b000000000000000000…]
+ +38.983s  client  SendTo(dest=1 chan=243 size=75 flags=0x02) -> OK [send 0201020101003b000000000000000000…]
+ +38.984s  client  SendTo(dest=1 chan=243 size=75 flags=0x02) -> OK [send 0201020101003b000000000000000000…]
+ +38.984s  client  SendTo(dest=1 chan=243 size=75 flags=0x02) -> OK [send 0201020101003b000000000000000000…]
+ +38.985s  client  PullPacket(bind=2 max=0x5dc) -> OK size=53 src=1 [recv 02010102010025000000000000000000…]
+ +38.985s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +38.989s  host    signal NWM::BindNodeEvent2
+ +38.989s  host    signal NWM::BindNodeEvent2
+ +38.989s  host    signal NWM::BindNodeEvent2
+ +38.989s  host    signal NWM::BindNodeEvent2
+ +38.989s  host    signal NWM::BindNodeEvent2
+ +38.989s  host    signal NWM::BindNodeEvent2
+ +38.991s  client  SendTo(dest=1 chan=243 size=53 flags=0x02) -> OK [send 02010201010025000000000000000000…]
+ +38.991s  host    PullPacket(bind=2 max=0x5dc) -> OK size=75 src=2 [recv 0201020101003b000000000000000000…]
+ +38.991s  host    PullPacket(bind=2 max=0x5dc) -> OK size=75 src=2 [recv 0201020101003b000000000000000000…]
+ +38.991s  host    PullPacket(bind=2 max=0x5dc) -> OK size=75 src=2 [recv 0201020101003b000000000000000000…]
+ +38.991s  host    PullPacket(bind=2 max=0x5dc) -> OK size=75 src=2 [recv 0201020101003b000000000000000000…]
+ +38.991s  host    PullPacket(bind=2 max=0x5dc) -> OK size=75 src=2 [recv 0201020101003b000000000000000000…]
+ +38.991s  host    PullPacket(bind=2 max=0x5dc) -> OK size=75 src=2 [recv 0201020101003b000000000000000000…]
+ +38.991s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +38.991s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +38.992s  client  SendTo(dest=1 chan=243 size=79 flags=0x02) -> OK [send 0201020101003f000000000000000000…]
+ +39.009s  host    signal NWM::BindNodeEvent2
+ +39.009s  host    signal NWM::BindNodeEvent2
+ +39.013s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +39.013s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +39.013s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +39.013s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +39.014s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +39.014s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +39.014s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +39.014s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +39.014s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +39.014s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +39.014s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +39.014s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +39.014s  host    PullPacket(bind=2 max=0x5dc) -> OK size=53 src=2 [recv 02010201010025000000000000000000…]
+ +39.014s  host    PullPacket(bind=2 max=0x5dc) -> OK size=79 src=2 [recv 0201020101003f000000000000000000…]
+ +39.014s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.014s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.027s  host    SendTo(dest=2 chan=243 size=53 flags=0x02) -> OK [send 02010102010025000000000000000000…]
+ +39.027s  client  SendTo(dest=1 chan=243 size=79 flags=0x02) -> OK [send 0201020101003f000000000000000000…]
+ +39.028s  host    SendTo(dest=2 chan=243 size=91 flags=0x02) -> OK [send 0201010201004b000000000000000000…]
+ +39.029s  client  signal NWM::BindNodeEvent2
+ +39.029s  host    signal NWM::BindNodeEvent2
+ +39.029s  client  signal NWM::BindNodeEvent2
+ +39.029s  client  signal NWM::BindNodeEvent2
+ +39.029s  client  signal NWM::BindNodeEvent2
+ +39.029s  client  signal NWM::BindNodeEvent2
+ +39.029s  client  signal NWM::BindNodeEvent2
+ +39.029s  client  signal NWM::BindNodeEvent2
+ +39.029s  client  signal NWM::BindNodeEvent2
+ +39.029s  client  signal NWM::BindNodeEvent2
+ +39.029s  client  signal NWM::BindNodeEvent2
+ +39.029s  client  signal NWM::BindNodeEvent2
+ +39.029s  client  signal NWM::BindNodeEvent2
+ +39.029s  client  signal NWM::BindNodeEvent2
+ +39.029s  client  signal NWM::BindNodeEvent2
+ +39.043s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +39.043s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +39.043s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +39.043s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +39.043s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +39.043s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +39.043s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +39.043s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +39.043s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +39.043s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +39.043s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +39.043s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +39.043s  client  PullPacket(bind=2 max=0x5dc) -> OK size=53 src=1 [recv 02010102010025000000000000000000…]
+ +39.043s  client  PullPacket(bind=2 max=0x5dc) -> OK size=91 src=1 [recv 0201010201004b000000000000000000…]
+ +39.043s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.043s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.045s  host    PullPacket(bind=2 max=0x5dc) -> OK size=79 src=2 [recv 0201020101003f000000000000000000…]
+ +39.045s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.061s  client  SendTo(dest=1 chan=243 size=79 flags=0x02) -> OK [send 0201020101003f000000000000000000…]
+ +39.062s  host    SendTo(dest=2 chan=243 size=91 flags=0x02) -> OK [send 0201010201004b000000000000000000…]
+ +39.069s  host    signal NWM::BindNodeEvent2
+ +39.069s  client  signal NWM::BindNodeEvent2
+ +39.076s  host    PullPacket(bind=2 max=0x5dc) -> OK size=79 src=2 [recv 0201020101003f000000000000000000…]
+ +39.076s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.076s  client  PullPacket(bind=2 max=0x5dc) -> OK size=91 src=1 [recv 0201010201004b000000000000000000…]
+ +39.076s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.091s  client  SendTo(dest=1 chan=243 size=53 flags=0x02) -> OK [send 02010201010025000000000000000000…]
+ +39.091s  client  SendTo(dest=1 chan=243 size=79 flags=0x02) -> OK [send 0201020101003f000000000000000000…]
+ +39.093s  host    SendTo(dest=2 chan=243 size=91 flags=0x02) -> OK [send 0201010201004b000000000000000000…]
+ +39.105s  host    signal NWM::BindNodeEvent2
+ +39.105s  host    signal NWM::BindNodeEvent2
+ +39.105s  client  signal NWM::BindNodeEvent2
+ +39.110s  host    PullPacket(bind=2 max=0x5dc) -> OK size=53 src=2 [recv 02010201010025000000000000000000…]
+ +39.110s  host    PullPacket(bind=2 max=0x5dc) -> OK size=79 src=2 [recv 0201020101003f000000000000000000…]
+ +39.110s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.110s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.111s  client  PullPacket(bind=2 max=0x5dc) -> OK size=91 src=1 [recv 0201010201004b000000000000000000…]
+ +39.111s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.126s  client  SendTo(dest=1 chan=243 size=79 flags=0x02) -> OK [send 0201020101003f000000000000000000…]
+ +39.127s  host    SendTo(dest=2 chan=243 size=91 flags=0x02) -> OK [send 0201010201004b000000000000000000…]
+ +39.142s  client  signal NWM::BindNodeEvent2
+ +39.142s  host    signal NWM::BindNodeEvent2
+ +39.143s  host    PullPacket(bind=2 max=0x5dc) -> OK size=79 src=2 [recv 0201020101003f000000000000000000…]
+ +39.143s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.144s  client  PullPacket(bind=2 max=0x5dc) -> OK size=91 src=1 [recv 0201010201004b000000000000000000…]
+ +39.144s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.161s  client  SendTo(dest=1 chan=243 size=79 flags=0x02) -> OK [send 0201020101003f000000000000000000…]
+ +39.163s  host    SendTo(dest=2 chan=243 size=91 flags=0x02) -> OK [send 0201010201004b000000000000000000…]
+ +39.179s  host    signal NWM::BindNodeEvent2
+ +39.179s  client  signal NWM::BindNodeEvent2
+ +39.192s  client  SendTo(dest=1 chan=243 size=79 flags=0x02) -> OK [send 0201020101003f000000000000000000…]
+ +39.192s  client  PullPacket(bind=2 max=0x5dc) -> OK size=91 src=1 [recv 0201010201004b000000000000000000…]
+ +39.192s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.196s  host    PullPacket(bind=2 max=0x5dc) -> OK size=79 src=2 [recv 0201020101003f000000000000000000…]
+ +39.196s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.197s  host    signal NWM::BindNodeEvent2
+ +39.210s  host    SendTo(dest=2 chan=243 size=91 flags=0x02) -> OK [send 0201010201004b000000000000000000…]
+ +39.211s  host    PullPacket(bind=2 max=0x5dc) -> OK size=79 src=2 [recv 0201020101003f000000000000000000…]
+ +39.211s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.213s  client  signal NWM::BindNodeEvent2
+ +39.227s  host    SendTo(dest=2 chan=243 size=91 flags=0x02) -> OK [send 0201010201004b000000000000000000…]
+ +39.230s  client  SendTo(dest=1 chan=243 size=79 flags=0x02) -> OK [send 0201020101003f000000000000000000…]
+ +39.230s  client  SendTo(dest=1 chan=243 size=149 flags=0x02) -> OK [send 02010201010085000000000000000000…]
+ +39.230s  client  SendTo(dest=1 chan=243 size=63 flags=0x02) -> OK [send 0201020101002f000000000000000000…]
+ +39.231s  client  PullPacket(bind=2 max=0x5dc) -> OK size=91 src=1 [recv 0201010201004b000000000000000000…]
+ +39.231s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.233s  host    signal NWM::BindNodeEvent2
+ +39.233s  host    signal NWM::BindNodeEvent2
+ +39.233s  host    signal NWM::BindNodeEvent2
+ +39.233s  client  signal NWM::BindNodeEvent2
+ +39.244s  host    PullPacket(bind=2 max=0x5dc) -> OK size=79 src=2 [recv 0201020101003f000000000000000000…]
+ +39.244s  host    PullPacket(bind=2 max=0x5dc) -> OK size=149 src=2 [recv 02010201010085000000000000000000…]
+ +39.244s  host    PullPacket(bind=2 max=0x5dc) -> OK size=63 src=2 [recv 0201020101002f000000000000000000…]
+ +39.244s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.244s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.244s  client  PullPacket(bind=2 max=0x5dc) -> OK size=91 src=1 [recv 0201010201004b000000000000000000…]
+ +39.244s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.258s  client  SendTo(dest=1 chan=243 size=79 flags=0x02) -> OK [send 0201020101003f000000000000000000…]
+ +39.262s  host    SendTo(dest=2 chan=243 size=91 flags=0x02) -> OK [send 0201010201004b000000000000000000…]
+ +39.271s  client  signal NWM::BindNodeEvent2
+ +39.271s  host    signal NWM::BindNodeEvent2
+ +39.277s  client  PullPacket(bind=2 max=0x5dc) -> OK size=91 src=1 [recv 0201010201004b000000000000000000…]
+ +39.277s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.281s  host    PullPacket(bind=2 max=0x5dc) -> OK size=79 src=2 [recv 0201020101003f000000000000000000…]
+ +39.281s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.294s  host    SendTo(dest=2 chan=243 size=93 flags=0x02) -> OK [send 0201010201004d000000000000000000…]
+ +39.294s  host    SendTo(dest=2 chan=243 size=53 flags=0x02) -> OK [send 02010102010025000000000000000000…]
+ +39.294s  client  SendTo(dest=1 chan=243 size=79 flags=0x02) -> OK [send 0201020101003f000000000000000000…]
+ +39.294s  host    SendTo(dest=2 chan=243 size=91 flags=0x02) -> OK [send 0201010201004b000000000000000000…]
+ +39.309s  host    signal NWM::BindNodeEvent2
+ +39.309s  client  signal NWM::BindNodeEvent2
+ +39.309s  client  signal NWM::BindNodeEvent2
+ +39.309s  client  signal NWM::BindNodeEvent2
+ +39.311s  client  PullPacket(bind=2 max=0x5dc) -> OK size=93 src=1 [recv 0201010201004d000000000000000000…]
+ +39.311s  client  PullPacket(bind=2 max=0x5dc) -> OK size=53 src=1 [recv 02010102010025000000000000000000…]
+ +39.311s  client  PullPacket(bind=2 max=0x5dc) -> OK size=91 src=1 [recv 0201010201004b000000000000000000…]
+ +39.311s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.311s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.312s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +39.313s  host    PullPacket(bind=2 max=0x5dc) -> OK size=79 src=2 [recv 0201020101003f000000000000000000…]
+ +39.313s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.329s  host    SendTo(dest=2 chan=243 size=91 flags=0x02) -> OK [send 0201010201004b000000000000000000…]
+ +39.329s  client  signal NWM::BindNodeEvent2
+ +39.329s  client  SendTo(dest=1 chan=243 size=79 flags=0x02) -> OK [send 0201020101003f000000000000000000…]
+ +39.334s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +39.334s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.343s  client  SendTo(dest=1 chan=243 size=69 flags=0x02) -> OK [send 02010201010035000000000000000000…]
+ +39.349s  host    signal NWM::BindNodeEvent2
+ +39.349s  host    signal NWM::BindNodeEvent2
+ +39.349s  client  signal NWM::BindNodeEvent2
+ +39.361s  host    PullPacket(bind=2 max=0x5dc) -> OK size=79 src=2 [recv 0201020101003f000000000000000000…]
+ +39.361s  host    PullPacket(bind=2 max=0x5dc) -> OK size=69 src=2 [recv 02010201010035000000000000000000…]
+ +39.361s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.361s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.361s  client  SendTo(dest=1 chan=243 size=53 flags=0x02) -> OK [send 02010201010025000000000000000000…]
+ +39.361s  client  SendTo(dest=1 chan=243 size=79 flags=0x02) -> OK [send 0201020101003f000000000000000000…]
+ +39.362s  client  PullPacket(bind=2 max=0x5dc) -> OK size=91 src=1 [recv 0201010201004b000000000000000000…]
+ +39.362s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.369s  host    signal NWM::BindNodeEvent2
+ +39.369s  host    signal NWM::BindNodeEvent2
+ +39.379s  host    SendTo(dest=2 chan=243 size=91 flags=0x02) -> OK [send 0201010201004b000000000000000000…]
+ +39.381s  host    PullPacket(bind=2 max=0x5dc) -> OK size=53 src=2 [recv 02010201010025000000000000000000…]
+ +39.381s  host    PullPacket(bind=2 max=0x5dc) -> OK size=79 src=2 [recv 0201020101003f000000000000000000…]
+ +39.381s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.381s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.387s  client  signal NWM::BindNodeEvent2
+ +39.393s  client  SendTo(dest=1 chan=243 size=79 flags=0x02) -> OK [send 0201020101003f000000000000000000…]
+ +39.394s  client  SendTo(dest=1 chan=243 size=79 flags=0x02) -> OK [send 0201020101003f000000000000000000…]
+ +39.394s  client  PullPacket(bind=2 max=0x5dc) -> OK size=91 src=1 [recv 0201010201004b000000000000000000…]
+ +39.394s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.395s  host    SendTo(dest=2 chan=243 size=53 flags=0x02) -> OK [send 02010102010025000000000000000000…]
+ +39.395s  host    SendTo(dest=2 chan=243 size=91 flags=0x02) -> OK [send 0201010201004b000000000000000000…]
+ +39.402s  client  signal NWM::BindNodeEvent2
+ +39.402s  client  signal NWM::BindNodeEvent2
+ +39.403s  host    signal NWM::BindNodeEvent2
+ +39.403s  host    signal NWM::BindNodeEvent2
+ +39.408s  client  SendTo(dest=1 chan=243 size=69 flags=0x02) -> OK [send 02010201010035000000000000000000…]
+ +39.409s  client  PullPacket(bind=2 max=0x5dc) -> OK size=53 src=1 [recv 02010102010025000000000000000000…]
+ +39.409s  client  PullPacket(bind=2 max=0x5dc) -> OK size=91 src=1 [recv 0201010201004b000000000000000000…]
+ +39.409s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.409s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.412s  host    SendTo(dest=2 chan=243 size=79 flags=0x02) -> OK [send 0201010201003f000000000000000000…]
+ +39.413s  host    PullPacket(bind=2 max=0x5dc) -> OK size=79 src=2 [recv 0201020101003f000000000000000000…]
+ +39.413s  host    PullPacket(bind=2 max=0x5dc) -> OK size=79 src=2 [recv 0201020101003f000000000000000000…]
+ +39.413s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.413s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.419s  host    signal NWM::BindNodeEvent2
+ +39.419s  client  signal NWM::BindNodeEvent2
+ +39.426s  client  PullPacket(bind=2 max=0x5dc) -> OK size=79 src=1 [recv 0201010201003f000000000000000000…]
+ +39.426s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.428s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +39.429s  host    SendTo(dest=2 chan=243 size=91 flags=0x02) -> OK [send 0201010201004b000000000000000000…]
+ +39.429s  host    PullPacket(bind=2 max=0x5dc) -> OK size=69 src=2 [recv 02010201010035000000000000000000…]
+ +39.429s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.439s  client  signal NWM::BindNodeEvent2
+ +39.439s  client  signal NWM::BindNodeEvent2
+ +39.443s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +39.445s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +39.445s  client  PullPacket(bind=2 max=0x5dc) -> OK size=91 src=1 [recv 0201010201004b000000000000000000…]
+ +39.445s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.445s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.455s  client  signal NWM::BindNodeEvent2
+ +39.461s  client  SendTo(dest=1 chan=243 size=69 flags=0x02) -> OK [send 02010201010035000000000000000000…]
+ +39.461s  host    SendTo(dest=2 chan=243 size=53 flags=0x02) -> OK [send 02010102010025000000000000000000…]
+ +39.462s  client  SendTo(dest=1 chan=243 size=53 flags=0x02) -> OK [send 02010201010025000000000000000000…]
+ +39.462s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +39.462s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.473s  client  signal NWM::BindNodeEvent2
+ +39.473s  host    signal NWM::BindNodeEvent2
+ +39.473s  host    signal NWM::BindNodeEvent2
+ +39.478s  host    PullPacket(bind=2 max=0x5dc) -> OK size=69 src=2 [recv 02010201010035000000000000000000…]
+ +39.478s  host    PullPacket(bind=2 max=0x5dc) -> OK size=53 src=2 [recv 02010201010025000000000000000000…]
+ +39.478s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.478s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.478s  client  PullPacket(bind=2 max=0x5dc) -> OK size=53 src=1 [recv 02010102010025000000000000000000…]
+ +39.478s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.495s  client  SendTo(dest=1 chan=243 size=53 flags=0x02) -> OK [send 02010201010025000000000000000000…]
+ +39.509s  host    signal NWM::BindNodeEvent2
+ +39.511s  host    PullPacket(bind=2 max=0x5dc) -> OK size=53 src=2 [recv 02010201010025000000000000000000…]
+ +39.511s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.527s  host    SendTo(dest=2 chan=243 size=79 flags=0x02) -> OK [send 0201010201003f000000000000000000…]
+ +39.527s  host    SendTo(dest=2 chan=243 size=53 flags=0x02) -> OK [send 02010102010025000000000000000000…]
+ +39.543s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +39.545s  client  signal NWM::BindNodeEvent2
+ +39.545s  client  signal NWM::BindNodeEvent2
+ +39.545s  client  signal NWM::BindNodeEvent2
+ +39.546s  client  PullPacket(bind=2 max=0x5dc) -> OK size=79 src=1 [recv 0201010201003f000000000000000000…]
+ +39.546s  client  PullPacket(bind=2 max=0x5dc) -> OK size=53 src=1 [recv 02010102010025000000000000000000…]
+ +39.546s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +39.546s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.546s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.579s  client  SendTo(dest=1 chan=243 size=69 flags=0x02) -> OK [send 02010201010035000000000000000000…]
+ +39.593s  client  SendTo(dest=1 chan=243 size=53 flags=0x02) -> OK [send 02010201010025000000000000000000…]
+ +39.596s  host    signal NWM::BindNodeEvent2
+ +39.596s  host    signal NWM::BindNodeEvent2
+ +39.612s  client  SendTo(dest=1 chan=243 size=1349 flags=0x02) -> OK [send 02010201010035050000000000000000…]
+ +39.612s  client  SendTo(dest=1 chan=243 size=393 flags=0x02) -> OK [send 02010201010079010000000000000000…]
+ +39.612s  host    PullPacket(bind=2 max=0x5dc) -> OK size=69 src=2 [recv 02010201010035000000000000000000…]
+ +39.612s  host    PullPacket(bind=2 max=0x5dc) -> OK size=53 src=2 [recv 02010201010025000000000000000000…]
+ +39.612s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.612s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.617s  host    signal NWM::BindNodeEvent2
+ +39.617s  host    signal NWM::BindNodeEvent2
+ +39.626s  client  SendTo(dest=1 chan=243 size=69 flags=0x02) -> OK [send 02010201010035000000000000000000…]
+ +39.630s  host    PullPacket(bind=2 max=0x5dc) -> OK size=1349 src=2 [recv 02010201010035050000000000000000…]
+ +39.630s  host    PullPacket(bind=2 max=0x5dc) -> OK size=393 src=2 [recv 02010201010079010000000000000000…]
+ +39.630s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.630s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.633s  host    signal NWM::BindNodeEvent2
+ +39.651s  host    PullPacket(bind=2 max=0x5dc) -> OK size=69 src=2 [recv 02010201010035000000000000000000…]
+ +39.651s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.660s  host    SendTo(dest=2 chan=243 size=1349 flags=0x02) -> OK [send 02010102010035050000000000000000…]
+ +39.660s  host    SendTo(dest=2 chan=243 size=393 flags=0x02) -> OK [send 02010102010079010000000000000000…]
+ +39.660s  host    SendTo(dest=2 chan=243 size=53 flags=0x02) -> OK [send 02010102010025000000000000000000…]
+ +39.672s  client  signal NWM::BindNodeEvent2
+ +39.672s  client  signal NWM::BindNodeEvent2
+ +39.672s  client  signal NWM::BindNodeEvent2
+ +39.678s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +39.679s  client  PullPacket(bind=2 max=0x5dc) -> OK size=1349 src=1 [recv 02010102010035050000000000000000…]
+ +39.680s  client  PullPacket(bind=2 max=0x5dc) -> OK size=393 src=1 [recv 02010102010079010000000000000000…]
+ +39.680s  client  PullPacket(bind=2 max=0x5dc) -> OK size=53 src=1 [recv 02010102010025000000000000000000…]
+ +39.680s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.680s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.689s  client  signal NWM::BindNodeEvent2
+ +39.696s  host    SendTo(dest=2 chan=243 size=53 flags=0x02) -> OK [send 02010102010025000000000000000000…]
+ +39.697s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +39.697s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.707s  client  signal NWM::BindNodeEvent2
+ +39.710s  client  SendTo(dest=1 chan=243 size=69 flags=0x02) -> OK [send 02010201010035000000000000000000…]
+ +39.711s  client  PullPacket(bind=2 max=0x5dc) -> OK size=53 src=1 [recv 02010102010025000000000000000000…]
+ +39.711s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.726s  client  SendTo(dest=1 chan=243 size=53 flags=0x02) -> OK [send 02010201010025000000000000000000…]
+ +39.727s  host    signal NWM::BindNodeEvent2
+ +39.727s  host    signal NWM::BindNodeEvent2
+ +39.728s  host    PullPacket(bind=2 max=0x5dc) -> OK size=69 src=2 [recv 02010201010035000000000000000000…]
+ +39.728s  host    PullPacket(bind=2 max=0x5dc) -> OK size=53 src=2 [recv 02010201010025000000000000000000…]
+ +39.728s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.728s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.764s  host    SendTo(dest=2 chan=243 size=53 flags=0x02) -> OK [send 02010102010025000000000000000000…]
+ +39.781s  client  signal NWM::BindNodeEvent2
+ +39.796s  client  PullPacket(bind=2 max=0x5dc) -> OK size=53 src=1 [recv 02010102010025000000000000000000…]
+ +39.796s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.828s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +39.835s  client  signal NWM::BindNodeEvent2
+ +39.846s  client  PullPacket(bind=2 max=0x5dc) -> OK size=83 src=1 [recv 02010102010043000000000000000000…]
+ +39.846s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.893s  client  SendTo(dest=1 chan=243 size=53 flags=0x02) -> OK [send 02010201010025000000000000000000…]
+ +39.906s  host    signal NWM::BindNodeEvent2
+ +39.912s  host    SendTo(dest=2 chan=243 size=79 flags=0x02) -> OK [send 0201010201003f000000000000000000…]
+ +39.912s  host    PullPacket(bind=2 max=0x5dc) -> OK size=53 src=2 [recv 02010201010025000000000000000000…]
+ +39.912s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.926s  client  signal NWM::BindNodeEvent2
+ +39.929s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +39.931s  client  PullPacket(bind=2 max=0x5dc) -> OK size=79 src=1 [recv 0201010201003f000000000000000000…]
+ +39.931s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.941s  client  signal NWM::BindNodeEvent2
+ +39.945s  client  SendTo(dest=1 chan=243 size=79 flags=0x02) -> OK [send 0201020101003f000000000000000000…]
+ +39.946s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +39.946s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.960s  host    signal NWM::BindNodeEvent2
+ +39.963s  client  SendTo(dest=1 chan=243 size=69 flags=0x02) -> OK [send 02010201010035000000000000000000…]
+ +39.963s  client  SendTo(dest=1 chan=243 size=53 flags=0x02) -> OK [send 02010201010025000000000000000000…]
+ +39.963s  host    PullPacket(bind=2 max=0x5dc) -> OK size=79 src=2 [recv 0201020101003f000000000000000000…]
+ +39.963s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.977s  host    signal NWM::BindNodeEvent2
+ +39.977s  host    signal NWM::BindNodeEvent2
+ +39.980s  host    PullPacket(bind=2 max=0x5dc) -> OK size=69 src=2 [recv 02010201010035000000000000000000…]
+ +39.980s  host    PullPacket(bind=2 max=0x5dc) -> OK size=53 src=2 [recv 02010201010025000000000000000000…]
+ +39.980s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.980s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +39.996s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +39.996s  host    SendTo(dest=2 chan=243 size=53 flags=0x02) -> OK [send 02010102010025000000000000000000…]
+ +39.996s  client  SendTo(dest=1 chan=243 size=53 flags=0x02) -> OK [send 02010201010025000000000000000000…]
+ +40.010s  host    signal NWM::BindNodeEvent2
+ +40.010s  client  signal NWM::BindNodeEvent2
+ +40.010s  client  signal NWM::BindNodeEvent2
+ +40.011s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +40.011s  client  PullPacket(bind=2 max=0x5dc) -> OK size=53 src=1 [recv 02010102010025000000000000000000…]
+ +40.011s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +40.011s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +40.014s  host    PullPacket(bind=2 max=0x5dc) -> OK size=53 src=2 [recv 02010201010025000000000000000000…]
+ +40.014s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +40.030s  host    SendTo(dest=2 chan=243 size=79 flags=0x02) -> OK [send 0201010201003f000000000000000000…]
+ +40.031s  host    SendTo(dest=2 chan=243 size=53 flags=0x02) -> OK [send 02010102010025000000000000000000…]
+ +40.047s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +40.048s  client  signal NWM::BindNodeEvent2
+ +40.048s  client  signal NWM::BindNodeEvent2
+ +40.048s  client  signal NWM::BindNodeEvent2
+ +40.062s  client  SendTo(dest=1 chan=243 size=53 flags=0x02) -> OK [send 02010201010025000000000000000000…]
+ +40.062s  client  PullPacket(bind=2 max=0x5dc) -> OK size=79 src=1 [recv 0201010201003f000000000000000000…]
+ +40.062s  client  PullPacket(bind=2 max=0x5dc) -> OK size=53 src=1 [recv 02010102010025000000000000000000…]
+ +40.062s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +40.062s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +40.062s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +40.068s  host    signal NWM::BindNodeEvent2
+ +40.080s  host    PullPacket(bind=2 max=0x5dc) -> OK size=53 src=2 [recv 02010201010025000000000000000000…]
+ +40.081s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +40.096s  client  SendTo(dest=1 chan=243 size=69 flags=0x02) -> OK [send 02010201010035000000000000000000…]
+ +40.096s  client  SendTo(dest=1 chan=243 size=53 flags=0x02) -> OK [send 02010201010025000000000000000000…]
+ +40.101s  host    signal NWM::BindNodeEvent2
+ +40.101s  host    signal NWM::BindNodeEvent2
+ +40.115s  host    PullPacket(bind=2 max=0x5dc) -> OK size=69 src=2 [recv 02010201010035000000000000000000…]
+ +40.116s  host    PullPacket(bind=2 max=0x5dc) -> OK size=53 src=2 [recv 02010201010025000000000000000000…]
+ +40.116s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +40.116s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +41.015s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +41.015s  host    SendTo(dest=2 chan=243 size=79 flags=0x02) -> OK [send 0201010201003f000000000000000000…]
+ +41.015s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +41.035s  client  signal NWM::BindNodeEvent2
+ +41.035s  client  signal NWM::BindNodeEvent2
+ +41.035s  client  signal NWM::BindNodeEvent2
+ +41.047s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +41.047s  client  PullPacket(bind=2 max=0x5dc) -> OK size=79 src=1 [recv 0201010201003f000000000000000000…]
+ +41.047s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +41.047s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +41.047s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +41.048s  client  SendTo(dest=1 chan=243 size=69 flags=0x02) -> OK [send 02010201010035000000000000000000…]
+ +41.048s  host    SendTo(dest=2 chan=243 size=79 flags=0x02) -> OK [send 0201010201003f000000000000000000…]
+ +41.048s  host    SendTo(dest=2 chan=243 size=53 flags=0x02) -> OK [send 02010102010025000000000000000000…]
+ +41.052s  host    signal NWM::BindNodeEvent2
+ +41.052s  client  signal NWM::BindNodeEvent2
+ +41.052s  client  signal NWM::BindNodeEvent2
+ +41.054s  client  PullPacket(bind=2 max=0x5dc) -> OK size=79 src=1 [recv 0201010201003f000000000000000000…]
+ +41.054s  client  PullPacket(bind=2 max=0x5dc) -> OK size=53 src=1 [recv 02010102010025000000000000000000…]
+ +41.054s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +41.054s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +41.064s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +41.065s  host    PullPacket(bind=2 max=0x5dc) -> OK size=69 src=2 [recv 02010201010035000000000000000000…]
+ +41.065s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +41.072s  client  signal NWM::BindNodeEvent2
+ +41.082s  client  SendTo(dest=1 chan=243 size=79 flags=0x02) -> OK [send 0201020101003f000000000000000000…]
+ +41.082s  client  SendTo(dest=1 chan=243 size=53 flags=0x02) -> OK [send 02010201010025000000000000000000…]
+ +41.084s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +41.084s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +41.092s  host    signal NWM::BindNodeEvent2
+ +41.092s  host    signal NWM::BindNodeEvent2
+ +41.098s  host    PullPacket(bind=2 max=0x5dc) -> OK size=79 src=2 [recv 0201020101003f000000000000000000…]
+ +41.098s  host    PullPacket(bind=2 max=0x5dc) -> OK size=53 src=2 [recv 02010201010025000000000000000000…]
+ +41.098s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +41.098s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +41.098s  client  SendTo(dest=1 chan=243 size=69 flags=0x02) -> OK [send 02010201010035000000000000000000…]
+ +41.111s  host    signal NWM::BindNodeEvent2
+ +41.116s  host    SendTo(dest=2 chan=243 size=53 flags=0x02) -> OK [send 02010102010025000000000000000000…]
+ +41.116s  client  SendTo(dest=1 chan=243 size=53 flags=0x02) -> OK [send 02010201010025000000000000000000…]
+ +41.118s  host    PullPacket(bind=2 max=0x5dc) -> OK size=69 src=2 [recv 02010201010035000000000000000000…]
+ +41.118s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +41.130s  host    signal NWM::BindNodeEvent2
+ +41.130s  client  signal NWM::BindNodeEvent2
+ +41.130s  client  PullPacket(bind=2 max=0x5dc) -> OK size=53 src=1 [recv 02010102010025000000000000000000…]
+ +41.130s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +41.133s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +41.134s  host    PullPacket(bind=2 max=0x5dc) -> OK size=53 src=2 [recv 02010201010025000000000000000000…]
+ +41.134s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +41.148s  host    SendTo(dest=2 chan=243 size=79 flags=0x02) -> OK [send 0201010201003f000000000000000000…]
+ +41.148s  host    SendTo(dest=2 chan=243 size=53 flags=0x02) -> OK [send 02010102010025000000000000000000…]
+ +41.150s  client  signal NWM::BindNodeEvent2
+ +41.150s  client  signal NWM::BindNodeEvent2
+ +41.150s  client  signal NWM::BindNodeEvent2
+ +41.164s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +41.165s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +41.165s  client  PullPacket(bind=2 max=0x5dc) -> OK size=79 src=1 [recv 0201010201003f000000000000000000…]
+ +41.165s  client  PullPacket(bind=2 max=0x5dc) -> OK size=53 src=1 [recv 02010102010025000000000000000000…]
+ +41.165s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +41.165s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +41.170s  client  signal NWM::BindNodeEvent2
+ +41.186s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +41.186s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +41.197s  client  SendTo(dest=1 chan=243 size=69 flags=0x02) -> OK [send 02010201010035000000000000000000…]
+ +41.206s  host    signal NWM::BindNodeEvent2
+ +41.214s  client  SendTo(dest=1 chan=243 size=85 flags=0x02) -> OK [send 02010201010045000000000000000000…]
+ +41.214s  client  SendTo(dest=1 chan=243 size=53 flags=0x02) -> OK [send 02010201010025000000000000000000…]
+ +41.219s  host    PullPacket(bind=2 max=0x5dc) -> OK size=69 src=2 [recv 02010201010035000000000000000000…]
+ +41.219s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +41.223s  host    signal NWM::BindNodeEvent2
+ +41.223s  host    signal NWM::BindNodeEvent2
+ +41.231s  client  SendTo(dest=1 chan=243 size=69 flags=0x02) -> OK [send 02010201010035000000000000000000…]
+ +41.233s  host    PullPacket(bind=2 max=0x5dc) -> OK size=85 src=2 [recv 02010201010045000000000000000000…]
+ +41.233s  host    PullPacket(bind=2 max=0x5dc) -> OK size=53 src=2 [recv 02010201010025000000000000000000…]
+ +41.233s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +41.233s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +41.241s  host    signal NWM::BindNodeEvent2
+ +41.252s  host    SendTo(dest=2 chan=243 size=53 flags=0x02) -> OK [send 02010102010025000000000000000000…]
+ +41.254s  host    PullPacket(bind=2 max=0x5dc) -> OK size=69 src=2 [recv 02010201010035000000000000000000…]
+ +41.254s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +41.259s  client  signal NWM::BindNodeEvent2
+ +41.265s  client  PullPacket(bind=2 max=0x5dc) -> OK size=53 src=1 [recv 02010102010025000000000000000000…]
+ +41.265s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +41.266s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +41.276s  client  signal NWM::BindNodeEvent2
+ +41.281s  host    SendTo(dest=2 chan=243 size=85 flags=0x02) -> OK [send 02010102010045000000000000000000…]
+ +41.282s  host    SendTo(dest=2 chan=243 size=53 flags=0x02) -> OK [send 02010102010025000000000000000000…]
+ +41.283s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +41.283s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +41.296s  client  signal NWM::BindNodeEvent2
+ +41.296s  client  signal NWM::BindNodeEvent2
+ +41.301s  client  PullPacket(bind=2 max=0x5dc) -> OK size=85 src=1 [recv 02010102010045000000000000000000…]
+ +41.301s  client  PullPacket(bind=2 max=0x5dc) -> OK size=53 src=1 [recv 02010102010025000000000000000000…]
+ +41.301s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +41.301s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +41.317s  client  SendTo(dest=1 chan=243 size=53 flags=0x02) -> OK [send 02010201010025000000000000000000…]
+ +41.320s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +41.331s  host    signal NWM::BindNodeEvent2
+ +41.332s  client  signal NWM::BindNodeEvent2
+ +41.334s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +41.334s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +41.338s  host    PullPacket(bind=2 max=0x5dc) -> OK size=53 src=2 [recv 02010201010025000000000000000000…]
+ +41.338s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +41.352s  client  SendTo(dest=1 chan=243 size=69 flags=0x02) -> OK [send 02010201010035000000000000000000…]
+ +41.353s  client  SendTo(dest=1 chan=243 size=53 flags=0x02) -> OK [send 02010201010025000000000000000000…]
+ +41.369s  host    signal NWM::BindNodeEvent2
+ +41.369s  host    signal NWM::BindNodeEvent2
+ +41.383s  host    PullPacket(bind=2 max=0x5dc) -> OK size=69 src=2 [recv 02010201010035000000000000000000…]
+ +41.383s  host    PullPacket(bind=2 max=0x5dc) -> OK size=53 src=2 [recv 02010201010025000000000000000000…]
+ +41.383s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +41.383s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +41.398s  client  SendTo(dest=1 chan=243 size=53 flags=0x02) -> OK [send 02010201010025000000000000000000…]
+ +41.398s  client  SendTo(dest=1 chan=243 size=79 flags=0x02) -> OK [send 0201020101003f000000000000000000…]
+ +41.402s  host    signal NWM::BindNodeEvent2
+ +41.402s  host    signal NWM::BindNodeEvent2
+ +41.417s  host    PullPacket(bind=2 max=0x5dc) -> OK size=53 src=2 [recv 02010201010025000000000000000000…]
+ +41.417s  host    PullPacket(bind=2 max=0x5dc) -> OK size=79 src=2 [recv 0201020101003f000000000000000000…]
+ +41.417s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +41.417s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +41.435s  host    SendTo(dest=2 chan=243 size=53 flags=0x02) -> OK [send 02010102010025000000000000000000…]
+ +41.436s  host    SendTo(dest=2 chan=243 size=91 flags=0x02) -> OK [send 0201010201004b000000000000000000…]
+ +41.437s  client  signal NWM::BindNodeEvent2
+ +41.437s  client  signal NWM::BindNodeEvent2
+ +41.449s  client  PullPacket(bind=2 max=0x5dc) -> OK size=53 src=1 [recv 02010102010025000000000000000000…]
+ +41.449s  client  PullPacket(bind=2 max=0x5dc) -> OK size=91 src=1 [recv 0201010201004b000000000000000000…]
+ +41.449s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +41.449s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +43.039s  host    SendTo(dest=2 chan=243 size=46 flags=0x02) -> OK [send 0201010201001e000000000000000000…]
+ +43.041s  client  signal NWM::BindNodeEvent2
+ +43.042s  client  PullPacket(bind=2 max=0x5dc) -> OK size=46 src=1 [recv 0201010201001e000000000000000000…]
+ +43.042s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +43.053s  client  SendTo(dest=1 chan=243 size=46 flags=0x02) -> OK [send 0201020101001e000000000000000000…]
+ +43.060s  host    signal NWM::BindNodeEvent2
+ +43.073s  host    PullPacket(bind=2 max=0x5dc) -> OK size=46 src=2 [recv 0201020101001e000000000000000000…]
+ +43.073s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +43.406s  client  SendTo(dest=1 chan=243 size=79 flags=0x02) -> OK [send 0201020101003f000000000000000000…]
+ +43.419s  host    signal NWM::BindNodeEvent2
+ +43.422s  host    PullPacket(bind=2 max=0x5dc) -> OK size=79 src=2 [recv 0201020101003f000000000000000000…]
+ +43.422s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +43.441s  host    SendTo(dest=2 chan=243 size=91 flags=0x02) -> OK [send 0201010201004b000000000000000000…]
+ +43.453s  client  signal NWM::BindNodeEvent2
+ +43.458s  client  PullPacket(bind=2 max=0x5dc) -> OK size=91 src=1 [recv 0201010201004b000000000000000000…]
+ +43.458s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +44.844s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +44.859s  client  signal NWM::BindNodeEvent2
+ +44.859s  client  PullPacket(bind=2 max=0x5dc) -> OK size=83 src=1 [recv 02010102010043000000000000000000…]
+ +44.859s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +44.893s  client  SendTo(dest=1 chan=243 size=53 flags=0x02) -> OK [send 02010201010025000000000000000000…]
+ +44.896s  host    signal NWM::BindNodeEvent2
+ +44.913s  host    PullPacket(bind=2 max=0x5dc) -> OK size=53 src=2 [recv 02010201010025000000000000000000…]
+ +44.913s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +45.412s  client  SendTo(dest=1 chan=243 size=79 flags=0x02) -> OK [send 0201020101003f000000000000000000…]
+ +45.424s  host    signal NWM::BindNodeEvent2
+ +45.430s  host    PullPacket(bind=2 max=0x5dc) -> OK size=79 src=2 [recv 0201020101003f000000000000000000…]
+ +45.430s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +45.446s  host    SendTo(dest=2 chan=243 size=91 flags=0x02) -> OK [send 0201010201004b000000000000000000…]
+ +45.459s  client  signal NWM::BindNodeEvent2
+ +45.462s  client  PullPacket(bind=2 max=0x5dc) -> OK size=91 src=1 [recv 0201010201004b000000000000000000…]
+ +45.462s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +45.513s  host    SendTo(dest=2 chan=243 size=1041 flags=0x02) -> OK [send 02010102010001040000000000000000…]
+ +45.529s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +45.531s  client  signal NWM::BindNodeEvent2
+ +45.531s  client  signal NWM::BindNodeEvent2
+ +45.544s  client  PullPacket(bind=2 max=0x5dc) -> OK size=1041 src=1 [recv 02010102010001040000000000000000…]
+ +45.544s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +45.544s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +45.544s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +45.560s  client  SendTo(dest=1 chan=243 size=1041 flags=0x02) -> OK [send 02010201010001040000000000000000…]
+ +45.569s  host    signal NWM::BindNodeEvent2
+ +45.578s  host    PullPacket(bind=2 max=0x5dc) -> OK size=1041 src=2 [recv 02010201010001040000000000000000…]
+ +45.578s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +45.578s  client  SendTo(dest=1 chan=243 size=69 flags=0x02) -> OK [send 02010201010035000000000000000000…]
+ +45.589s  host    signal NWM::BindNodeEvent2
+ +45.595s  host    PullPacket(bind=2 max=0x5dc) -> OK size=69 src=2 [recv 02010201010035000000000000000000…]
+ +45.595s  client  SendTo(dest=1 chan=243 size=53 flags=0x02) -> OK [send 02010201010025000000000000000000…]
+ +45.595s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +45.606s  host    signal NWM::BindNodeEvent2
+ +45.612s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +45.612s  host    SendTo(dest=2 chan=243 size=53 flags=0x02) -> OK [send 02010102010025000000000000000000…]
+ +45.615s  host    PullPacket(bind=2 max=0x5dc) -> OK size=53 src=2 [recv 02010201010025000000000000000000…]
+ +45.615s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +45.627s  client  signal NWM::BindNodeEvent2
+ +45.627s  client  signal NWM::BindNodeEvent2
+ +45.628s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +45.628s  client  PullPacket(bind=2 max=0x5dc) -> OK size=53 src=1 [recv 02010102010025000000000000000000…]
+ +45.628s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +45.628s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +45.647s  host    SendTo(dest=2 chan=243 size=53 flags=0x02) -> OK [send 02010102010025000000000000000000…]
+ +45.662s  client  SendTo(dest=1 chan=243 size=53 flags=0x02) -> OK [send 02010201010025000000000000000000…]
+ +45.663s  host    signal NWM::BindNodeEvent2
+ +45.663s  client  signal NWM::BindNodeEvent2
+ +45.679s  client  PullPacket(bind=2 max=0x5dc) -> OK size=53 src=1 [recv 02010102010025000000000000000000…]
+ +45.679s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +45.681s  host    PullPacket(bind=2 max=0x5dc) -> OK size=53 src=2 [recv 02010201010025000000000000000000…]
+ +45.681s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +47.050s  host    SendTo(dest=2 chan=243 size=46 flags=0x02) -> OK [send 0201010201001e000000000000000000…]
+ +47.054s  client  signal NWM::BindNodeEvent2
+ +47.067s  client  PullPacket(bind=2 max=0x5dc) -> OK size=46 src=1 [recv 0201010201001e000000000000000000…]
+ +47.067s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +47.083s  client  SendTo(dest=1 chan=243 size=46 flags=0x02) -> OK [send 0201020101001e000000000000000000…]
+ +47.089s  host    signal NWM::BindNodeEvent2
+ +47.102s  host    PullPacket(bind=2 max=0x5dc) -> OK size=46 src=2 [recv 0201020101001e000000000000000000…]
+ +47.102s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +47.417s  client  SendTo(dest=1 chan=243 size=79 flags=0x02) -> OK [send 0201020101003f000000000000000000…]
+ +47.425s  host    signal NWM::BindNodeEvent2
+ +47.436s  host    PullPacket(bind=2 max=0x5dc) -> OK size=79 src=2 [recv 0201020101003f000000000000000000…]
+ +47.436s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +47.452s  host    SendTo(dest=2 chan=243 size=91 flags=0x02) -> OK [send 0201010201004b000000000000000000…]
+ +47.459s  client  signal NWM::BindNodeEvent2
+ +47.469s  client  PullPacket(bind=2 max=0x5dc) -> OK size=91 src=1 [recv 0201010201004b000000000000000000…]
+ +47.469s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +48.386s  host    SendTo(dest=2 chan=243 size=337 flags=0x02) -> OK [send 02010102010041010000000000000000…]
+ +48.387s  client  signal NWM::BindNodeEvent2
+ +48.406s  client  PullPacket(bind=2 max=0x5dc) -> OK size=337 src=1 [recv 02010102010041010000000000000000…]
+ +48.406s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +48.422s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +48.426s  client  signal NWM::BindNodeEvent2
+ +48.437s  client  SendTo(dest=1 chan=243 size=69 flags=0x02) -> OK [send 02010201010035000000000000000000…]
+ +48.437s  client  SendTo(dest=1 chan=243 size=53 flags=0x02) -> OK [send 02010201010025000000000000000000…]
+ +48.444s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +48.444s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +48.446s  host    signal NWM::BindNodeEvent2
+ +48.446s  host    signal NWM::BindNodeEvent2
+ +48.454s  host    PullPacket(bind=2 max=0x5dc) -> OK size=69 src=2 [recv 02010201010035000000000000000000…]
+ +48.454s  host    PullPacket(bind=2 max=0x5dc) -> OK size=53 src=2 [recv 02010201010025000000000000000000…]
+ +48.454s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +48.454s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +48.487s  host    SendTo(dest=2 chan=243 size=53 flags=0x02) -> OK [send 02010102010025000000000000000000…]
+ +48.503s  client  signal NWM::BindNodeEvent2
+ +48.503s  client  SendTo(dest=1 chan=243 size=53 flags=0x02) -> OK [send 02010201010025000000000000000000…]
+ +48.505s  client  PullPacket(bind=2 max=0x5dc) -> OK size=53 src=1 [recv 02010102010025000000000000000000…]
+ +48.505s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +48.521s  host    signal NWM::BindNodeEvent2
+ +48.522s  host    PullPacket(bind=2 max=0x5dc) -> OK size=53 src=2 [recv 02010201010025000000000000000000…]
+ +48.522s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +49.422s  client  SendTo(dest=1 chan=243 size=79 flags=0x02) -> OK [send 0201020101003f000000000000000000…]
+ +49.432s  host    signal NWM::BindNodeEvent2
+ +49.443s  host    PullPacket(bind=2 max=0x5dc) -> OK size=79 src=2 [recv 0201020101003f000000000000000000…]
+ +49.443s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +49.457s  host    SendTo(dest=2 chan=243 size=91 flags=0x02) -> OK [send 0201010201004b000000000000000000…]
+ +49.469s  client  signal NWM::BindNodeEvent2
+ +49.474s  client  PullPacket(bind=2 max=0x5dc) -> OK size=91 src=1 [recv 0201010201004b000000000000000000…]
+ +49.474s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +49.776s  host    SendTo(dest=2 chan=243 size=79 flags=0x02) -> OK [send 0201010201003f000000000000000000…]
+ +49.790s  client  signal NWM::BindNodeEvent2
+ +49.790s  client  PullPacket(bind=2 max=0x5dc) -> OK size=79 src=1 [recv 0201010201003f000000000000000000…]
+ +49.790s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +49.791s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +49.806s  client  signal NWM::BindNodeEvent2
+ +49.809s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +49.809s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +49.822s  client  SendTo(dest=1 chan=243 size=69 flags=0x02) -> OK [send 02010201010035000000000000000000…]
+ +49.826s  host    signal NWM::BindNodeEvent2
+ +49.840s  client  SendTo(dest=1 chan=243 size=53 flags=0x02) -> OK [send 02010201010025000000000000000000…]
+ +49.843s  host    signal NWM::BindNodeEvent2
+ +49.844s  host    PullPacket(bind=2 max=0x5dc) -> OK size=69 src=2 [recv 02010201010035000000000000000000…]
+ +49.844s  host    PullPacket(bind=2 max=0x5dc) -> OK size=53 src=2 [recv 02010201010025000000000000000000…]
+ +49.844s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +49.844s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +49.858s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +49.861s  client  signal NWM::BindNodeEvent2
+ +49.873s  client  PullPacket(bind=2 max=0x5dc) -> OK size=83 src=1 [recv 02010102010043000000000000000000…]
+ +49.873s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +49.891s  host    SendTo(dest=2 chan=243 size=53 flags=0x02) -> OK [send 02010102010025000000000000000000…]
+ +49.895s  client  signal NWM::BindNodeEvent2
+ +49.908s  client  SendTo(dest=1 chan=243 size=53 flags=0x02) -> OK [send 02010201010025000000000000000000…]
+ +49.909s  client  PullPacket(bind=2 max=0x5dc) -> OK size=53 src=1 [recv 02010102010025000000000000000000…]
+ +49.909s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +49.912s  host    signal NWM::BindNodeEvent2
+ +49.926s  host    PullPacket(bind=2 max=0x5dc) -> OK size=53 src=2 [recv 02010201010025000000000000000000…]
+ +49.926s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +51.095s  host    SendTo(dest=2 chan=243 size=46 flags=0x02) -> OK [send 0201010201001e000000000000000000…]
+ +51.109s  client  SendTo(dest=1 chan=243 size=46 flags=0x02) -> OK [send 0201020101001e000000000000000000…]
+ +51.110s  client  signal NWM::BindNodeEvent2
+ +51.110s  host    signal NWM::BindNodeEvent2
+ +51.110s  client  PullPacket(bind=2 max=0x5dc) -> OK size=46 src=1 [recv 0201010201001e000000000000000000…]
+ +51.110s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +51.113s  host    PullPacket(bind=2 max=0x5dc) -> OK size=46 src=2 [recv 0201020101001e000000000000000000…]
+ +51.113s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +51.126s  client  SendTo(dest=1 chan=243 size=46 flags=0x02) -> OK [send 0201020101001e000000000000000000…]
+ +51.129s  host    SendTo(dest=2 chan=243 size=46 flags=0x02) -> OK [send 0201010201001e000000000000000000…]
+ +51.145s  host    signal NWM::BindNodeEvent2
+ +51.145s  client  signal NWM::BindNodeEvent2
+ +51.145s  client  PullPacket(bind=2 max=0x5dc) -> OK size=46 src=1 [recv 0201010201001e000000000000000000…]
+ +51.145s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +51.147s  host    PullPacket(bind=2 max=0x5dc) -> OK size=46 src=2 [recv 0201020101001e000000000000000000…]
+ +51.147s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +51.427s  client  SendTo(dest=1 chan=243 size=79 flags=0x02) -> OK [send 0201020101003f000000000000000000…]
+ +51.442s  host    signal NWM::BindNodeEvent2
+ +51.447s  host    PullPacket(bind=2 max=0x5dc) -> OK size=79 src=2 [recv 0201020101003f000000000000000000…]
+ +51.447s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +51.463s  host    SendTo(dest=2 chan=243 size=91 flags=0x02) -> OK [send 0201010201004b000000000000000000…]
+ +51.479s  client  signal NWM::BindNodeEvent2
+ +51.495s  client  PullPacket(bind=2 max=0x5dc) -> OK size=91 src=1 [recv 0201010201004b000000000000000000…]
+ +51.495s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +52.063s  client  SendTo(dest=1 chan=243 size=337 flags=0x02) -> OK [send 02010201010041010000000000000000…]
+ +52.074s  host    signal NWM::BindNodeEvent2
+ +52.081s  host    PullPacket(bind=2 max=0x5dc) -> OK size=337 src=2 [recv 02010201010041010000000000000000…]
+ +52.081s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +52.097s  client  SendTo(dest=1 chan=243 size=69 flags=0x02) -> OK [send 02010201010035000000000000000000…]
+ +52.113s  host    signal NWM::BindNodeEvent2
+ +52.114s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +52.115s  host    PullPacket(bind=2 max=0x5dc) -> OK size=69 src=2 [recv 02010201010035000000000000000000…]
+ +52.115s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +52.133s  client  signal NWM::BindNodeEvent2
+ +52.147s  host    SendTo(dest=2 chan=243 size=53 flags=0x02) -> OK [send 02010102010025000000000000000000…]
+ +52.148s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +52.148s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +52.154s  client  signal NWM::BindNodeEvent2
+ +52.165s  client  PullPacket(bind=2 max=0x5dc) -> OK size=53 src=1 [recv 02010102010025000000000000000000…]
+ +52.165s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +52.182s  host    SendTo(dest=2 chan=243 size=53 flags=0x02) -> OK [send 02010102010025000000000000000000…]
+ +52.194s  client  signal NWM::BindNodeEvent2
+ +52.196s  client  SendTo(dest=1 chan=243 size=53 flags=0x02) -> OK [send 02010201010025000000000000000000…]
+ +52.197s  client  PullPacket(bind=2 max=0x5dc) -> OK size=53 src=1 [recv 02010102010025000000000000000000…]
+ +52.197s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +52.214s  host    signal NWM::BindNodeEvent2
+ +52.217s  host    PullPacket(bind=2 max=0x5dc) -> OK size=53 src=2 [recv 02010201010025000000000000000000…]
+ +52.217s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +53.434s  client  SendTo(dest=1 chan=243 size=79 flags=0x02) -> OK [send 0201020101003f000000000000000000…]
+ +53.445s  host    signal NWM::BindNodeEvent2
+ +53.451s  host    PullPacket(bind=2 max=0x5dc) -> OK size=79 src=2 [recv 0201020101003f000000000000000000…]
+ +53.451s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +53.469s  host    SendTo(dest=2 chan=243 size=91 flags=0x02) -> OK [send 0201010201004b000000000000000000…]
+ +53.482s  client  signal NWM::BindNodeEvent2
+ +53.486s  client  PullPacket(bind=2 max=0x5dc) -> OK size=91 src=1 [recv 0201010201004b000000000000000000…]
+ +53.486s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +53.650s  client  SendTo(dest=1 chan=243 size=79 flags=0x02) -> OK [send 0201020101003f000000000000000000…]
+ +53.664s  host    signal NWM::BindNodeEvent2
+ +53.668s  client  SendTo(dest=1 chan=243 size=69 flags=0x02) -> OK [send 02010201010035000000000000000000…]
+ +53.671s  host    PullPacket(bind=2 max=0x5dc) -> OK size=79 src=2 [recv 0201020101003f000000000000000000…]
+ +53.671s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +53.684s  host    signal NWM::BindNodeEvent2
+ +53.686s  host    PullPacket(bind=2 max=0x5dc) -> OK size=69 src=2 [recv 02010201010035000000000000000000…]
+ +53.686s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +53.701s  host    SendTo(dest=2 chan=243 size=69 flags=0x02) -> OK [send 02010102010035000000000000000000…]
+ +53.718s  client  signal NWM::BindNodeEvent2
+ +53.720s  host    SendTo(dest=2 chan=243 size=53 flags=0x02) -> OK [send 02010102010025000000000000000000…]
+ +53.721s  client  PullPacket(bind=2 max=0x5dc) -> OK size=69 src=1 [recv 02010102010035000000000000000000…]
+ +53.721s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +53.735s  client  signal NWM::BindNodeEvent2
+ +53.736s  client  PullPacket(bind=2 max=0x5dc) -> OK size=53 src=1 [recv 02010102010025000000000000000000…]
+ +53.736s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +53.769s  client  SendTo(dest=1 chan=243 size=53 flags=0x02) -> OK [send 02010201010025000000000000000000…]
+ +53.769s  host    signal NWM::BindNodeEvent2
+ +53.771s  host    PullPacket(bind=2 max=0x5dc) -> OK size=53 src=2 [recv 02010201010025000000000000000000…]
+ +53.771s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +54.874s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +54.876s  client  signal NWM::BindNodeEvent2
+ +54.890s  client  PullPacket(bind=2 max=0x5dc) -> OK size=83 src=1 [recv 02010102010043000000000000000000…]
+ +54.890s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +54.936s  client  SendTo(dest=1 chan=243 size=53 flags=0x02) -> OK [send 02010201010025000000000000000000…]
+ +54.949s  host    signal NWM::BindNodeEvent2
+ +54.957s  host    PullPacket(bind=2 max=0x5dc) -> OK size=53 src=2 [recv 02010201010025000000000000000000…]
+ +54.957s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +55.441s  client  SendTo(dest=1 chan=243 size=79 flags=0x02) -> OK [send 0201020101003f000000000000000000…]
+ +55.456s  host    signal NWM::BindNodeEvent2
+ +55.458s  host    PullPacket(bind=2 max=0x5dc) -> OK size=79 src=2 [recv 0201020101003f000000000000000000…]
+ +55.458s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +55.476s  host    SendTo(dest=2 chan=243 size=91 flags=0x02) -> OK [send 0201010201004b000000000000000000…]
+ +55.494s  client  signal NWM::BindNodeEvent2
+ +55.508s  client  PullPacket(bind=2 max=0x5dc) -> OK size=91 src=1 [recv 0201010201004b000000000000000000…]
+ +55.508s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +57.130s  host    SendTo(dest=2 chan=243 size=46 flags=0x02) -> OK [send 0201010201001e000000000000000000…]
+ +57.143s  client  SendTo(dest=1 chan=243 size=46 flags=0x02) -> OK [send 0201020101001e000000000000000000…]
+ +57.146s  host    signal NWM::BindNodeEvent2
+ +57.146s  client  signal NWM::BindNodeEvent2
+ +57.148s  host    PullPacket(bind=2 max=0x5dc) -> OK size=46 src=2 [recv 0201020101001e000000000000000000…]
+ +57.148s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +57.161s  host    SendTo(dest=2 chan=243 size=46 flags=0x02) -> OK [send 0201010201001e000000000000000000…]
+ +57.162s  client  signal NWM::BindNodeEvent2
+ +57.163s  client  PullPacket(bind=2 max=0x5dc) -> OK size=46 src=1 [recv 0201010201001e000000000000000000…]
+ +57.163s  client  PullPacket(bind=2 max=0x5dc) -> OK size=46 src=1 [recv 0201010201001e000000000000000000…]
+ +57.163s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +57.163s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +57.178s  client  SendTo(dest=1 chan=243 size=46 flags=0x02) -> OK [send 0201020101001e000000000000000000…]
+ +57.183s  host    signal NWM::BindNodeEvent2
+ +57.194s  host    PullPacket(bind=2 max=0x5dc) -> OK size=46 src=2 [recv 0201020101001e000000000000000000…]
+ +57.194s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +57.443s  client  SendTo(dest=1 chan=243 size=79 flags=0x02) -> OK [send 0201020101003f000000000000000000…]
+ +57.450s  host    signal NWM::BindNodeEvent2
+ +57.464s  host    PullPacket(bind=2 max=0x5dc) -> OK size=79 src=2 [recv 0201020101003f000000000000000000…]
+ +57.464s  host    PullPacket(bind=2 max=0x5dc) -> OK empty
+ +57.479s  host    SendTo(dest=2 chan=243 size=91 flags=0x02) -> OK [send 0201010201004b000000000000000000…]
+ +57.479s  host    Network <Info> HandleGameNamePacket: client is not playing
+ +57.479s  host    Network <Info> SendStatusMessage: [127.0.0.1] client has left.
+ +57.484s  client  signal NWM::BindNodeEvent2
+ +57.499s  client  PullPacket(bind=2 max=0x5dc) -> OK size=91 src=1 [recv 0201010201004b000000000000000000…]
+ +57.499s  client  PullPacket(bind=2 max=0x5dc) -> OK empty
+ +59.133s  host    SendTo(dest=2 chan=243 size=46 flags=0x02) -> OK [send 0201010201001e000000000000000000…]
+ +59.888s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +60.103s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +60.539s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +61.174s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +62.010s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +63.077s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +64.147s  host    SendTo(dest=2 chan=243 size=46 flags=0x02) -> OK [send 0201010201001e000000000000000000…]
+ +64.350s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +64.903s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +65.118s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +65.553s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +65.819s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +66.188s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +67.022s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +67.493s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +68.093s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +69.163s  host    SendTo(dest=2 chan=243 size=46 flags=0x02) -> OK [send 0201010201001e000000000000000000…]
+ +69.364s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +69.395s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +69.916s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +70.131s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +70.567s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +70.834s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +71.201s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +71.401s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +72.039s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +72.505s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +73.106s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +73.409s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +74.377s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +74.410s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +74.930s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +75.148s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +75.412s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +75.582s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +75.850s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +76.216s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +76.418s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +77.051s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +77.420s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +77.521s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +78.122s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +78.422s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +79.391s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +79.424s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +79.424s  host    SendTo(dest=2 chan=243 size=83 flags=0x02) -> OK [send 02010102010043000000000000000000…]
+ +80.447s  host    DestroyNetwork() -> OK
+ +80.447s  host    signal NWM::connection_status_event
+ +80.447s  host    signal NWM::BindNodeEvent2
+ +80.447s  host    PullPacket(bind=2 max=0x5dc) -> 0xC8A113EA (desc=1002 module=68 summary=5 level=25)
+ +80.447s  host    Service.NWM <Error> PullPacketHLE: Not connected yet.
+ +80.447s  host    GetConnectionStatus() -> OK NotConnected reason=None node=1 nodes=0/0 bitmask=0x0000 changed=0x0000
+ +80.448s  host    Unbind(bind=2) -> OK words=0x2,0x0,0x0,0x0
+ +80.448s  host    Unbind(bind=1) -> OK words=0x1,0x0,0x0,0x0
+ +80.834s  host    Bind(bind=4 recv_buf=0x2e30 chan=243 node=broadcast) -> OK +event handle
+ +80.948s  host    Unbind(bind=4) -> OK words=0x4,0x0,0x0,0x0
+ +80.948s  host    signal NWM::BindNodeEvent4
+ +80.948s  host    Unbind(bind=3) -> OK words=0x3,0x0,0x0,0x0
+ +80.949s  host    Shutdown() -> OK
+ +80.949s  host    ndm:u LeaveExclusiveState(words=0x20,0xb) -> OK
+ +80.949s  host    Service.NDM <Warning> LeaveExclusiveState: (STUBBED)
+ +81.031s  host    ndm:u EnterExclusiveState(state=LocalCommunications) -> OK
+ +81.031s  host    Service.NDM <Warning> EnterExclusiveState: (STUBBED) exclusive_state=0x00000002
+ +81.031s  host    InitializeWithVersion(shmem=0x14000 user="host" version=0x400) -> OK +event handle
+ +81.215s  host    SetProbeResponseParam(words=0x321f00,0x0) -> UNIMPLEMENTED in Azahar
+ +81.215s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +81.215s  host    signal NWM::connection_status_event
+ +82.371s  host    DestroyNetwork() -> OK
+ +82.371s  host    signal NWM::connection_status_event
+ +82.371s  host    cmd_0023() -> UNIMPLEMENTED in Azahar
+ +82.371s  host    cmd_0023() -> UNIMPLEMENTED in Azahar
+ +82.372s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0xffffffff id8=0xff) -> OK words=0x4000c,0x0
+ +82.673s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +82.972s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +83.273s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +83.573s  host    SetProbeResponseParam(words=0x321f00,0x40000) -> UNIMPLEMENTED in Azahar
+ +83.573s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +83.573s  host    signal NWM::connection_status_event
+ +83.956s  host    DestroyNetwork() -> OK
+ +83.956s  host    signal NWM::connection_status_event
+ +83.956s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +84.258s  host    SetProbeResponseParam(words=0x321f00,0x40000) -> UNIMPLEMENTED in Azahar
+ +84.258s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +84.258s  host    signal NWM::connection_status_event
+ +85.411s  host    DestroyNetwork() -> OK
+ +85.411s  host    signal NWM::connection_status_event
+ +85.411s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +85.713s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +86.013s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +86.013s  host    Network <Info> HandleGameNamePacket: host is not playing
+ +86.013s  host    Network <Info> SendStatusMessage: [127.0.0.1] host has left.
+ +86.013s  host    Network <Info> SendStatusMessage: [127.0.0.1] host has left.
