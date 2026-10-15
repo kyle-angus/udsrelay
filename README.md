@@ -8,6 +8,7 @@ The first target is Pokémon X/Y: a local trade, then a local battle.
 
 - Phase 1 (recon in Azahar): done. Traces for idle, trade, battle, two drop cases and an X–Y trade are in `recon/traces/`; findings are in the design doc's Phase 1 entry.
 - Phase 2 (passthrough shim on hardware): done. A full trade and a full battle ran between two consoles through the shim; the battle trace is in `recon/traces/battle-hw-01/`, and the differences from Azahar are in the design doc.
+- Phase 3 (relay server): done. `udsrelay` serves rooms, scan, join, node events, data forwarding and keepalive over UDP. `udsfake` fake consoles pass the exit test and replay all six two-console traces through it with hardware's result codes and byte-for-byte data.
 
 ## Layout
 
@@ -21,6 +22,11 @@ The first target is Pokémon X/Y: a local trade, then a local battle.
 | `shim/RUNBOOK.md` | How to build the Phase 2 shim, install it on two consoles, and compare its logs against the Azahar trace |
 | `shim/core` | Host-agnostic C: IPC parsing, passthrough forwarding loop, GetServiceHandle finder, trace formatting |
 | `shim/plugin` | CTRPluginFramework 3GX plugin: hooks GetServiceHandle, runs the forwarding threads, writes logs to SD |
+| `relay/RUNBOOK.md` | How to run the relay and fake consoles, replay traces, and the wire protocol |
+| `cmd/udsrelay` | The relay server |
+| `cmd/udsfake` | Fake consoles: a scripted host and joiner, and trace replay |
+| `internal/relay` | Wire protocol, server, client library, and a loss/latency wrapper for tests |
+| `internal/udsfake` | Fake console modelling the shim's UDS state machine, trace replay, and the Phase 3 exit test |
 
 ## Develop
 
@@ -30,6 +36,10 @@ go test ./...
 
 ```bash
 make -C shim/core test
+```
+
+```bash
+go run ./cmd/udsrelay
 ```
 
 ```bash
