@@ -1,0 +1,210 @@
+package udstrace
+
+import (
+	"bytes"
+	"os"
+	"strings"
+	"testing"
+)
+
+func loadFixture(t *testing.T, name string) *Session {
+	t.Helper()
+	f, err := os.Open("testdata/" + name + ".log")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer f.Close()
+	recs, err := Parse(f, name)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return NewSession(name, recs)
+}
+
+func findCall(t *testing.T, s *Session, port string, cmd uint16) *Call {
+	t.Helper()
+	for _, c := range s.Calls() {
+		if c.Port == port && c.Cmd == cmd {
+			return c
+		}
+	}
+	t.Fatalf("%s: no call %s 0x%04X", s.Instance, port, cmd)
+	return nil
+}
+
+func TestParseTraceLine(t *testing.T) {
+	line := "\x1b[0;36m[  12.000345] Service <Info> core/hle/service/service.cpp:HandleSyncRequest:192: " +
+		`UDSTRACE v=1 kind=req wall=1792000000000000 port=nwm::UDS cmd=0x0017 name="SendTo" tid=33 ` +
+		`proc="my game" hdr=0x00170182 words=0x00170182,0x00000000,0x00000002` + "\x1b[0m"
+	recs, err := Parse(strings.NewReader(line), "a")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(recs) != 1 {
+		t.Fatalf("got %d records", len(recs))
+	}
+	r := recs[0]
+	if r.Kind != "req" || r.Cmd != 0x17 || r.Name != "SendTo" || r.Proc != "my game" || r.Hdr != 0x00170182 {
+		t.Errorf("bad record: %+v", r)
+	}
+	if len(r.Words) != 3 || r.Words[2] != 2 {
+		t.Errorf("words = %v", r.Words)
+	}
+}
+
+func TestParseRejectsMalformed(t *testing.T) {
+	for _, line := range []string{
+		"UDSTRACE v=1 kind=req wall=notanumber port=nwm::UDS",
+		"UDSTRACE v=1 kind=bogus wall=1",
+		`UDSTRACE v=1 kind=signal wall=1 event="unterminated`,
+		"UDSTRACE v=1 kind=blob wall=1 tag=send hex=zz",
+	} {
+		if _, err := Parse(strings.NewReader(line), "a"); err == nil {
+			t.Errorf("expected error for %q", line)
+		}
+	}
+}
+
+func TestNotesKeepOnlyNetworkClasses(t *testing.T) {
+	log := "[   1.000000] Service.NWM <Debug> core/hle/service/nwm/nwm_uds.cpp:Shutdown:618: called\n" +
+		"[   1.000000] Render.OpenGL <Info> video_core/x.cpp:Foo:1: not ours\n"
+	recs, err := Parse(strings.NewReader(log), "a")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(recs) != 1 || recs[0].Func != "Shutdown" || recs[0].Message != "called" {
+		t.Errorf("records = %+v", recs)
+	}
+}
+
+func TestHostSession(t *testing.T) {
+	s := loadFixture(t, "host")
+
+	host := findCall(t, s, PortUDS, CmdBeginHostingNetwork)
+	ni, err := ParseNetworkInfo(host.Blob("netinfo").Data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if ni.WlanCommID != 0x00123456 || ni.ID8 != 2 || ni.MaxNodes != 2 || ni.AppDataSize != 32 {
+		t.Errorf("network info = %+v", ni)
+	}
+	if got := host.Blob("passphrase").Data; string(got) != "FIXTURE-PASSPHRASE-NOT-REAL" {
+		t.Errorf("passphrase = %q", got)
+	}
+
+	init := findCall(t, s, PortUDS, CmdInitializeWithVersion)
+	if u := nodeUsername(init.Req.Words); u != "Serena" {
+		t.Errorf("username = %q", u)
+	}
+
+	unimpl := findCall(t, s, PortUDS, 0x15)
+	if !unimpl.Unimplemented || ReplySummary(unimpl) != "UNIMPLEMENTED in Azahar" {
+		t.Errorf("SetMaxSendDelay not marked unimplemented: %+v", unimpl)
+	}
+
+	var statuses []string
+	for _, c := range s.Calls() {
+		if c.Cmd == CmdGetConnectionStatus {
+			cs, ok := ParseConnectionStatus(c.Reply)
+			if !ok {
+				t.Fatal("short connection status")
+			}
+			statuses = append(statuses, cs.String())
+		}
+	}
+	want := "ConnectedAsHost reason=ConnectionEstablished node=1 nodes=2/2 bitmask=0x0003 changed=0x0002"
+	if statuses[len(statuses)-1] != want {
+		t.Errorf("last status = %q, want %q", statuses[len(statuses)-1], want)
+	}
+}
+
+func TestClientDeferredConnect(t *testing.T) {
+	s := loadFixture(t, "client")
+
+	conn := findCall(t, s, PortUDS, CmdConnectToNetwork)
+	if !conn.AwaitingWake || conn.Wake == nil {
+		t.Fatalf("ConnectToNetwork not paired with its wake-up: %+v", conn)
+	}
+	if code, ok := conn.Result(); !ok || code != 0 {
+		t.Errorf("ConnectToNetwork result = %#x, %v", code, ok)
+	}
+	if conn.Blob("netinfo").Extra["conn_type"] != "1" {
+		t.Errorf("conn_type missing")
+	}
+
+	// RecvBeaconBroadcastData writes its reply before sleeping, so deferred=1 still has a reply.
+	scan := findCall(t, s, PortUDS, CmdRecvBeaconBroadcastData)
+	if scan.AwaitingWake {
+		t.Error("scan should not await a wake-up: its reply header differs from the request")
+	}
+	if !strings.Contains(Args(scan), "comm_id=0x00123456") {
+		t.Errorf("scan args = %s", Args(scan))
+	}
+
+	pull := 0
+	for _, c := range s.Calls() {
+		if c.Cmd == CmdPullPacket && c.Blob("recv") != nil {
+			pull++
+		}
+	}
+	if pull != 4 {
+		t.Errorf("received %d packets, want 4", pull)
+	}
+}
+
+func TestResultString(t *testing.T) {
+	if ResultString(0) != "OK" {
+		t.Error("zero should be OK")
+	}
+	// Bitfield split: description 0-9, module 10-17, summary 21-26, level 27-31.
+	code := uint32(1022) | 65<<10 | 9<<21 | 25<<27
+	if got := ResultString(code); !strings.Contains(got, "desc=1022 module=65 summary=9 level=25") {
+		t.Errorf("ResultString = %s", got)
+	}
+}
+
+func TestTimelineFoldsPolls(t *testing.T) {
+	sessions := []*Session{loadFixture(t, "host"), loadFixture(t, "client")}
+	var quiet, verbose bytes.Buffer
+	WriteTimeline(&quiet, sessions, false)
+	WriteTimeline(&verbose, sessions, true)
+
+	q := quiet.String()
+	if !strings.Contains(q, "GetConnectionStatus x2") {
+		t.Errorf("unchanged polls not folded:\n%s", q)
+	}
+	if strings.Contains(q, "PullPacket(bind=1") {
+		t.Errorf("data traffic should be folded by default:\n%s", q)
+	}
+	v := verbose.String()
+	if !strings.Contains(v, "[send a000") || !strings.Contains(v, "signal NWM::BindNodeEvent1") {
+		t.Errorf("verbose timeline missing payloads or data events:\n%s", v)
+	}
+	if strings.Count(v, "\n") <= strings.Count(q, "\n") {
+		t.Error("verbose timeline should be longer")
+	}
+}
+
+func TestSummary(t *testing.T) {
+	sessions := []*Session{loadFixture(t, "host"), loadFixture(t, "client")}
+	var b bytes.Buffer
+	WriteSummary(&b, sessions, "fixture trade")
+	out := b.String()
+	for _, want := range []string{
+		"# UDS command trace: fixture trade",
+		"| pokemonxy | Serena |",
+		"wlan comm ID `0x00123456`",
+		"| nwm::UDS | `0x0015` | SetMaxSendDelay | 1 [1] | 0 |",
+		"Not in the design table yet: SetMaxSendDelay (0x0015).",
+		"| NWM::connection_status_event | 3 | 1 |",
+		"| host | send | 1 | 2 | 0x00 | 4 |",
+		"ndm:u EnterExclusiveState(state=LocalCommunications) -> OK",
+	} {
+		if !strings.Contains(out, want) {
+			t.Errorf("summary missing %q", want)
+		}
+	}
+	if t.Failed() {
+		t.Log(out)
+	}
+}

@@ -1,0 +1,306 @@
+diff --git a/src/common/logging/udstrace.h b/src/common/logging/udstrace.h
+new file mode 100644
+index 0000000..b391830
+--- /dev/null
++++ b/src/common/logging/udstrace.h
+@@ -0,0 +1,90 @@
++// UDS recon tracing for the 3DS Local Wireless Relay project.
++// Emits one "UDSTRACE" line per traced IPC request, reply, wake-up, event signal and payload.
++// Lines are parsed by the project's udstrace tool; keep the key=value format stable.
++
++#pragma once
++
++#include <chrono>
++#include <cstdlib>
++#include <span>
++#include <string>
++#include <string_view>
++#include <fmt/format.h>
++#include "common/common_types.h"
++
++namespace Common::UdsTrace {
++
++/// Wall-clock microseconds since the Unix epoch, so logs from two instances merge exactly.
++inline u64 WallMicros() {
++    using namespace std::chrono;
++    return static_cast<u64>(
++        duration_cast<microseconds>(system_clock::now().time_since_epoch()).count());
++}
++
++/// Ports to trace, from UDSTRACE_PORTS (comma-separated). Empty string disables tracing.
++inline bool PortEnabled(std::string_view port) {
++    static const std::string ports = [] {
++        const char* env = std::getenv("UDSTRACE_PORTS");
++        return std::string(env ? env : "nwm::UDS,ndm:u,ac:u,ac:i");
++    }();
++    std::string_view rest = ports;
++    while (!rest.empty()) {
++        const auto comma = rest.find(',');
++        const auto item = rest.substr(0, comma);
++        if (item == port) {
++            return true;
++        }
++        if (comma == std::string_view::npos) {
++            break;
++        }
++        rest.remove_prefix(comma + 1);
++    }
++    return false;
++}
++
++inline bool UdsEnabled() {
++    return PortEnabled("nwm::UDS");
++}
++
++/// Max bytes of send/recv payload hex to log, from UDSTRACE_PAYLOAD_MAX (default 512, -1 = all).
++/// Azahar stops writing a log at 100 MiB, so full payloads shorten how long a session can run.
++inline size_t PayloadMax() {
++    static const size_t max = [] {
++        const char* env = std::getenv("UDSTRACE_PAYLOAD_MAX");
++        if (env == nullptr || *env == '\0') {
++            return static_cast<size_t>(512);
++        }
++        const long value = std::strtol(env, nullptr, 10);
++        return value < 0 ? static_cast<size_t>(-1) : static_cast<size_t>(value);
++    }();
++    return max;
++}
++
++inline std::string Hex(std::span<const u8> data) {
++    static constexpr char digits[] = "0123456789abcdef";
++    std::string out;
++    out.reserve(data.size() * 2);
++    for (const u8 b : data) {
++        out.push_back(digits[b >> 4]);
++        out.push_back(digits[b & 0xF]);
++    }
++    return out;
++}
++
++inline std::string Words(const u32* words, int count) {
++    std::string out;
++    for (int i = 0; i < count; ++i) {
++        if (i != 0) {
++            out.push_back(',');
++        }
++        out += fmt::format("{:#010x}", words[i]);
++    }
++    return out;
++}
++
++/// Number of words in an IPC message including the header.
++inline int MessageWords(u32 header) {
++    return 1 + static_cast<int>(header & 0x3F) + static_cast<int>((header >> 6) & 0x3F);
++}
++
++} // namespace Common::UdsTrace
+diff --git a/src/core/hle/service/nwm/nwm_uds.cpp b/src/core/hle/service/nwm/nwm_uds.cpp
+index f6fafdd..903dd33 100644
+--- a/src/core/hle/service/nwm/nwm_uds.cpp
++++ b/src/core/hle/service/nwm/nwm_uds.cpp
+@@ -11,6 +11,7 @@
+ #include "common/common_types.h"
+ #include "common/hacks/hack_manager.h"
+ #include "common/logging/log.h"
++#include "common/logging/udstrace.h"
+ #include "common/settings.h"
+ #include "core/core.h"
+ #include "core/core_timing.h"
+@@ -32,6 +33,21 @@ SERVICE_CONSTRUCT_IMPL(Service::NWM::NWM_UDS)
+ 
+ namespace Service::NWM {
+ 
++/// Logs a payload for the udstrace tool. tag is one of netinfo, passphrase, appdata, send, recv.
++static void TraceBlob(u16 command_id, std::string_view tag, std::span<const u8> data,
++                      std::string_view extra = {}) {
++    if (!Common::UdsTrace::UdsEnabled()) {
++        return;
++    }
++    // size is the full payload length; hex may be truncated (see UDSTRACE_PAYLOAD_MAX).
++    const bool is_payload = tag == "send" || tag == "recv";
++    const auto logged = is_payload ? data.first(std::min(data.size(), Common::UdsTrace::PayloadMax()))
++                                   : data;
++    LOG_INFO(Service, "UDSTRACE v=1 kind=blob wall={} port=nwm::UDS cmd={:#06x} tag={}{}{} size={} hex={}",
++             Common::UdsTrace::WallMicros(), command_id, tag, extra.empty() ? "" : " ", extra,
++             data.size(), Common::UdsTrace::Hex(logged));
++}
++
+ template <class Archive>
+ void NWM_UDS::serialize(Archive& ar, const unsigned int) {
+     DEBUG_SERIALIZATION_POINT;
+@@ -1008,6 +1024,9 @@ void NWM_UDS::BeginHostingNetwork(Kernel::HLERequestContext& ctx) {
+     std::vector<u8> passphrase = rp.PopStaticBuffer();
+     ASSERT(passphrase.size() == passphrase_size);
+ 
++    TraceBlob(0x1D, "netinfo", network_info_buffer);
++    TraceBlob(0x1D, "passphrase", passphrase);
++
+     LOG_DEBUG(Service_NWM, "called");
+     auto result = BeginHostingNetwork(network_info_buffer, std::move(passphrase));
+     LOG_DEBUG(Service_NWM, "An UDS network has been created.");
+@@ -1026,6 +1045,9 @@ void NWM_UDS::BeginHostingNetworkDeprecated(Kernel::HLERequestContext& ctx) {
+     std::vector<u8> passphrase = rp.PopStaticBuffer();
+     ASSERT(passphrase.size() == passphrase_size);
+ 
++    TraceBlob(0x04, "netinfo", network_info_buffer);
++    TraceBlob(0x04, "passphrase", passphrase);
++
+     LOG_DEBUG(Service_NWM, "called");
+     auto result = BeginHostingNetwork(network_info_buffer, std::move(passphrase));
+     LOG_DEBUG(Service_NWM, "An UDS network has been created.");
+@@ -1162,6 +1184,9 @@ void NWM_UDS::SendTo(Kernel::HLERequestContext& ctx) {
+ 
+     std::vector<u8> input_buffer = rp.PopStaticBuffer();
+ 
++    TraceBlob(0x17, "send", input_buffer,
++              fmt::format("dest={:#06x} chan={} flags={:#04x}", dest_node_id, data_channel, flags));
++
+     IPC::RequestBuilder rb = rp.MakeBuilder(1, 0);
+ 
+     auto res = SendToHLE(dest_node_id, data_channel, data_size, flags, input_buffer);
+@@ -1283,6 +1308,13 @@ void NWM_UDS::PullPacket(Kernel::HLERequestContext& ctx) {
+     default:;
+     }
+ 
++    if (*ret > 0) {
++        const auto traced_size = std::min(static_cast<size_t>(*ret), output_buffer.size());
++        TraceBlob(0x14, "recv", std::span<const u8>(output_buffer.data(), traced_size),
++                  fmt::format("bind={} src={:#06x}", bind_node_id,
++                              static_cast<u16>(secure_data.src_node_id)));
++    }
++
+     IPC::RequestBuilder rb = rp.MakeBuilder(3, 2);
+ 
+     rb.Push(ResultSuccess);
+@@ -1370,13 +1402,25 @@ public:
+             LOG_ERROR(Service_NWM, "timed out when trying to connect to UDS server");
+             rb.Push(Result(ErrorDescription::Timeout, ErrorModule::UDS, ErrorSummary::Canceled,
+                            ErrorLevel::Status));
++            TraceWake(ctx);
+             return;
+         }
+         rb.Push(ResultSuccess);
+         LOG_DEBUG(Service_NWM, "connection sequence finished");
++        TraceWake(ctx);
+     }
+ 
+ private:
++    void TraceWake(Kernel::HLERequestContext& ctx) const {
++        if (!Common::UdsTrace::UdsEnabled()) {
++            return;
++        }
++        const u32* cmd = ctx.CommandBuffer();
++        LOG_INFO(Service, "UDSTRACE v=1 kind=wake wall={} port=nwm::UDS cmd={:#06x} hdr={:#010x} words={}",
++                 Common::UdsTrace::WallMicros(), command_id, cmd[0],
++                 Common::UdsTrace::Words(cmd, Common::UdsTrace::MessageWords(cmd[0])));
++    }
++
+     ThreadCallback() = default;
+     u16 command_id;
+ 
+@@ -1401,6 +1445,10 @@ void NWM_UDS::ConnectToNetworkHLE(NetworkInfo net_info, u8 connection_type,
+ void NWM_UDS::ConnectToNetwork(Kernel::HLERequestContext& ctx, u16 command_id,
+                                std::span<const u8> network_info_buffer, u8 connection_type,
+                                std::vector<u8> passphrase) {
++    TraceBlob(command_id, "netinfo", network_info_buffer,
++              fmt::format("conn_type={}", connection_type));
++    TraceBlob(command_id, "passphrase", passphrase);
++
+     NetworkInfo net_info;
+     std::memcpy(&net_info, network_info_buffer.data(), network_info_buffer.size());
+     ConnectToNetworkHLE(net_info, connection_type, passphrase);
+@@ -1506,6 +1554,7 @@ void NWM_UDS::SetApplicationData(Kernel::HLERequestContext& ctx) {
+ 
+     const std::vector<u8> application_data = rp.PopStaticBuffer();
+     ASSERT(application_data.size() == size);
++    TraceBlob(0x10, "appdata", application_data);
+ 
+     LOG_DEBUG(Service_NWM, "called");
+ 
+@@ -1661,6 +1710,10 @@ Network::MacAddress NWM_UDS::GetMacAddress() {
+ }
+ 
+ void NWM_UDS::SignalEventAsync(std::shared_ptr<Kernel::Event> event) {
++    if (Common::UdsTrace::UdsEnabled() && event) {
++        LOG_INFO(Service, "UDSTRACE v=1 kind=signal wall={} port=nwm::UDS event=\"{}\"",
++                 Common::UdsTrace::WallMicros(), event->GetName());
++    }
+     if (system.GetCoreLoopThreadId() == std::this_thread::get_id()) {
+         event->Signal();
+         return;
+diff --git a/src/core/hle/service/service.cpp b/src/core/hle/service/service.cpp
+index 44258df..2bac226 100644
+--- a/src/core/hle/service/service.cpp
++++ b/src/core/hle/service/service.cpp
+@@ -7,6 +7,7 @@
+ #include "common/assert.h"
+ #include "common/hacks/hack_manager.h"
+ #include "common/logging/log.h"
++#include "common/logging/udstrace.h"
+ #include "core/core.h"
+ #include "core/hle/ipc.h"
+ #include "core/hle/kernel/client_port.h"
+@@ -14,6 +15,7 @@
+ #include "core/hle/kernel/process.h"
+ #include "core/hle/kernel/server_port.h"
+ #include "core/hle/kernel/server_session.h"
++#include "core/hle/kernel/thread.h"
+ #include "core/hle/service/ac/ac.h"
+ #include "core/hle/service/act/act.h"
+ #include "core/hle/service/am/am.h"
+@@ -178,14 +180,54 @@ void ServiceFrameworkBase::ReportUnimplementedFunction(u32* cmd_buf, const Funct
+ void ServiceFrameworkBase::HandleSyncRequest(Kernel::HLERequestContext& context) {
+     auto itr = handlers.find(context.CommandHeader().command_id.Value());
+     const FunctionInfoBase* info = itr == handlers.end() ? nullptr : &itr->second;
++
++    const bool trace = Common::UdsTrace::PortEnabled(service_name);
++    const u32 request_header = context.CommandBuffer()[0];
++    if (trace) {
++        const auto thread = context.ClientThread();
++        const auto process = thread ? thread->owner_process.lock() : nullptr;
++        LOG_INFO(Service,
++                 "UDSTRACE v=1 kind=req wall={} port={} cmd={:#06x} name=\"{}\" tid={} "
++                 "proc=\"{}\" hdr={:#010x} words={}",
++                 Common::UdsTrace::WallMicros(), service_name, request_header >> 16,
++                 info ? info->name : "", thread ? thread->GetThreadId() : 0,
++                 process ? process->GetName() : "",
++                 request_header,
++                 Common::UdsTrace::Words(context.CommandBuffer(),
++                                         Common::UdsTrace::MessageWords(request_header)));
++    }
++
+     if (info == nullptr || info->handler_callback == nullptr) {
+         context.ReportUnimplemented();
+-        return ReportUnimplementedFunction(context.CommandBuffer(), info);
++        ReportUnimplementedFunction(context.CommandBuffer(), info);
++        if (trace) {
++            LOG_INFO(Service, "UDSTRACE v=1 kind=unimpl wall={} port={} cmd={:#06x} hdr={:#010x}",
++                     Common::UdsTrace::WallMicros(), service_name, request_header >> 16,
++                     request_header);
++        }
++        return;
+     }
+ 
+     LOG_TRACE(Service, "{}",
+               MakeFunctionString(info->name, GetServiceName(), context.CommandBuffer()));
+     handler_invoker(this, info->handler_callback, context);
++
++    if (trace) {
++        // A handler that sleeps the client thread (ConnectToNetwork, RecvBeaconBroadcastData)
++        // may not have written its reply yet; "deferred=1" marks that, and the parser treats a
++        // reply whose header equals the request header as not yet written.
++        const auto thread = context.ClientThread();
++        const bool deferred =
++            thread && thread->status == Kernel::ThreadStatus::WaitHleEvent;
++        const u32 reply_header = context.CommandBuffer()[0];
++        LOG_INFO(Service,
++                 "UDSTRACE v=1 kind=rsp wall={} port={} cmd={:#06x} hdr={:#010x} deferred={} "
++                 "words={}",
++                 Common::UdsTrace::WallMicros(), service_name, request_header >> 16,
++                 reply_header, deferred ? 1 : 0,
++                 Common::UdsTrace::Words(context.CommandBuffer(),
++                                         Common::UdsTrace::MessageWords(reply_header)));
++    }
+ }
+ 
+ std::string ServiceFrameworkBase::GetFunctionName(IPC::Header header) const {
