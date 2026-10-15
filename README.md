@@ -20,7 +20,7 @@ The first target is Pokémon X/Y: a local trade, then a local battle.
 | `cmd/udstrace` | Turns the logs into a merged timeline and a Markdown command-trace summary |
 | `internal/udstrace` | Parser, request/reply pairing, UDS struct decoders and trace comparison, with tests on synthetic fixtures |
 | `shim/RUNBOOK.md` | How to build the Phase 2 shim, install it on two consoles, and compare its logs against the Azahar trace |
-| `shim/core` | Host-agnostic C: IPC parsing, passthrough forwarding loop, GetServiceHandle finder, trace formatting |
+| `shim/core` | Host-agnostic C: IPC parsing, passthrough forwarding loop, GetServiceHandle finder, trace formatting, and the relay wire protocol (SHA-256, HMAC tags) for Phase 4 |
 | `shim/plugin` | CTRPluginFramework 3GX plugin: hooks GetServiceHandle, runs the forwarding threads, writes logs to SD |
 | `relay/RUNBOOK.md` | How to run the relay and fake consoles, replay traces, and the wire protocol |
 | `cmd/udsrelay` | The relay server |

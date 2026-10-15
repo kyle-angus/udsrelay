@@ -12,8 +12,10 @@
 #include "shim/config.h"
 #include "shim/finder.h"
 #include "shim/ipc.h"
+#include "shim/relay_wire.h"
 #include "shim/ring.h"
 #include "shim/session.h"
+#include "shim/sha256.h"
 #include "shim/trace.h"
 
 static int failures;
@@ -551,6 +553,79 @@ static void test_session_error_result(void) {
     free(k.arena);
 }
 
+/* -------------------------------------------------------------- relay wire */
+
+static int hex_equal(const uint8_t *b, size_t n, const char *hex) {
+    if (strlen(hex) != 2 * n) {
+        return 0;
+    }
+    for (size_t i = 0; i < n; i++) {
+        unsigned v;
+        if (sscanf(hex + 2 * i, "%2x", &v) != 1 || v != b[i]) {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+// Published vectors: FIPS 180-2 ("abc", one million 'a') and RFC 4231 cases 2 and 6.
+static void test_sha256(void) {
+    uint8_t out[SHIM_SHA256_SIZE];
+    shim_sha256("abc", 3, out);
+    CHECK(hex_equal(out, 32, "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"));
+
+    shim_sha256_ctx s;
+    shim_sha256_init(&s);
+    char a[1001];
+    memset(a, 'a', sizeof(a));
+    for (int i = 0; i < 1000; i++) {
+        shim_sha256_update(&s, a, i % 2 ? 999 : 1001); // odd chunk sizes cross block boundaries
+    }
+    shim_sha256_final(&s, out);
+    CHECK(hex_equal(out, 32, "cdc76e5c9914fb9281a1c7e284d73e67f1809a48a497200e046d39ccc7112cd0"));
+
+    shim_hmac_sha256("Jefe", 4, "what do ya want for nothing?", 28, out);
+    CHECK(hex_equal(out, 32, "5bdcc146bf60754e6a042426089575c75a003f089d2739839dec58b964ec3843"));
+
+    uint8_t longkey[131];
+    memset(longkey, 0xaa, sizeof(longkey));
+    const char *msg = "Test Using Larger Than Block-Size Key - Hash Key First";
+    shim_hmac_sha256(longkey, sizeof(longkey), msg, strlen(msg), out);
+    CHECK(hex_equal(out, 32, "60e431591ee0b67f0d8a26aacbf5b77f8e0bc6213728c5140546040f0ee37f54"));
+}
+
+// The same vectors are checked on the Go side (internal/relay/vectors_test.go); they were
+// computed independently with Python's hashlib and hmac.
+static void test_relay_wire(void) {
+    const char *key = "test-key";
+    CHECK(shim_relay_lobby_id(key, 8) == 0x6ab979dd);
+
+    uint8_t buf[SHIM_RELAY_MAX_DATAGRAM];
+    size_t n = shim_relay_hello(key, 8, 0x01020304, 7, buf, sizeof(buf));
+    CHECK(n == 32 && hex_equal(buf, n, "5552020101020304000700006ab979dd3cc2c53977b4c5f9fb54fe29371441f3"));
+    CHECK(shim_relay_hello(key, 8, 1, 1, buf, 31) == 0); // too small for the tag
+
+    // DATA from node 1 to node 2 on channel 243, flags 2.
+    const shim_relay_header dh = {SHIM_RELAY_DATA, 0x01020304, 9, 0};
+    shim_relay_header_put(buf, &dh);
+    const uint8_t data[] = {0, 1, 0, 2, 243, 2, 2, 1, 2, 1};
+    memcpy(buf + SHIM_RELAY_HEADER_SIZE, data, sizeof(data));
+    n = shim_relay_seal(key, 8, buf, SHIM_RELAY_HEADER_SIZE + sizeof(data), sizeof(buf));
+    CHECK(hex_equal(buf, n, "5552020c010203040009000000010002f3020201020103570ab1ecbb5ebb3e12ef9d770af768"));
+
+    CHECK(shim_relay_open(key, 8, buf, n) == (long)(n - SHIM_RELAY_TAG_SIZE));
+    CHECK(shim_relay_open("wrong-key", 9, buf, n) == -1);
+    buf[14] ^= 1; // a flipped payload bit
+    CHECK(shim_relay_open(key, 8, buf, n) == -1);
+    CHECK(shim_relay_open(key, 8, buf, SHIM_RELAY_HEADER_SIZE + SHIM_RELAY_TAG_SIZE - 1) == -1);
+
+    shim_relay_header h;
+    CHECK(shim_relay_header_get(buf, n, &h) == 0 && h.type == SHIM_RELAY_DATA && h.session == 0x01020304 &&
+          h.seq == 9 && h.ack == 0);
+    buf[2] = 1; // version 1
+    CHECK(shim_relay_header_get(buf, n, &h) == -1);
+}
+
 int main(int argc, char **argv) {
     const char *fixture = argc > 1 ? argv[1] : NULL;
     test_ipc_parse();
@@ -561,6 +636,8 @@ int main(int argc, char **argv) {
     test_ring();
     test_session(fixture);
     test_session_error_result();
+    test_sha256();
+    test_relay_wire();
     if (failures) {
         fprintf(stderr, "%d check(s) failed\n", failures);
         return 1;
