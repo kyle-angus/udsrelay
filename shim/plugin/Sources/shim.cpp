@@ -8,7 +8,6 @@
 
 #include <3ds.h>
 #include <CTRPluginFramework.hpp>
-#include <csvc.h>
 
 #include <cstdarg>
 #include <cstdio>
@@ -21,6 +20,7 @@
 #include "shim/session.h"
 #include "shim/trace.h"
 
+#include "luma_svc.hpp"
 #include "shim_plugin.hpp"
 
 using namespace CTRPluginFramework;

@@ -27,7 +27,9 @@ PSF 		:= 	udsrelay-shim.plgInfo
 ARCH	:=	-march=armv6k -mtune=mpcore -mfloat-abi=hard -mtp=soft
 
 COMMONFLAGS	:=	-mword-relocations -ffunction-sections -fdata-sections -fno-strict-aliasing \
-				-Wall -Wextra -O2 -fomit-frame-pointer -DNDEBUG=1 $(ARCH)
+				-Wall -Wextra -O2 -fomit-frame-pointer -DNDEBUG=1 $(ARCH) \
+				-D'NORETURN=__attribute__((noreturn))'
+# libctrpf 0.8.0's headers still use NORETURN, which current libctru no longer defines.
 
 CFLAGS		:=	$(COMMONFLAGS) -std=gnu11 $(INCLUDE) -D__3DS__
 CXXFLAGS	:=	$(COMMONFLAGS) -std=gnu++11 -fno-rtti -fno-exceptions $(INCLUDE) -D__3DS__
@@ -54,6 +56,7 @@ export LD		:=	$(CXX)
 export OFILES	:=	$(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)
 export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
 					$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
+					-idirafter $(CTRULIB)/include/3ds \
 					-I$(CURDIR)/$(BUILD)
 export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 

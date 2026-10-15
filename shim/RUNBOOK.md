@@ -136,6 +136,6 @@ Expected differences from Azahar, which are not shim bugs:
 
 ## Status and risks
 
-- **Not built or run on hardware yet.** No devkitARM was available when this was written, so the plugin glue (`shim/plugin/Sources`) has never been compiled. The core it uses is compiled and tested on a PC only.
+- **Not run on hardware yet.** The plugin builds with devkitARM (GCC 16.1) and libctrpf 0.8.0, but nothing has run on a console. The Makefile works around two mismatches between libctrpf 0.8.0 and current libctru: it adds libctru's `include/3ds` for libctrpf's `"types.h"` includes, and defines the `NORETURN` macro libctru dropped. `svcControlService` comes from a minimal `Sources/luma_svc.hpp`, since devkitPro does not install Luma's `csvc.h`.
 - **Same-process sessions:** the game and the shim share a process, so the game's client session and the shim's server session live in one handle table. The kernel allows this, but it is the first thing to suspect if requests never arrive.
 - **One hook point:** if a game obtains `nwm::UDS` before the plugin loads, or through a path other than GetServiceHandle, the shim never sees it. The plugin loader runs before the game's entry point, so the first case should not happen.
