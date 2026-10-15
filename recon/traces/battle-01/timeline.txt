@@ -1,0 +1,651 @@
+      ?  host      · debug note x6 (through ?)
+  +0.000s  host    ndm:u OverrideDefaultDaemons(words=0xf) -> OK
+  +0.000s  host    Service.NDM <Warning> OverrideDefaultDaemons: (STUBBED) bit_mask=0x0000000F
+  +0.000s  host    ndm:u SuspendDaemons(words=0x6) -> OK
+  +0.000s  host    Service.NDM <Warning> SuspendDaemons: (STUBBED) bit_mask=0x00000006
+  +0.584s  host    ndm:u ResumeDaemons(words=0x2) -> OK
+  +0.584s  host    Service.NDM <Warning> ResumeDaemons: (STUBBED) bit_mask=0x00000002
+  +0.584s  host    ndm:u ResumeDaemons(words=0x4) -> OK
+  +0.584s  host    Service.NDM <Warning> ResumeDaemons: (STUBBED) bit_mask=0x00000004
+  +1.298s  client  ndm:u OverrideDefaultDaemons(words=0xf) -> OK
+  +1.298s  client  Service.NDM <Warning> OverrideDefaultDaemons: (STUBBED) bit_mask=0x0000000F
+  +1.299s  client  ndm:u SuspendDaemons(words=0x6) -> OK
+  +1.299s  client  Service.NDM <Warning> SuspendDaemons: (STUBBED) bit_mask=0x00000006
+  +1.867s  client  ndm:u ResumeDaemons(words=0x2) -> OK
+  +1.867s  client  Service.NDM <Warning> ResumeDaemons: (STUBBED) bit_mask=0x00000002
+  +1.867s  client  ndm:u ResumeDaemons(words=0x4) -> OK
+  +1.867s  client  Service.NDM <Warning> ResumeDaemons: (STUBBED) bit_mask=0x00000004
+  +0.584s  host      · debug note x1 (through +0.584s)
+ +16.600s  host    ndm:u EnterExclusiveState(state=LocalCommunications) -> OK
+ +16.600s  host    Service.NDM <Warning> EnterExclusiveState: (STUBBED) exclusive_state=0x00000002
+ +16.601s  host    InitializeWithVersion(shmem=0x14000 user="host" version=0x400) -> OK +event handle
+ +16.617s  client  ndm:u EnterExclusiveState(state=LocalCommunications) -> OK
+ +16.617s  client  Service.NDM <Warning> EnterExclusiveState: (STUBBED) exclusive_state=0x00000002
+ +16.619s  client  InitializeWithVersion(shmem=0x14000 user="client" version=0x400) -> OK +event handle
+ +16.648s  host    SetProbeResponseParam(words=0x321f00,0x0) -> UNIMPLEMENTED in Azahar
+ +16.648s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +16.648s  host    signal NWM::connection_status_event
+ +16.667s  client  SetProbeResponseParam(words=0x321f00,0x0) -> UNIMPLEMENTED in Azahar
+ +16.667s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +16.667s  client  signal NWM::connection_status_event
+ +17.491s  host    DestroyNetwork() -> OK
+ +17.491s  host    signal NWM::connection_status_event
+ +17.491s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +17.521s  client  DestroyNetwork() -> OK
+ +17.521s  client  signal NWM::connection_status_event
+ +17.528s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +17.787s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +17.787s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +17.824s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +17.825s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +18.086s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +18.086s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +18.086s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +18.086s  host    signal NWM::connection_status_event
+ +18.121s  client  SetProbeResponseParam(words=0x321f00,0x40000) -> UNIMPLEMENTED in Azahar
+ +18.121s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +18.121s  client  signal NWM::connection_status_event
+ +18.470s  host    DestroyNetwork() -> OK
+ +18.470s  host    signal NWM::connection_status_event
+ +18.470s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +18.505s  client  DestroyNetwork() -> OK
+ +18.506s  client  signal NWM::connection_status_event
+ +18.506s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +18.770s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +18.770s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +18.770s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +18.770s  host    signal NWM::connection_status_event
+ +18.805s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +18.805s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +18.805s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +18.805s  client  signal NWM::connection_status_event
+ +19.191s  client  DestroyNetwork() -> OK
+ +19.191s  client  signal NWM::connection_status_event
+ +19.191s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +19.491s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +19.491s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +19.491s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +19.491s  client  signal NWM::connection_status_event
+ +20.307s  host    DestroyNetwork() -> OK
+ +20.307s  host    signal NWM::connection_status_event
+ +20.307s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +20.609s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +20.609s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +20.642s  client  DestroyNetwork() -> OK
+ +20.642s  client  signal NWM::connection_status_event
+ +20.642s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +20.911s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +20.911s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +20.944s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +20.945s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +21.211s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +21.211s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +21.245s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +21.510s  host    SetProbeResponseParam(words=0x321f00,0x40000) -> UNIMPLEMENTED in Azahar
+ +21.510s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +21.510s  host    signal NWM::connection_status_event
+ +21.548s  client  SetProbeResponseParam(words=0x321f00,0x40000) -> UNIMPLEMENTED in Azahar
+ +21.548s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +21.548s  client  signal NWM::connection_status_event
+ +21.896s  host    DestroyNetwork() -> OK
+ +21.896s  host    signal NWM::connection_status_event
+ +21.896s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +22.198s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +22.198s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +22.198s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +22.198s  host    signal NWM::connection_status_event
+ +22.700s  client  DestroyNetwork() -> OK
+ +22.700s  client  signal NWM::connection_status_event
+ +22.700s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +23.001s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +23.001s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +23.304s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +23.304s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +23.352s  host    DestroyNetwork() -> OK
+ +23.352s  host    signal NWM::connection_status_event
+ +23.352s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +23.603s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +23.603s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +23.603s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +23.603s  client  signal NWM::connection_status_event
+ +23.650s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +23.650s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +23.953s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +24.254s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +24.254s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +24.254s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +24.254s  host    signal NWM::connection_status_event
+ +24.639s  host    DestroyNetwork() -> OK
+ +24.639s  host    signal NWM::connection_status_event
+ +24.639s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +24.940s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +24.940s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +24.940s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +24.940s  host    signal NWM::connection_status_event
+ +25.141s  client  DestroyNetwork() -> OK
+ +25.141s  client  signal NWM::connection_status_event
+ +25.141s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +25.442s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +25.442s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +25.743s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +25.743s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +26.043s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +26.043s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +26.093s  host    DestroyNetwork() -> OK
+ +26.093s  host    signal NWM::connection_status_event
+ +26.093s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +26.344s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +26.345s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +26.345s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +26.345s  client  signal NWM::connection_status_event
+ +26.393s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +26.393s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +26.695s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +26.993s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +26.993s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +26.993s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +26.993s  host    signal NWM::connection_status_event
+ +27.382s  host    DestroyNetwork() -> OK
+ +27.382s  host    signal NWM::connection_status_event
+ +27.382s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +27.500s  client  DestroyNetwork() -> OK
+ +27.500s  client  signal NWM::connection_status_event
+ +27.500s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +27.680s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +27.680s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +27.680s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +27.680s  host    signal NWM::connection_status_event
+ +27.799s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +27.799s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +28.102s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +28.102s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +28.401s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +28.401s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +28.401s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +28.401s  client  signal NWM::connection_status_event
+ +29.217s  host    DestroyNetwork() -> OK
+ +29.217s  host    signal NWM::connection_status_event
+ +29.217s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +29.519s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +29.519s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +29.819s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +29.819s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +29.940s  client  DestroyNetwork() -> OK
+ +29.940s  client  signal NWM::connection_status_event
+ +29.940s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +30.120s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +30.120s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +30.238s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +30.238s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +30.421s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +30.421s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +30.421s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +30.421s  host    signal NWM::connection_status_event
+ +30.541s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +30.841s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +30.841s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +31.142s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +31.142s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +31.142s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +31.142s  client  signal NWM::connection_status_event
+ +31.190s  host    DestroyNetwork() -> OK
+ +31.190s  host    signal NWM::connection_status_event
+ +31.190s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +31.491s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +31.794s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +31.794s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +31.794s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +31.794s  host    signal NWM::connection_status_event
+ +31.912s  client  DestroyNetwork() -> OK
+ +31.912s  client  signal NWM::connection_status_event
+ +31.912s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +32.212s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +32.212s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +32.514s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +32.514s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +32.514s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +32.514s  client  signal NWM::connection_status_event
+ +32.944s  host    DestroyNetwork() -> OK
+ +32.944s  host    signal NWM::connection_status_event
+ +32.944s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +33.244s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +33.244s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +33.281s  client  DestroyNetwork() -> OK
+ +33.281s  client  signal NWM::connection_status_event
+ +33.281s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +33.548s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +33.548s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +33.582s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +33.582s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +33.849s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +33.849s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +33.849s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +33.849s  host    signal NWM::connection_status_event
+ +33.883s  client  SetProbeResponseParam(words=0x321f00,0x40000) -> UNIMPLEMENTED in Azahar
+ +33.883s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +33.883s  client  signal NWM::connection_status_event
+ +35.385s  host    DestroyNetwork() -> OK
+ +35.385s  host    signal NWM::connection_status_event
+ +35.385s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +35.419s  client  DestroyNetwork() -> OK
+ +35.419s  client  signal NWM::connection_status_event
+ +35.419s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +35.686s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +35.686s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +35.722s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +35.722s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +35.988s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +35.988s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +36.024s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +36.289s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +36.325s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +36.590s  host    SetProbeResponseParam(words=0x321f00,0x40000) -> UNIMPLEMENTED in Azahar
+ +36.590s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +36.590s  host    signal NWM::connection_status_event
+ +36.624s  client  SetProbeResponseParam(words=0x321f00,0x40000) -> UNIMPLEMENTED in Azahar
+ +36.624s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +36.624s  client  signal NWM::connection_status_event
+ +37.359s  host    DestroyNetwork() -> OK
+ +37.359s  host    signal NWM::connection_status_event
+ +37.359s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +37.392s  client  DestroyNetwork() -> OK
+ +37.392s  client  signal NWM::connection_status_event
+ +37.392s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +37.659s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +37.660s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +37.692s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +37.692s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +37.959s  host    SetProbeResponseParam(words=0x321f00,0x40000) -> UNIMPLEMENTED in Azahar
+ +37.959s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +37.959s  host    signal NWM::connection_status_event
+ +37.993s  client  SetProbeResponseParam(words=0x321f00,0x40000) -> UNIMPLEMENTED in Azahar
+ +37.993s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +37.993s  client  signal NWM::connection_status_event
+ +39.113s  host    DestroyNetwork() -> OK
+ +39.113s  host    signal NWM::connection_status_event
+ +39.113s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +39.414s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +39.414s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +39.532s  client  DestroyNetwork() -> OK
+ +39.532s  client  signal NWM::connection_status_event
+ +39.532s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +39.716s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +39.716s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +39.836s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +39.836s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +40.014s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +40.014s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +40.014s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +40.014s  host    signal NWM::connection_status_event
+ +40.134s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +40.433s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +40.433s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +40.736s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +40.736s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +40.736s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +40.737s  client  signal NWM::connection_status_event
+ +41.120s  client  DestroyNetwork() -> OK
+ +41.120s  client  signal NWM::connection_status_event
+ +41.120s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +41.422s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +41.422s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +41.422s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +41.422s  client  signal NWM::connection_status_event
+ +41.555s  host    DestroyNetwork() -> OK
+ +41.555s  host    signal NWM::connection_status_event
+ +41.555s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +41.853s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +41.853s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +42.156s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +42.156s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +42.191s  client  DestroyNetwork() -> OK
+ +42.191s  client  signal NWM::connection_status_event
+ +42.191s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +42.458s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +42.458s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +42.491s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +42.491s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +42.760s  host    SetProbeResponseParam(words=0x321f00,0x40000) -> UNIMPLEMENTED in Azahar
+ +42.760s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +42.760s  host    signal NWM::connection_status_event
+ +42.790s  client  SetProbeResponseParam(words=0x321f00,0x40000) -> UNIMPLEMENTED in Azahar
+ +42.790s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +42.790s  client  signal NWM::connection_status_event
+ +43.142s  host    DestroyNetwork() -> OK
+ +43.142s  host    signal NWM::connection_status_event
+ +43.142s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +43.443s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +43.443s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +43.443s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +43.443s  host    signal NWM::connection_status_event
+ +43.562s  client  DestroyNetwork() -> OK
+ +43.562s  client  signal NWM::connection_status_event
+ +43.562s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +43.862s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +43.862s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +44.163s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +44.163s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +44.163s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +44.163s  client  signal NWM::connection_status_event
+ +44.212s  host    DestroyNetwork() -> OK
+ +44.212s  host    signal NWM::connection_status_event
+ +44.212s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +44.512s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +44.512s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +44.546s  client  DestroyNetwork() -> OK
+ +44.546s  client  signal NWM::connection_status_event
+ +44.546s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +44.811s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +44.811s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +44.811s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +44.811s  host    signal NWM::connection_status_event
+ +44.848s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +44.848s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +44.848s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +44.848s  client  signal NWM::connection_status_event
+ +45.233s  client  DestroyNetwork() -> OK
+ +45.233s  client  signal NWM::connection_status_event
+ +45.233s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +45.533s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +45.533s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +45.533s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +45.533s  client  signal NWM::connection_status_event
+ +45.582s  host    DestroyNetwork() -> OK
+ +45.582s  host    signal NWM::connection_status_event
+ +45.582s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +45.882s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +45.882s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +46.181s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +46.181s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +46.181s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +46.181s  host    signal NWM::connection_status_event
+ +46.302s  client  DestroyNetwork() -> OK
+ +46.302s  client  signal NWM::connection_status_event
+ +46.302s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +46.601s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +46.601s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +46.902s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +46.902s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +46.902s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +46.902s  client  signal NWM::connection_status_event
+ +46.951s  host    DestroyNetwork() -> OK
+ +46.951s  host    signal NWM::connection_status_event
+ +46.951s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +47.254s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +47.254s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +47.554s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +47.554s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +47.554s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +47.554s  host    signal NWM::connection_status_event
+ +47.675s  client  DestroyNetwork() -> OK
+ +47.675s  client  signal NWM::connection_status_event
+ +47.675s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +47.938s  host    DestroyNetwork() -> OK
+ +47.938s  host    signal NWM::connection_status_event
+ +47.938s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +47.975s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +47.975s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +48.240s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +48.241s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +48.241s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +48.241s  host    signal NWM::connection_status_event
+ +48.275s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +48.275s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +48.275s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +48.275s  client  signal NWM::connection_status_event
+ +49.043s  client  DestroyNetwork() -> OK
+ +49.043s  client  signal NWM::connection_status_event
+ +49.043s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +49.345s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +49.345s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +49.393s  host    DestroyNetwork() -> OK
+ +49.393s  host    signal NWM::connection_status_event
+ +49.393s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +49.646s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +49.646s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +49.646s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +49.646s  client  signal NWM::connection_status_event
+ +49.695s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +49.695s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +49.996s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +50.028s  client  DestroyNetwork() -> OK
+ +50.028s  client  signal NWM::connection_status_event
+ +50.028s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +50.296s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +50.296s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +50.296s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +50.296s  host    signal NWM::connection_status_event
+ +50.327s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +50.327s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +50.327s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +50.328s  client  signal NWM::connection_status_event
+ +51.063s  host    DestroyNetwork() -> OK
+ +51.063s  host    signal NWM::connection_status_event
+ +51.063s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +51.365s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +51.365s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +51.664s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +51.664s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +51.664s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +51.664s  host    signal NWM::connection_status_event
+ +51.868s  client  DestroyNetwork() -> OK
+ +51.868s  client  signal NWM::connection_status_event
+ +51.868s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +52.051s  host    DestroyNetwork() -> OK
+ +52.051s  host    signal NWM::connection_status_event
+ +52.051s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +52.166s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +52.167s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +52.350s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +52.350s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +52.350s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +52.350s  host    signal NWM::connection_status_event
+ +52.470s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +52.470s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +52.771s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +52.771s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +53.072s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +53.073s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +53.073s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +53.073s  client  signal NWM::connection_status_event
+ +53.888s  host    DestroyNetwork() -> OK
+ +53.888s  host    signal NWM::connection_status_event
+ +53.888s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +54.190s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +54.190s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +54.224s  client  DestroyNetwork() -> OK
+ +54.224s  client  signal NWM::connection_status_event
+ +54.224s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +54.491s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +54.491s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +54.526s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +54.526s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +54.790s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +54.790s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +54.827s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +55.090s  host    SetProbeResponseParam(words=0x321f00,0x40000) -> UNIMPLEMENTED in Azahar
+ +55.090s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +55.090s  host    signal NWM::connection_status_event
+ +55.126s  client  SetProbeResponseParam(words=0x321f00,0x40000) -> UNIMPLEMENTED in Azahar
+ +55.126s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +55.126s  client  signal NWM::connection_status_event
+ +55.479s  host    DestroyNetwork() -> OK
+ +55.479s  host    signal NWM::connection_status_event
+ +55.479s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +55.777s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +55.777s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +55.777s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +55.777s  host    signal NWM::connection_status_event
+ +56.280s  client  DestroyNetwork() -> OK
+ +56.280s  client  signal NWM::connection_status_event
+ +56.280s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +56.582s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +56.582s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +56.882s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +56.882s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +56.930s  host    DestroyNetwork() -> OK
+ +56.930s  host    signal NWM::connection_status_event
+ +56.930s  host    DestroyNetwork() -> 0xC8A111EA (desc=490 module=68 summary=5 level=25)
+ +56.930s  host    Service.NWM <Warning> DestroyNetworkHLE: called with status 3
+ +56.981s  host    Shutdown() -> OK
+ +56.981s  host    ndm:u LeaveExclusiveState(words=0x20,0xb) -> OK
+ +56.981s  host    Service.NDM <Warning> LeaveExclusiveState: (STUBBED)
+ +57.183s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +57.183s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
+ +57.183s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
+ +57.183s  client  signal NWM::connection_status_event
+ +57.453s  host    ndm:u EnterExclusiveState(state=LocalCommunications) -> OK
+ +57.453s  host    Service.NDM <Warning> EnterExclusiveState: (STUBBED) exclusive_state=0x00000002
+ +57.453s  host    InitializeWithVersion(shmem=0x14000 user="host" version=0x400) -> OK +event handle
+ +57.454s  host    GetConnectionStatus() -> OK NotConnected reason=None node=0 nodes=0/0 bitmask=0x0000 changed=0x0000
+ +57.454s  host      · GetConnectionStatus x1 (through +57.454s)
+ +57.500s  host    Bind(bind=2 recv_buf=0x2e30 chan=243 node=broadcast) -> OK +event handle
+ +57.500s  host    SetProbeResponseParam(words=0x321f00,0x0) -> UNIMPLEMENTED in Azahar
+ +57.500s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x01 max_nodes=4 appdata=0B passphrase=13B) -> OK
+ +57.500s  host    signal NWM::connection_status_event
+ +57.500s  host    GetConnectionStatus() -> OK ConnectedAsHost reason=ConnectionEstablished node=1 nodes=1/4 bitmask=0x0001 changed=0x0001
+ +57.500s  host      · GetChannel x1 (through +57.500s)
+ +57.533s  host    SetApplicationData(size=184) -> OK
+ +57.538s  host    SetApplicationData(size=184) -> OK
+ +58.721s  client  DestroyNetwork() -> OK
+ +58.721s  client  signal NWM::connection_status_event
+ +58.721s  client  cmd_0023() -> UNIMPLEMENTED in Azahar
+ +58.722s  client  cmd_0023() -> UNIMPLEMENTED in Azahar
+ +58.722s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0xffffffff id8=0xff) -> OK words=0x4000c,0x0
+ +59.021s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +59.323s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +59.323s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +59.622s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +59.622s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +59.925s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +59.925s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
+ +60.224s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
+ +60.224s  client  DestroyNetwork() -> 0xC8A111EA (desc=490 module=68 summary=5 level=25)
+ +60.224s  client  Service.NWM <Warning> DestroyNetworkHLE: called with status 3
+ +60.273s  client  Shutdown() -> OK
+ +60.274s  client  ndm:u LeaveExclusiveState(words=0x20,0xb) -> OK
+ +60.274s  client  Service.NDM <Warning> LeaveExclusiveState: (STUBBED)
+ +60.731s  client  ndm:u EnterExclusiveState(state=LocalCommunications) -> OK
+ +60.731s  client  Service.NDM <Warning> EnterExclusiveState: (STUBBED) exclusive_state=0x00000002
+ +60.731s  client  InitializeWithVersion(shmem=0x14000 user="client" version=0x400) -> OK +event handle
+ +60.731s  client  GetConnectionStatus() -> OK NotConnected reason=None node=0 nodes=0/0 bitmask=0x0000 changed=0x0000
+ +60.731s  client    · GetConnectionStatus x1 (through +60.731s)
+ +60.791s  client  RecvBeaconBroadcastData(out_size=0x8000 comm_id=0x00055d10 id8=0x01) -> OK words=0x8000c,0x0
+ +61.095s  client  Bind(bind=2 recv_buf=0x2e30 chan=243 node=broadcast) -> OK +event handle
+ +61.096s  client  ConnectToNetwork(conn_type=1 comm_id=0x00055d10 id8=0x01 max_nodes=4 appdata=184B passphrase=13B) -> OK
+ +61.114s  host    signal NWM::connection_status_event
+ +61.114s  client  signal NWM::connection_status_event
+ +61.114s  client  signal HLE Pause Event: uds::ConnectToNetwork
+ +61.125s  host    GetConnectionStatus() -> OK ConnectedAsHost reason=ConnectionEstablished node=1 nodes=2/4 bitmask=0x0003 changed=0x0002
+ +61.127s  client  GetConnectionStatus() -> OK ConnectedAsClient reason=ConnectionEstablished node=2 nodes=2/4 bitmask=0x0003 changed=0x0003
+ +61.131s  client  DestroyNetwork() -> 0xC8A111EA (desc=490 module=68 summary=5 level=25)
+ +61.131s  client  Service.NWM <Warning> DestroyNetworkHLE: called with status 9
+ +61.184s  client    · PullPacket x543, PullPacket empty x515, SendTo x504, data event x543 (through +214.177s)
++214.193s  client  DisconnectNetwork() -> OK
++214.193s  client  signal NWM::connection_status_event
++214.193s  client    · data event x1 (through +214.193s)
++214.193s  client  PullPacket(bind=2 max=0x5dc) -> 0xC8A113EA (desc=1002 module=68 summary=5 level=25)
++214.193s  client  Service.NWM <Error> PullPacketHLE: Not connected yet.
++214.193s  client  GetConnectionStatus() -> OK NotConnected reason=None node=2 nodes=0/0 bitmask=0x0000 changed=0x0000
++214.194s  client  PullPacket(bind=2 max=0x5dc) -> 0xC8A113EA (desc=1002 module=68 summary=5 level=25)
++214.194s  client  Service.NWM <Error> PullPacketHLE: Not connected yet.
++214.194s  client  Unbind(bind=2) -> OK words=0x2,0x0,0x0,0x0
++214.194s  client  Unbind(bind=1) -> OK words=0x1,0x0,0x0,0x0
+ +61.188s  host      · PullPacket x504, PullPacket empty x493, SendTo x543, data event x504 (through +214.203s)
++214.211s  host    signal NWM::connection_status_event
++214.222s  host      · SendTo x1 (through +214.222s)
++214.222s  host    GetConnectionStatus() -> OK ConnectedAsHost reason=ConnectionEstablished node=1 nodes=1/4 bitmask=0x0001 changed=0x0002
++214.565s  client  Bind(bind=4 recv_buf=0x2e30 chan=243 node=broadcast) -> OK +event handle
++214.679s  client  Unbind(bind=4) -> OK words=0x4,0x0,0x0,0x0
++214.679s  client    · data event x1 (through +214.679s)
++214.679s  client  Unbind(bind=3) -> OK words=0x3,0x0,0x0,0x0
++214.680s  client  Shutdown() -> OK
++214.680s  client  ndm:u LeaveExclusiveState(words=0x20,0xb) -> OK
++214.680s  client  Service.NDM <Warning> LeaveExclusiveState: (STUBBED)
++216.569s  host    DestroyNetwork() -> OK
++216.569s  host    signal NWM::connection_status_event
++216.569s  host      · data event x1 (through +216.569s)
++216.569s  host    PullPacket(bind=2 max=0x5dc) -> 0xC8A113EA (desc=1002 module=68 summary=5 level=25)
++216.569s  host    Service.NWM <Error> PullPacketHLE: Not connected yet.
++216.569s  host    GetConnectionStatus() -> OK NotConnected reason=None node=1 nodes=0/0 bitmask=0x0000 changed=0x0000
++216.569s  host    Unbind(bind=2) -> OK words=0x2,0x0,0x0,0x0
++216.569s  host    Unbind(bind=1) -> OK words=0x1,0x0,0x0,0x0
++216.914s  host    Bind(bind=4 recv_buf=0x2e30 chan=243 node=broadcast) -> OK +event handle
++217.031s  host    Unbind(bind=4) -> OK words=0x4,0x0,0x0,0x0
++217.031s  host      · data event x1 (through +217.031s)
++217.031s  host    Unbind(bind=3) -> OK words=0x3,0x0,0x0,0x0
++217.031s  host    Shutdown() -> OK
++217.031s  host    ndm:u LeaveExclusiveState(words=0x20,0xb) -> OK
++217.031s  host    Service.NDM <Warning> LeaveExclusiveState: (STUBBED)
++217.655s  client  ndm:u EnterExclusiveState(state=LocalCommunications) -> OK
++217.655s  client  Service.NDM <Warning> EnterExclusiveState: (STUBBED) exclusive_state=0x00000002
++217.655s  client  InitializeWithVersion(shmem=0x14000 user="client" version=0x400) -> OK +event handle
++217.703s  client  SetProbeResponseParam(words=0x321f00,0x0) -> UNIMPLEMENTED in Azahar
++217.703s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++217.703s  client  signal NWM::connection_status_event
++218.471s  client  DestroyNetwork() -> OK
++218.471s  client  signal NWM::connection_status_event
++218.471s  client  cmd_0023() -> UNIMPLEMENTED in Azahar
++218.471s  client  cmd_0023() -> UNIMPLEMENTED in Azahar
++218.471s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0xffffffff id8=0xff) -> OK words=0x4000c,0x0
++218.499s  host    ndm:u EnterExclusiveState(state=LocalCommunications) -> OK
++218.499s  host    Service.NDM <Warning> EnterExclusiveState: (STUBBED) exclusive_state=0x00000002
++218.499s  host    InitializeWithVersion(shmem=0x14000 user="host" version=0x400) -> OK +event handle
++218.550s  host    SetProbeResponseParam(words=0x321f00,0x0) -> UNIMPLEMENTED in Azahar
++218.550s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++218.550s  host    signal NWM::connection_status_event
++218.773s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
++219.073s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
++219.073s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
++219.238s  host    DestroyNetwork() -> OK
++219.238s  host    signal NWM::connection_status_event
++219.238s  host    cmd_0023() -> UNIMPLEMENTED in Azahar
++219.238s  host    cmd_0023() -> UNIMPLEMENTED in Azahar
++219.238s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0xffffffff id8=0xff) -> OK words=0x4000c,0x0
++219.376s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
++219.376s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
++219.376s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++219.376s  client  signal NWM::connection_status_event
++219.539s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
++219.839s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
++219.839s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
++219.839s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++219.839s  host    signal NWM::connection_status_event
++220.143s  client  DestroyNetwork() -> OK
++220.143s  client  signal NWM::connection_status_event
++220.143s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
++220.446s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
++220.446s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
++220.606s  host    DestroyNetwork() -> OK
++220.606s  host    signal NWM::connection_status_event
++220.606s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
++220.747s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
++220.747s  client  SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
++220.747s  client  BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++220.747s  client  signal NWM::connection_status_event
++220.906s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
++220.906s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
++221.207s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
++221.207s  host    SetProbeResponseParam(words=0x321f00,0x20000) -> UNIMPLEMENTED in Azahar
++221.207s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++221.207s  host    signal NWM::connection_status_event
++221.516s  client  DestroyNetwork() -> OK
++221.516s  client  signal NWM::connection_status_event
++221.516s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
++221.817s  client  DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
++221.817s  client  RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
++221.207s  host      · debug note x2 (through +221.207s)
++222.361s  host    DestroyNetwork() -> OK
++222.361s  host    signal NWM::connection_status_event
++222.361s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
++222.663s  host    DecryptBeaconData(words=0x420402,0x6456e8,0x3f8802,0x6457f0,0x3f8c02,0x6458ee) -> OK words=0xa00002,0xdeadc0de
++222.663s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
++222.963s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
++223.264s  host    SetProbeResponseParam(words=0x321f00,0x40000) -> UNIMPLEMENTED in Azahar
++223.264s  host    BeginHostingNetwork(comm_id=0x00055d10 id8=0x02 max_nodes=2 appdata=184B passphrase=13B) -> OK
++223.264s  host    signal NWM::connection_status_event
++224.803s  host    DestroyNetwork() -> OK
++224.803s  host    signal NWM::connection_status_event
++224.803s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
++225.103s  host    RecvBeaconBroadcastData(out_size=0x4000 comm_id=0x00055d10 id8=0xff) -> OK words=0x4000c,0x0
++225.103s  host      · debug note x3 (through +225.103s)
