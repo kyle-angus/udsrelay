@@ -8,6 +8,12 @@
 //   ndm:rly  in place of ndm:u: forwarded to the real ndm:u, except the exclusive-state calls,
 //            which it fakes so infrastructure Wi-Fi (and the relay) stays up during local play.
 //
+// mode = trace in shim.ini instead forwards every redirected session to the real service and logs
+// it, and also serves uds:dlp and ndm:dlp, which the patched sm hands to the Download Play
+// module: games like Mario Kart 7 run local play through it. Local wireless then works as
+// usual between consoles side by side, and the log records both the game's and Download Play's
+// calls.
+//
 // A thread per session runs shim/core's session loop, as in the plugin. A relay thread starts
 // sockets the first time a game opens uds:rly and then feeds the relay to the emulator, and a
 // writer thread logs to sdmc:/udsrelay/logs/ in the plugin's UDSTRACE format.
@@ -16,6 +22,7 @@
 
 #include <arpa/inet.h>
 #include <errno.h>
+#include <fcntl.h>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <poll.h>
@@ -31,9 +38,9 @@
 #include "shim/trace.h"
 #include "shim/uds.h"
 
-#define VERSION "0.4.3"
+#define VERSION "0.5.0"
 
-#define MAX_SESSIONS 4
+#define MAX_SESSIONS 8 // trace mode can see the game and Download Play at once
 #define SLOT_SIZE 0x800 // largest UDS static buffer is SendTo's 0x5F4
 #define RING_SIZE (64 * 1024)
 #define HEAP_SIZE (192 * 1024) // thread stacks and newlib's socket bookkeeping
@@ -421,8 +428,13 @@ static void OpsLog(void *ctx, const char *line, size_t len) {
 
 // nwm::UDS: every request goes to the emulator, with the session's reply bank as scratch for
 // static-buffer replies. ndm:u: the exclusive-state calls are faked, everything else forwarded.
+static bool g_trace; // mode = trace: forward everything, answer nothing
+
 static int OpsAnswer(void *ctx, shim_session *s, uint32_t *cmd) {
     (void)ctx;
+    if (g_trace) {
+        return 0;
+    }
     if (strcmp(s->port, "nwm::UDS") == 0) {
         shim_uds_handle(&g_uds, cmd, s->bank_rsp);
         return 1;
@@ -483,8 +495,9 @@ static void SessionWorker(void *arg) {
     }
 }
 
-// Hands an accepted session to a free worker. real is the real service session (ndm:u), or 0.
-static void Dispatch(const char *port, Handle server, Handle real, int index) {
+// Hands an accepted session to a free worker. real is the real service session, or 0 when the
+// emulator answers everything. client says who it serves, for the log.
+static void Dispatch(const char *port, const char *client, Handle server, Handle real, int index) {
     LightLock_Lock(&g_slotLock);
     SessionSlot *slot = NULL;
     for (int i = 0; i < MAX_SESSIONS && !slot; i++) {
@@ -494,7 +507,7 @@ static void Dispatch(const char *port, Handle server, Handle real, int index) {
     }
     if (!slot) {
         LightLock_Unlock(&g_slotLock);
-        Note("Warning", "Dispatch", "no free session slot for %s; closing it", port);
+        Note("Warning", "Dispatch", "no free session slot for %s (%s); closing it", port, client);
         svcCloseHandle(server);
         if (real) {
             svcCloseHandle(real);
@@ -517,7 +530,8 @@ static void Dispatch(const char *port, Handle server, Handle real, int index) {
     slot->used = true;
     LightLock_Unlock(&g_slotLock);
     LightEvent_Signal(&slot->start);
-    Note("Info", "Dispatch", "serving a %s session in slot %d", port, (int)(slot - g_slots));
+    Note("Info", "Dispatch", "serving a %s session for %s in slot %d (sess=%d)", port, client, (int)(slot - g_slots),
+         index);
 }
 
 // ---- relay thread --------------------------------------------------------------------------
@@ -580,15 +594,23 @@ static void RelayThread(void *arg) {
     g_relayFd = fd;
     LightLock_Unlock(&g_udsLock);
     Note("Info", "Relay", "relay mode: %s:%u", g_cfg.relay_host, (unsigned)g_cfg.relay_port);
+    // Never wait inside the socket service: libctru sends every socket call over one shared
+    // session, so a poll() blocking there for 20 ms held up every SendTo behind it (median 20 ms
+    // per frame on hardware, capping a game at about 30 frames a second). The socket is
+    // non-blocking; the thread drains what has arrived and sleeps 2 ms outside the service
+    // when there is nothing.
+    fcntl(fd, F_SETFL, fcntl(fd, F_GETFL, 0) | O_NONBLOCK);
     static u8 buf[SHIM_RELAY_MAX_DATAGRAM];
     u64 lastPoll = 0;
     for (;;) {
-        struct pollfd pfd = {fd, POLLIN, 0};
-        if (poll(&pfd, 1, 20) > 0 && (pfd.revents & POLLIN)) {
-            const ssize_t n = recv(fd, buf, sizeof(buf), 0);
-            if (n > 0) {
-                shim_uds_net_input(&g_uds, buf, (size_t)n);
-            }
+        bool got = false;
+        ssize_t n;
+        while ((n = recv(fd, buf, sizeof(buf), 0)) > 0) {
+            shim_uds_net_input(&g_uds, buf, (size_t)n);
+            got = true;
+        }
+        if (!got) {
+            svcSleepThread(2 * NS_PER_MS);
         }
         if (UdsNow(NULL) - lastPoll >= 20) {
             shim_uds_net_poll(&g_uds);
@@ -629,45 +651,71 @@ int main(void) {
     LightEvent_Wait(&g_sdReady);
     LoadConfig();
 
-    if (!g_cfg.relay_host[0] || !g_cfg.lobby[0]) {
-        // Without the services, sm gives games the real ones: local wireless works as usual.
-        Note("Info", "Start", "udsrelay sysmodule %s: no relay or lobby in %s; not serving", VERSION, CONFIG_PATH);
-        svcSleepThread(2000 * NS_PER_MS); // let the writer flush
-        return 0;
-    }
-    const u32 session = ((u32)svcGetSystemTick() ^ (u32)(svcGetSystemTick() >> 32) * 2654435761u) | 1;
-    if (shim_uds_init(&g_uds, &g_udsOps, g_cfg.lobby, strlen(g_cfg.lobby), session) != 0) {
-        Note("Error", "Start", "bad lobby key in %s; not serving", CONFIG_PATH);
-        svcSleepThread(2000 * NS_PER_MS);
-        return 0;
+    g_trace = g_cfg.trace_mode;
+    if (!g_trace) {
+        if (!g_cfg.relay_host[0] || !g_cfg.lobby[0]) {
+            // Without the services, sm gives games the real ones: local wireless works as usual.
+            Note("Info", "Start", "udsrelay sysmodule %s: no relay or lobby in %s; not serving", VERSION, CONFIG_PATH);
+            svcSleepThread(2000 * NS_PER_MS); // let the writer flush
+            return 0;
+        }
+        const u32 session = ((u32)svcGetSystemTick() ^ (u32)(svcGetSystemTick() >> 32) * 2654435761u) | 1;
+        if (shim_uds_init(&g_uds, &g_udsOps, g_cfg.lobby, strlen(g_cfg.lobby), session) != 0) {
+            Note("Error", "Start", "bad lobby key in %s; not serving", CONFIG_PATH);
+            svcSleepThread(2000 * NS_PER_MS);
+            return 0;
+        }
     }
 
     for (int i = 0; i < MAX_SESSIONS; i++) {
         LightEvent_Init(&g_slots[i].start, RESET_ONESHOT);
         g_slots[i].ready = threadCreate(SessionWorker, &g_slots[i], WORKER_STACK, WORKER_PRIORITY, -2, true) != NULL;
     }
-    if (!threadCreate(RelayThread, NULL, RELAY_STACK, RELAY_PRIORITY, -2, true)) {
+    if (!g_trace && !threadCreate(RelayThread, NULL, RELAY_STACK, RELAY_PRIORITY, -2, true)) {
         Note("Error", "Start", "could not start the relay thread; not serving");
         svcSleepThread(2000 * NS_PER_MS);
         return 0;
     }
 
-    Handle ports[2] = {0, 0};
-    const Result r0 = srvRegisterService(&ports[0], "uds:rly", MAX_SESSIONS);
-    const Result r1 = srvRegisterService(&ports[1], "ndm:rly", MAX_SESSIONS);
-    if (R_FAILED(r0) || R_FAILED(r1)) {
-        Note("Error", "Start", "could not register uds:rly (0x%08lx) and ndm:rly (0x%08lx); games keep the real services",
-             (unsigned long)r0, (unsigned long)r1);
-        svcSleepThread(2000 * NS_PER_MS);
-        return 0;
+    // What each registered name stands in for. Relay mode serves games only; trace mode also
+    // serves the Download Play module, under the names the patched sm gives it.
+    static const struct {
+        const char *name, *port, *client;
+    } services[] = {
+        {"uds:rly", "nwm::UDS", "the game"},
+        {"ndm:rly", "ndm:u", "the game"},
+        {"uds:dlp", "nwm::UDS", "Download Play"},
+        {"ndm:dlp", "ndm:u", "Download Play"},
+    };
+    const int nservices = g_trace ? 4 : 2;
+    Handle ports[4] = {0, 0, 0, 0};
+    for (int i = 0; i < nservices; i++) {
+        const Result rc = srvRegisterService(&ports[i], services[i].name, MAX_SESSIONS);
+        if (R_FAILED(rc)) {
+            Note("Error", "Start", "could not register %s (0x%08lx); games keep the real services", services[i].name,
+                 (unsigned long)rc);
+            for (int k = 0; k < i; k++) {
+                srvUnregisterService(services[k].name);
+            }
+            svcSleepThread(2000 * NS_PER_MS);
+            return 0;
+        }
     }
-    Note("Info", "Start", "udsrelay sysmodule %s serving uds:rly and ndm:rly; payload_max %ld", VERSION,
-         g_cfg.payload_max);
+    if (g_trace) {
+        Note("Info", "Start",
+             "udsrelay sysmodule %s in trace mode: forwarding and logging uds:rly, ndm:rly, uds:dlp and ndm:dlp to the "
+             "real services; payload_max %ld",
+             VERSION, g_cfg.payload_max);
+    } else {
+        Note("Info", "Start", "udsrelay sysmodule %s serving uds:rly and ndm:rly; payload_max %ld", VERSION,
+             g_cfg.payload_max);
+    }
 
     int next = 0;
     for (;;) {
         s32 idx = -1;
-        if (R_FAILED(svcWaitSynchronizationN(&idx, ports, 2, false, U64_MAX)) || idx < 0 || idx > 1) {
+        if (R_FAILED(svcWaitSynchronizationN(&idx, ports, nservices, false, U64_MAX)) || idx < 0 ||
+            idx >= nservices) {
             svcSleepThread(100 * NS_PER_MS);
             continue;
         }
@@ -675,19 +723,21 @@ int main(void) {
         if (R_FAILED(svcAcceptSession(&server, ports[idx]))) {
             continue;
         }
-        if (idx == 0) {
+        const bool uds = strcmp(services[idx].port, "nwm::UDS") == 0;
+        if (uds && !g_trace) {
             LightEvent_Signal(&g_relayWanted);
-            Dispatch("nwm::UDS", server, 0, next++);
-        } else {
-            Handle real = 0;
-            // sm gives the sysmodule itself the real ndm:u.
-            const Result rc = srvGetServiceHandle(&real, "ndm:u");
-            if (R_FAILED(rc)) {
-                Note("Error", "Main", "cannot open the real ndm:u: 0x%08lx", (unsigned long)rc);
-                svcCloseHandle(server);
-                continue;
-            }
-            Dispatch("ndm:u", server, real, next++);
+            Dispatch(services[idx].port, services[idx].client, server, 0, next++);
+            continue;
         }
+        // sm gives the sysmodule itself the real services.
+        Handle real = 0;
+        const Result rc = srvGetServiceHandle(&real, services[idx].port);
+        if (R_FAILED(rc)) {
+            Note("Error", "Main", "cannot open the real %s for %s: 0x%08lx", services[idx].port, services[idx].client,
+                 (unsigned long)rc);
+            svcCloseHandle(server);
+            continue;
+        }
+        Dispatch(services[idx].port, services[idx].client, server, real, next++);
     }
 }

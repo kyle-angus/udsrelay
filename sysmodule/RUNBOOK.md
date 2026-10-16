@@ -46,6 +46,24 @@ sysmodule/build.sh
 
 It stages `shim/core` and `sysmodule` in `/tmp/udsrelay-sysmodule-build`, clones Luma3DS v13.4 there (once) and applies the two patches, then writes the three files to `sysmodule/out/`.
 
+### SD card package
+
+`package.sh` builds and then zips everything a console needs, in the SD card's layout: the three `.cxi` files under `luma/sysmodules/`, and a `udsrelay/shim.ini` for the chosen mode. For relay mode, it reads the lobby key from `--lobby-file`, else `$UDSRELAY_LOBBY`, else asks for it without echoing, so the key stays out of shell history:
+
+```bash
+sysmodule/package.sh relay --relay relay.example.net:28300
+```
+
+For trace mode (below), no relay or key:
+
+```bash
+sysmodule/package.sh trace
+```
+
+The zip goes to `sysmodule/out/udsrelay-sd-<mode>.zip` (git-ignored). A relay-mode zip contains the lobby key, so share it only with people in the lobby. `--payload-max N` sets how much of each frame is logged (default 64), `--no-build` packages what is already in `sysmodule/out`, `-o` picks another path, and `--force` overwrites an existing zip.
+
+Unzip it, then copy `luma/` and `udsrelay/` onto the SD card root, **merging** with the folders already there. Windows Explorer and FTP clients merge folders. In macOS Finder, hold Option while dropping and choose Merge: Replace would delete the existing `luma` folder, including Luma's own settings. An existing `shim.ini` is overwritten.
+
 ## 3. Install and test, one step at a time
 
 A broken `sm` or `pm` stops the console from booting. To recover, hold Select while powering on to open Luma's configuration and turn "Enable loading external FIRMs and modules" off, or delete the files from the SD card on a PC. Do steps a and b on one console first.
@@ -61,6 +79,24 @@ c. **Pokémon X/Y over the relay**, as in Phase 5: start the relay, open PSS on 
 d. **Other games:** Mario Kart 7 (one race, then a second race), and Smash Bros. for 3DS (one match). Copy the logs off after each game, named after it.
 
 Send both consoles' logs from each step that fails, and from c and d either way.
+
+## Trace mode: recording Download Play's local wireless
+
+Some games run local play through the Download Play system module (title `0004013000002802`) rather than calling `nwm::UDS` themselves. Mario Kart 7 is one: in Azahar (`recon/traces/mk7-azahar-01`) it never sends a `nwm::UDS` request, and on a console in relay mode it asks for local mode, then backs out 30 ms later with "turn on wireless". The patched `sm` gives Download Play its own names, `uds:dlp` and `ndm:dlp`, which relay mode does not register, so it keeps the real services and fails, as real NWM refuses local play while NDM is faked.
+
+Trace mode records what Download Play actually does, before the emulator is taught to serve it. With `mode = trace` in `sdmc:/udsrelay/shim.ini`, the sysmodule registers all four names and answers nothing itself. It forwards every request from the game and from Download Play to the real NWM and NDM and logs it, as the Phase 2 plugin did for Pokémon. Local wireless works as usual, so the two consoles must be side by side. `relay` and `lobby` are not needed.
+
+1. On both consoles: the latest `sm.cxi`, `pm.cxi` and `0004013000F00D02.cxi` in `sdmc:/luma/sysmodules/`, plugin loader off, and `shim.ini` with:
+
+   ```ini
+   mode = trace
+   payload_max = 64
+   ```
+
+2. Reboot both. Each `sysmodule-….log` should say `in trace mode`.
+3. Mario Kart 7 on both, Multiplayer → Local Play: one creates a group, the other joins, then race once.
+4. Copy both logs. `Dispatch` lines say which sessions serve `the game` and which `Download Play`, with their `sess=` numbers.
+5. Set `mode = relay` again afterwards.
 
 ## What to look for
 

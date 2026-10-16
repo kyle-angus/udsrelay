@@ -25,13 +25,17 @@ typedef struct {
     /// mode = relay: answer nwm::UDS in the shim over the relay instead of forwarding it to NWM
     /// (needs relay and lobby; implies fake_ndm). mode = passthrough (the default) forwards.
     int relay_mode;
+    /// mode = trace (sysmodule only): forward and log every redirected nwm::UDS and ndm:u
+    /// session, the Download Play module's included, to the real services. The plugin treats it
+    /// as passthrough.
+    int trace_mode;
 } shim_config;
 
 /// Defaults: ports nwm::UDS and ndm:u, payload_max 512.
 void shim_config_defaults(shim_config *cfg);
 
 /// Applies `key = value` lines; '#' starts a comment. Keys: ports (comma-separated),
-/// payload_max, relay (host:port), lobby, fake_ndm (0 or 1), mode (passthrough or relay).
+/// payload_max, relay (host:port), lobby, fake_ndm (0 or 1), mode (passthrough, relay or trace).
 /// Returns the number of lines it could not understand.
 int shim_config_parse(shim_config *cfg, const char *text, size_t len);
 

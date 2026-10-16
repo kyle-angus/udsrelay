@@ -1,40 +1,53 @@
 diff --git a/sysmodules/sm/source/services.c b/sysmodules/sm/source/services.c
-index f2893d3..e3795f2 100644
+index f2893d3..22fae45 100644
 --- a/sysmodules/sm/source/services.c
 +++ b/sysmodules/sm/source/services.c
-@@ -164,6 +164,39 @@ Result IsServiceRegistered(SessionData *sessionData, bool *isRegistered, const c
+@@ -164,6 +164,52 @@ Result IsServiceRegistered(SessionData *sessionData, bool *isRegistered, const c
      }
  }
  
 +// udsrelay: local-wireless relay redirect.
 +// An application asking for nwm::UDS or ndm:u is given the udsrelay sysmodule's uds:rly or
-+// ndm:rly instead, when that is registered. System processes, and the sysmodule itself, keep
-+// the real services, and nothing changes while the sysmodule is not running.
-+static bool isApplicationProcess(u32 pid)
++// ndm:rly instead, and the Download Play module (which runs some games' local play, such as
++// Mario Kart 7's) is given uds:dlp or ndm:dlp, each only while that name is registered. Other
++// system processes, and the sysmodule itself, keep the real services, and nothing changes while
++// the sysmodule is not running.
++enum { UDSRELAY_OTHER, UDSRELAY_APPLICATION, UDSRELAY_DLP };
++
++static int udsRelayClientKind(u32 pid)
 +{
 +    Handle process;
 +    s64 titleId = 0;
 +    if(R_FAILED(svcOpenProcess(&process, pid)))
-+        return false;
++        return UDSRELAY_OTHER;
 +    // Luma3DS extension: 0x10001 is the process's title ID.
 +    Result res = svcGetProcessInfo(&titleId, process, 0x10001);
 +    svcCloseHandle(process);
-+    return R_SUCCEEDED(res) && ((u64)titleId >> 32) == 0x00040000;
++    if(R_FAILED(res))
++        return UDSRELAY_OTHER;
++    if(((u64)titleId >> 32) == 0x00040000)
++        return UDSRELAY_APPLICATION;
++    if(((u64)titleId & ~0xF0000000ULL) == 0x0004013000002802ULL)
++        return UDSRELAY_DLP;
++    return UDSRELAY_OTHER;
 +}
 +
 +static const char *udsRelayRedirect(SessionData *sessionData, const char *name, s32 nameSize)
 +{
-+    static const char *const redirects[][2] = {
-+        { "nwm::UDS", "uds:rly" },
-+        { "ndm:u", "ndm:rly" },
++    static const char *const redirects[][3] = {
++        // service, for applications, for the Download Play module
++        { "nwm::UDS", "uds:rly", "uds:dlp" },
++        { "ndm:u", "ndm:rly", "ndm:dlp" },
 +    };
 +    for(u32 i = 0; i < sizeof(redirects) / sizeof(redirects[0]); i++)
 +    {
-+        const char *to = redirects[i][1];
-+        if(areServiceNamesEqual(redirects[i][0], name, nameSize) &&
-+           findServicePortByName(false, to, (s32)strlen(to)) != -1 &&
-+           isApplicationProcess(sessionData->pid))
++        if(!areServiceNamesEqual(redirects[i][0], name, nameSize))
++            continue;
++        const int kind = udsRelayClientKind(sessionData->pid);
++        const char *to = kind == UDSRELAY_APPLICATION ? redirects[i][1] : kind == UDSRELAY_DLP ? redirects[i][2] : NULL;
++        if(to != NULL && findServicePortByName(false, to, (s32)strlen(to)) != -1)
 +            return to;
++        return NULL;
 +    }
 +    return NULL;
 +}
@@ -42,7 +55,7 @@ index f2893d3..e3795f2 100644
  Result GetServiceHandle(SessionData *sessionData, Handle *session, const char *name, s32 nameSize, u32 flags)
  {
      Result res = checkServiceName(name, nameSize);
-@@ -175,6 +208,13 @@ Result GetServiceHandle(SessionData *sessionData, Handle *session, const char *n
+@@ -175,6 +221,13 @@ Result GetServiceHandle(SessionData *sessionData, Handle *session, const char *n
      else if(!checkServiceAccess(sessionData, name, nameSize))
          return 0xD8E06406;
  

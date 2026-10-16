@@ -20,6 +20,7 @@
 #include <unistd.h>
 
 #include <cerrno>
+#include <fcntl.h>
 #include <cstdarg>
 #include <cstdio>
 #include <cstring>
@@ -641,16 +642,24 @@ void RelayThread(void *) {
         LightEvent_Wait(&g_run);
     }
     Note("Info", "Relay", "relay mode: %s:%u", g_cfg.relay_host, (unsigned)g_cfg.relay_port);
+    // Never wait inside the socket service: libctru sends every socket call over one shared
+    // session, so a poll() blocking there for 20 ms held up every SendTo behind it (median 20 ms
+    // per frame on hardware, capping a game at about 30 frames a second). The socket is
+    // non-blocking; the thread drains what has arrived and sleeps 2 ms outside the service
+    // when there is nothing.
+    fcntl(g_relayFd, F_SETFL, fcntl(g_relayFd, F_GETFL, 0) | O_NONBLOCK);
     static u8 buf[SHIM_RELAY_MAX_DATAGRAM];
     u64 lastPoll = 0;
     for (;;) {
         LightEvent_Wait(&g_run);
-        pollfd pfd = {g_relayFd, POLLIN, 0};
-        if (poll(&pfd, 1, 20) > 0 && (pfd.revents & POLLIN)) {
-            const ssize_t n = recv(g_relayFd, buf, sizeof(buf), 0);
-            if (n > 0) {
-                shim_uds_net_input(&g_uds, buf, static_cast<size_t>(n));
-            }
+        bool got = false;
+        ssize_t n;
+        while ((n = recv(g_relayFd, buf, sizeof(buf), 0)) > 0) {
+            shim_uds_net_input(&g_uds, buf, static_cast<size_t>(n));
+            got = true;
+        }
+        if (!got) {
+            svcSleepThread(2 * kNsPerMs);
         }
         if (MonotonicMs() - lastPoll >= 20) {
             shim_uds_net_poll(&g_uds);

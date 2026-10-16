@@ -126,8 +126,13 @@ int shim_config_parse(shim_config *cfg, const char *text, size_t len) {
                 } else if (klen == 4 && memcmp(text + i, "mode", 4) == 0) {
                     if (vlen == 5 && memcmp(v, "relay", 5) == 0) {
                         cfg->relay_mode = 1;
+                        cfg->trace_mode = 0;
                     } else if (vlen == 11 && memcmp(v, "passthrough", 11) == 0) {
                         cfg->relay_mode = 0;
+                        cfg->trace_mode = 0;
+                    } else if (vlen == 5 && memcmp(v, "trace", 5) == 0) {
+                        cfg->relay_mode = 0;
+                        cfg->trace_mode = 1;
                     } else {
                         bad++;
                     }

@@ -183,6 +183,9 @@ static void test_config(void) {
     CHECK(shim_config_parse(&cfg, mode, sizeof(mode) - 1) == 0 && cfg.relay_mode == 1);
     const char modes[] = "mode = Relay\nmode = passthrough\n";
     CHECK(shim_config_parse(&cfg, modes, sizeof(modes) - 1) == 1 && cfg.relay_mode == 0);
+    const char trace[] = "mode = trace\n";
+    CHECK(shim_config_parse(&cfg, trace, sizeof(trace) - 1) == 0 && cfg.trace_mode == 1 && cfg.relay_mode == 0);
+    CHECK(shim_config_parse(&cfg, mode, sizeof(mode) - 1) == 0 && cfg.trace_mode == 0 && cfg.relay_mode == 1);
 }
 
 static void test_ring(void) {

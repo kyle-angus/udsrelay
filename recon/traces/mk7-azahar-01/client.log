@@ -1,0 +1,593 @@
+[   0.185951] Input <Info> input_common/udp/client.cpp:StartCommunication:206: Starting communication with UDP input server on 127.0.0.1:26760
+[   0.195920] Frontend <Info> citra_qt/citra_qt.cpp:GMainWindow:461: Azahar Version: 68202bc | HEAD-68202bc4f-dirty
+[   0.195923] Frontend <Info> citra_qt/citra_qt.cpp:GMainWindow:466: Build Variant: N/A
+[   0.195925] Frontend <Info> citra_qt/citra_qt.cpp:GMainWindow:483: Host OS: macOS Golden Gate (27.0.1)
+[   0.195942] Frontend <Info> citra_qt/citra_qt.cpp:GMainWindow:486: Host RAM: 24.00 GiB
+[   0.195943] Frontend <Info> citra_qt/citra_qt.cpp:GMainWindow:487: Host Swap: 0.00 GiB
+[   3.235764] Render.Vulkan <Info> video_core/renderer_vulkan/vk_platform.cpp:operator():271: Candidate instance extension VK_KHR_portability_enumeration is not available
+[   3.236197] Frontend <Info> citra_qt/citra_qt.cpp:BootGame:1520: Azahar starting...
+[   3.236345] Frontend <Info> citra_qt/citra_qt.cpp:BootGame:1544: Loading per application config file for title 0004000000030800
+[   3.237091] Config <Info> common/settings.cpp:LogSettings:88: Azahar Configuration:
+[   3.237094] Config <Info> common/settings.cpp:operator():85: Core_UseCpuJit: true
+[   3.237094] Config <Info> common/settings.cpp:operator():85: Core_UseFastInterp: true
+[   3.237095] Config <Info> common/settings.cpp:operator():85: Core_CPUClockPercentage: 100
+[   3.237095] Config <Info> common/settings.cpp:operator():85: Controller_UseArticController: false
+[   3.237095] Config <Info> common/settings.cpp:operator():85: Renderer_UseGLES: false
+[   3.237096] Config <Info> common/settings.cpp:operator():85: Renderer_GraphicsAPI: Vulkan
+[   3.237096] Config <Info> common/settings.cpp:operator():85: Renderer_AsyncShaders: false
+[   3.237096] Config <Info> common/settings.cpp:operator():85: Renderer_AsyncPresentation: true
+[   3.237096] Config <Info> common/settings.cpp:operator():85: Renderer_SpirvShaderGen: true
+[   3.237097] Config <Info> common/settings.cpp:operator():85: Renderer_DisableSpirvOptimizer: true
+[   3.237097] Config <Info> common/settings.cpp:operator():85: Renderer_Debug: false
+[   3.237097] Config <Info> common/settings.cpp:operator():85: Renderer_PicaDebugging: false
+[   3.237097] Config <Info> common/settings.cpp:operator():85: Renderer_UseHwShader: true
+[   3.237098] Config <Info> common/settings.cpp:operator():85: Renderer_ShadersAccurateMul: true
+[   3.237098] Config <Info> common/settings.cpp:operator():85: Renderer_UseShaderJit: true
+[   3.237098] Config <Info> common/settings.cpp:operator():85: Renderer_UseResolutionFactor: 1
+[   3.237099] Config <Info> common/settings.cpp:operator():85: Renderer_UseIntegerScaling: false
+[   3.237100] Config <Info> common/settings.cpp:operator():85: Renderer_FrameLimit: 100
+[   3.237100] Config <Info> common/settings.cpp:operator():85: Renderer_VSyncNew: true
+[   3.237100] Config <Info> common/settings.cpp:operator():85: Renderer_SkipDuplicateFrames: false
+[   3.237101] Config <Info> common/settings.cpp:operator():85: Renderer_PostProcessingShader: None (builtin)
+[   3.237101] Config <Info> common/settings.cpp:operator():85: Renderer_FilterMode: true
+[   3.237101] Config <Info> common/settings.cpp:operator():85: Renderer_TextureFilter: None
+[   3.237101] Config <Info> common/settings.cpp:operator():85: Renderer_TextureSampling: GameControlled
+[   3.237102] Config <Info> common/settings.cpp:operator():85: Renderer_DelayGameRenderThreadUs: 0
+[   3.237102] Config <Info> common/settings.cpp:operator():85: Renderer_Simulate3DSGPUTimings: false
+[   3.237102] Config <Info> common/settings.cpp:operator():85: Renderer_DisableRightEyeRender: false
+[   3.237103] Config <Info> common/settings.cpp:operator():85: Stereoscopy_Render3d: 0
+[   3.237103] Config <Info> common/settings.cpp:operator():85: Stereoscopy_Factor3d: 0
+[   3.237103] Config <Info> common/settings.cpp:operator():85: Stereoscopy_Swap_Eyes: false
+[   3.237103] Config <Info> common/settings.cpp:operator():85: Stereoscopy_Render_3d_to_which_display: 0
+[   3.237104] Config <Info> common/settings.cpp:operator():85: Stereoscopy_MonoRenderOption: 0
+[   3.237104] Config <Info> common/settings.cpp:operator():85: Layout_LayoutOption: 0
+[   3.237104] Config <Info> common/settings.cpp:operator():85: Layout_PortraitLayoutOption: 0
+[   3.237104] Config <Info> common/settings.cpp:operator():85: Layout_SecondaryDisplayLayout: 4
+[   3.237105] Config <Info> common/settings.cpp:operator():85: Layout_SwapScreen: false
+[   3.237105] Config <Info> common/settings.cpp:operator():85: Layout_UprightScreen: false
+[   3.237105] Config <Info> common/settings.cpp:operator():85: Layout_ScreenGap: 0
+[   3.237123] Config <Info> common/settings.cpp:operator():85: Layout_LargeScreenProportion: 4
+[   3.237123] Config <Info> common/settings.cpp:operator():85: Layout_SmallScreenPosition: 2
+[   3.237124] Config <Info> common/settings.cpp:operator():85: Utility_DumpTextures: false
+[   3.237124] Config <Info> common/settings.cpp:operator():85: Utility_CustomTextures: false
+[   3.237124] Config <Info> common/settings.cpp:operator():85: Utility_PreloadTextures: false
+[   3.237124] Config <Info> common/settings.cpp:operator():85: Utility_AsyncCustomLoading: true
+[   3.237124] Config <Info> common/settings.cpp:operator():85: Utility_UseDiskShaderCache: true
+[   3.237125] Config <Info> common/settings.cpp:operator():85: Audio_Emulation: HLE
+[   3.237125] Config <Info> common/settings.cpp:operator():85: Audio_OutputType: 0
+[   3.237125] Config <Info> common/settings.cpp:operator():85: Audio_OutputDevice: Auto
+[   3.237125] Config <Info> common/settings.cpp:operator():85: Audio_InputType: 0
+[   3.237125] Config <Info> common/settings.cpp:operator():85: Audio_InputDevice: Auto
+[   3.237126] Config <Info> common/settings.cpp:operator():85: Audio_EnableAudioStretching: true
+[   3.237126] Config <Info> common/settings.cpp:operator():85: Audio_EnableRealtime: false
+[   3.237126] Config <Info> common/settings.cpp:operator():85: Camera_OuterRightName: blank
+[   3.237126] Config <Info> common/settings.cpp:operator():85: Camera_OuterRightConfig: 
+[   3.237126] Config <Info> common/settings.cpp:operator():85: Camera_OuterRightFlip: 0
+[   3.237127] Config <Info> common/settings.cpp:operator():85: Camera_InnerName: blank
+[   3.237127] Config <Info> common/settings.cpp:operator():85: Camera_InnerConfig: 
+[   3.237127] Config <Info> common/settings.cpp:operator():85: Camera_InnerFlip: 0
+[   3.237127] Config <Info> common/settings.cpp:operator():85: Camera_OuterLeftName: blank
+[   3.237127] Config <Info> common/settings.cpp:operator():85: Camera_OuterLeftConfig: 
+[   3.237127] Config <Info> common/settings.cpp:operator():85: Camera_OuterLeftFlip: 0
+[   3.237128] Config <Info> common/settings.cpp:operator():85: DataStorage_UseVirtualSd: true
+[   3.237128] Config <Info> common/settings.cpp:operator():85: DataStorage_UseCustomStorage: false
+[   3.237128] Config <Info> common/settings.cpp:operator():85: System_IsNew3ds: true
+[   3.237128] Config <Info> common/settings.cpp:operator():85: System_LLEApplets: true
+[   3.237128] Config <Info> common/settings.cpp:operator():85: System_RegionValue: -1
+[   3.237128] Config <Info> common/settings.cpp:operator():85: System_PluginLoader: false
+[   3.237129] Config <Info> common/settings.cpp:operator():85: System_PluginLoaderAllowed: true
+[   3.237129] Config <Info> common/settings.cpp:operator():85: System_ApplyRegionFreePatch: true
+[   3.237129] Config <Info> common/settings.cpp:operator():85: Debugging_DelayStartForLLEModules: true
+[   3.237129] Config <Info> common/settings.cpp:operator():85: Debugging_UseGdbstub: false
+[   3.237129] Config <Info> common/settings.cpp:operator():85: Debugging_GdbstubPort: 24689
+[   3.237129] Config <Info> common/settings.cpp:operator():85: Debugging_InstantDebugLog: false
+[   3.237130] Config <Info> common/settings.cpp:operator():85: Debugging_ToggleUniqueDataConsoleType: false
+[   3.237130] Config <Info> common/settings.cpp:operator():85: Debugging_EnableExceptionHandler: false
+[   3.424416] Audio.Sink <Info> audio_core/cubeb_sink.cpp:StateCallback:136: Cubeb Audio Stream Started
+[   3.427792] Service.HTTP <Error> core/hle/service/http/http_c.cpp:DecryptClCertA:2282: ClCertA file missing, using default
+[   3.428115] Render.Vulkan <Info> video_core/renderer_vulkan/vk_platform.cpp:operator():271: Candidate instance extension VK_KHR_portability_enumeration is not available
+[   3.428371] Render.Vulkan <Info> video_core/renderer_vulkan/vk_instance.cpp:operator():432: Enabling extension: VK_KHR_swapchain
+[   3.428372] Render.Vulkan <Info> video_core/renderer_vulkan/vk_instance.cpp:operator():432: Enabling extension: VK_KHR_image_format_list
+[   3.428373] Render.Vulkan <Info> video_core/renderer_vulkan/vk_instance.cpp:operator():432: Enabling extension: VK_EXT_shader_stencil_export
+[   3.428373] Render.Vulkan <Info> video_core/renderer_vulkan/vk_instance.cpp:operator():432: Enabling extension: VK_EXT_external_memory_host
+[   3.428373] Render.Vulkan <Warning> video_core/renderer_vulkan/vk_instance.cpp:operator():437: Extension VK_EXT_tooling_info has been blacklisted because function pointer is not exposed by MoltenVK
+[   3.428374] Render.Vulkan <Info> video_core/renderer_vulkan/vk_instance.cpp:operator():432: Enabling extension: VK_KHR_timeline_semaphore
+[   3.428374] Render.Vulkan <Info> video_core/renderer_vulkan/vk_instance.cpp:operator():432: Enabling extension: VK_KHR_portability_subset
+[   3.428374] Render.Vulkan <Info> video_core/renderer_vulkan/vk_instance.cpp:operator():432: Enabling extension: VK_EXT_extended_dynamic_state
+[   3.428375] Render.Vulkan <Warning> video_core/renderer_vulkan/vk_instance.cpp:operator():441: Extension VK_EXT_custom_border_color unavailable.
+[   3.428375] Render.Vulkan <Warning> video_core/renderer_vulkan/vk_instance.cpp:operator():437: Extension VK_EXT_index_type_uint8 has been blacklisted because uint8 index conversion causes memory leaks in MoltenVK
+[   3.428375] Render.Vulkan <Info> video_core/renderer_vulkan/vk_instance.cpp:operator():432: Enabling extension: VK_EXT_robustness2
+[   3.428376] Render.Vulkan <Info> video_core/renderer_vulkan/vk_instance.cpp:operator():432: Enabling extension: VK_EXT_fragment_shader_interlock
+[   3.428376] Render.Vulkan <Info> video_core/renderer_vulkan/vk_instance.cpp:operator():432: Enabling extension: VK_EXT_pipeline_creation_cache_control
+[   3.428376] Render.Vulkan <Warning> video_core/renderer_vulkan/vk_instance.cpp:operator():437: Extension VK_KHR_fragment_shader_barycentric has been blacklisted because the PerVertexKHR attribute is not supported by MoltenVK
+[   3.431131] Render.Vulkan <Warning> video_core/renderer_vulkan/vk_instance.cpp:CreateFormatTable:303: Format B8G8R8Unorm unsupported, falling back unconditionally to R8G8B8A8Unorm
+[   3.431133] Render.Vulkan <Warning> video_core/renderer_vulkan/vk_instance.cpp:CreateFormatTable:303: Format X8D24UnormPack32 unsupported, falling back unconditionally to D32Sfloat
+[   3.431133] Render.Vulkan <Warning> video_core/renderer_vulkan/vk_instance.cpp:CreateFormatTable:303: Format D24UnormS8Uint unsupported, falling back unconditionally to D32SfloatS8Uint
+[   3.431244] Render.Vulkan <Info> video_core/renderer_vulkan/renderer_vulkan.cpp:IsLowRefreshRate:101: Refresh rate is above emulated 3DS screen: 120hz. Good.
+[   3.431500] Render.Vulkan <Info> video_core/renderer_vulkan/vk_stream_buffer.cpp:CreateBuffers:240: Created Stream buffer with size 128 KiB (flags { DeviceLocal | HostVisible | HostCoherent | HostCached })
+[   3.470309] Render.Vulkan <Info> video_core/renderer_vulkan/vk_stream_buffer.cpp:CreateBuffers:240: Created Upload buffer with size 524288 KiB (flags { DeviceLocal | HostVisible | HostCoherent | HostCached })
+[   3.470338] Render.Vulkan <Info> video_core/renderer_vulkan/vk_stream_buffer.cpp:CreateBuffers:240: Created Download buffer with size 16384 KiB (flags { DeviceLocal | HostVisible | HostCoherent | HostCached })
+[   3.470460] Render.Vulkan <Info> video_core/renderer_vulkan/vk_stream_buffer.cpp:CreateBuffers:240: Created Stream buffer with size 65536 KiB (flags { DeviceLocal | HostVisible | HostCoherent | HostCached })
+[   3.470508] Render.Vulkan <Info> video_core/renderer_vulkan/vk_stream_buffer.cpp:CreateBuffers:240: Created Stream buffer with size 8192 KiB (flags { DeviceLocal | HostVisible | HostCoherent | HostCached })
+[   3.470547] Render.Vulkan <Info> video_core/renderer_vulkan/vk_stream_buffer.cpp:CreateBuffers:240: Created Stream buffer with size 2048 KiB (flags { DeviceLocal | HostVisible | HostCoherent | HostCached })
+[   3.470594] Render.Vulkan <Info> video_core/renderer_vulkan/vk_stream_buffer.cpp:CreateBuffers:240: Created Stream buffer with size 2048 KiB (flags { DeviceLocal | HostVisible | HostCoherent | HostCached })
+[   3.473319] Render.Vulkan <Info> video_core/renderer_vulkan/renderer_vulkan.cpp:IsLowRefreshRate:101: Refresh rate is above emulated 3DS screen: 120hz. Good.
+[   3.473490] Loader <Info> core/loader/ncch.cpp:Load:345: Program ID: 0004000000030800
+[   3.489694] Loader <Info> core/hle/kernel/process.cpp:ParseKernelCaps:201: ExHeader kernel version: 2.32
+[   3.490600] Service.FS <Info> core/file_sys/ncch_container.cpp:LoadSectionExeFS:480: Attempting to load logo from the ExeFS
+[   3.511711] Core.Cheats <Info> core/cheats/cheats.cpp:LoadCheatFile:92: Attempting to load cheats file: <repo>/recon/run/client/user/cheats/0004000000030800.txt
+[   3.511753] Core.Cheats <Info> core/cheats/gateway_cheat.cpp:LoadFile:491: GatewayCheat::LoadFile failed, file doesn't exist: <repo>/recon/run/client/user/cheats/0004000000030800.txt
+[   3.512687] Render.Vulkan <Info> video_core/renderer_vulkan/vk_pipeline_cache.cpp:LoadDriverPipelineDiskCache:241: No pipeline cache found for title_id=0004000000030800
+[   3.512730] Render.Vulkan <Info> video_core/renderer_vulkan/vk_shader_disk_cache.cpp:InitVSCache:585: Loading VS disk shader cache for title 0004000000030800
+[   3.512747] Render.Vulkan <Info> video_core/renderer_vulkan/vk_shader_disk_cache.cpp:InitVSCache:590: Missing VS disk shader cache for title 0004000000030800
+[   3.512871] Render.Vulkan <Info> video_core/renderer_vulkan/vk_shader_disk_cache.cpp:InitFSCache:896: Loading FS disk shader cache for title 0004000000030800
+[   3.512876] Render.Vulkan <Info> video_core/renderer_vulkan/vk_shader_disk_cache.cpp:InitFSCache:901: Missing FS disk shader cache for title 0004000000030800
+[   3.513144] Render.Vulkan <Info> video_core/renderer_vulkan/vk_shader_disk_cache.cpp:InitGSCache:1113: Loading GS disk shader cache for title 0004000000030800
+[   3.513150] Render.Vulkan <Info> video_core/renderer_vulkan/vk_shader_disk_cache.cpp:InitGSCache:1118: Missing GS disk shader cache for title 0004000000030800
+[   3.513213] Render.Vulkan <Info> video_core/renderer_vulkan/vk_shader_disk_cache.cpp:InitPLCache:1332: Loading PL disk shader cache for title 0004000000030800
+[   3.513218] Render.Vulkan <Info> video_core/renderer_vulkan/vk_shader_disk_cache.cpp:InitPLCache:1337: Missing PL disk shader cache for title 0004000000030800
+[   3.514120] Service.CAM <Info> citra_qt/camera/qt_multimedia_camera.cpp:ResumeCameras:50: Resuming all cameras
+[   3.648091] Service.SRV <Warning> core/hle/service/sm/srv.cpp:RegisterClient:64: (STUBBED) called. Caller PID=11
+[   3.727567] Service.SRV <Warning> core/hle/service/sm/srv.cpp:EnableNotification:86: (STUBBED) called
+[   3.729297] Service <Info> core/hle/service/service.cpp:HandleSyncRequest:197: UDSTRACE v=1 kind=req wall=1792162599814491 port=ndm:u cmd=0x0014 name="OverrideDefaultDaemons" tid=1 proc="MarioKar" hdr=0x00140040 words=0x00140040,0x0000000f
+[   3.729301] Service.NDM <Warning> core/hle/service/ndm/ndm_u.cpp:OverrideDefaultDaemons:195: (STUBBED) bit_mask=0x0000000F
+[   3.729302] Service <Info> core/hle/service/service.cpp:HandleSyncRequest:229: UDSTRACE v=1 kind=rsp wall=1792162599814497 port=ndm:u cmd=0x0014 hdr=0x00140040 deferred=0 words=0x00140040,0x00000000
+[   3.729518] Service <Info> core/hle/service/service.cpp:HandleSyncRequest:197: UDSTRACE v=1 kind=req wall=1792162599814713 port=ndm:u cmd=0x0006 name="SuspendDaemons" tid=1 proc="MarioKar" hdr=0x00060040 words=0x00060040,0x00000006
+[   3.729520] Service.NDM <Warning> core/hle/service/ndm/ndm_u.cpp:SuspendDaemons:74: (STUBBED) bit_mask=0x00000006
+[   3.729521] Service <Info> core/hle/service/service.cpp:HandleSyncRequest:229: UDSTRACE v=1 kind=rsp wall=1792162599814716 port=ndm:u cmd=0x0006 hdr=0x00060040 deferred=0 words=0x00060040,0x00000000
+[   3.729757] Service.FS <Warning> core/hle/service/fs/fs_user.cpp:InitializeWithSdkVersion:1092: (STUBBED) called, version: 0x040002C8
+[   3.845006] Service <Error> core/hle/service/service.cpp:ReportUnimplementedFunction:172: unknown / unimplemented function 'Initialize': port='nim:aoc' cmd_buf={[0]=0x210000 (0x0021, 0, 0)}
+[   3.845282] Service.APT <Warning> core/hle/service/apt/apt.cpp:NotifyToWait:362: (STUBBED) app_id=768
+[   3.846059] Service.APT <Warning> core/hle/service/apt/apt.cpp:AppletUtility:735: (STUBBED) called command=0X00000007, input_size=0X00000004, output_size=0X00000001
+[   3.846158] Service.APT <Warning> core/hle/service/apt/apt.cpp:AppletUtility:735: (STUBBED) called command=0X00000004, input_size=0X00000001, output_size=0X00000001
+[   3.846246] Service.APT <Warning> core/hle/service/apt/apt.cpp:AppletUtility:735: (STUBBED) called command=0X00000004, input_size=0X00000001, output_size=0X00000001
+[   3.846404] Service.FRD <Warning> core/hle/service/frd/frd.cpp:SetClientSdkVersion:233: (STUBBED) called, version: 0x040002C8
+[   3.846488] Service.FRD <Warning> core/hle/service/frd/frd.cpp:GetMyPresence:41: (STUBBED) called
+[   3.852458] Service.FS <Error> ./core/file_sys/archive_backend.h:GetOpenDelayNs:221: Delay generator was not initalized. Using default
+[   3.880774] Service.FS <Error> ./core/file_sys/archive_backend.h:GetOpenDelayNs:221: Delay generator was not initalized. Using default
+[   4.064019] Service.SRV <Warning> core/hle/service/sm/srv.cpp:Subscribe:213: (STUBBED) called, notification_id=0x209
+[   4.081685] Service.FS <Error> ./core/file_sys/archive_backend.h:GetOpenDelayNs:221: Delay generator was not initalized. Using default
+[   4.095543] Service.FS <Error> ./core/file_sys/file_backend.h:GetReadDelayNs:51: Delay generator was not initalized. Using default
+[   4.132600] Service.HID <Warning> core/hle/service/hid/hid.cpp:GetGyroscopeLowCalibrateParam:634: (STUBBED) called
+[   4.134449] Service.CFG <Info> core/hle/service/cfg/cfg.cpp:UpdatePreferredRegionCode:1162: Preferred region code set to 1
+[   4.233228] Service.FS <Error> ./core/file_sys/archive_backend.h:GetOpenDelayNs:221: Delay generator was not initalized. Using default
+[   4.233291] Service.FS <Warning> core/file_sys/archive_ncch.cpp:OpenFile:179: Mii data file missing. Loading open source replacement from memory
+[   4.315309] Service.FS <Error> core/file_sys/savedata_archive.cpp:DeleteFile:117: File not found <repo>/recon/run/client/user/nand/data/00000000000000000000000000000000/extdata/00048000/F000000B/user/CFL_OldDB.dat
+[   4.348670] Service.FS <Error> core/file_sys/savedata_archive.cpp:DeleteFile:117: File not found <repo>/recon/run/client/user/nand/data/00000000000000000000000000000000/extdata/00048000/F000000B/user/CFL_DB.dat
+[   4.504862] Service.CECD <Warning> core/hle/service/cecd/cecd.cpp:GetCecInfoEventHandle:715: (STUBBED) called
+[   4.505314] Service.FS <Error> core/file_sys/savedata_archive.cpp:OpenFile:76: Non-existing file <repo>/recon/run/client/user/nand/data/00000000000000000000000000000000/sysdata/00010034/00000000/BOSS_SV.db can't be open without mode create.
+[   4.505322] Service.FS <Error> core/file_sys/savedata_archive.cpp:OpenFile:76: Non-existing file <repo>/recon/run/client/user/nand/data/00000000000000000000000000000000/sysdata/00010034/00000000/BOSS_SS.db can't be open without mode create.
+[   4.505323] Service.BOSS <Error> core/hle/service/boss/online_service.cpp:InitializeSession:104: Could not open BOSS database.
+[   4.506637] Service.APT <Warning> core/hle/service/apt/apt.cpp:AppletUtility:735: (STUBBED) called command=0X00000007, input_size=0X00000004, output_size=0X00000001
+[   4.506669] Service.APT <Warning> core/hle/service/apt/apt.cpp:AppletUtility:735: (STUBBED) called command=0X00000004, input_size=0X00000001, output_size=0X00000001
+[   4.520182] Service.DSP <Info> audio_core/hle/hle.cpp:LoadComponent:514: Firmware hash: 0x3318473a60c8e953
+[   4.520186] Service.DSP <Info> audio_core/hle/hle.cpp:LoadComponent:519: Structures hash: 0x228655de1258d999
+[   4.520187] Service.DSP <Info> core/hle/service/dsp/dsp_dsp.cpp:LoadComponent:192: called size=0xC20A, prog_mask=0x00FF, data_mask=0x00FF
+[   4.520395] Service.DSP <Info> core/hle/service/dsp/dsp_dsp.cpp:RegisterInterruptEvents:259: Registered interrupt=2, channel=2, event=event-002261e4
+[   4.520474] Service.DSP <Warning> core/hle/service/dsp/dsp_dsp.cpp:GetSemaphoreEventHandle:275: (STUBBED) called
+[   4.520553] Service.DSP <Warning> core/hle/service/dsp/dsp_dsp.cpp:SetSemaphoreMask:285: (STUBBED) called mask=0x2000
+[   4.520666] Audio.DSP <Info> audio_core/hle/hle.cpp:PipeWrite:235: Application has requested initialization of DSP hardware
+[   4.520758] Service.DSP <Info> core/hle/service/dsp/dsp_dsp.cpp:SetSemaphore:57: called, semaphore_value=4000
+[   4.521208] Service.DSP <Info> core/hle/service/dsp/dsp_dsp.cpp:SetSemaphore:57: called, semaphore_value=4000
+[   4.527856] Service.FS <Error> core/hle/service/fs/fs_user.cpp:operator():728: failed to get a handle for archive archive_id=0x00000006 archive_path=[Binary: 010000000803000000000000]
+[   4.770683] Service.FRD <Warning> core/hle/service/frd/frd.cpp:GetMyFriendKey:95: (STUBBED) called
+[   4.770966] Service.FRD <Warning> core/hle/service/frd/frd.cpp:GetMyMii:139: (STUBBED) called
+[   4.771082] Service.FRD <Warning> core/hle/service/frd/frd.cpp:GetMyProfile:151: (STUBBED) called
+[   4.771392] Service.FRD <Warning> core/hle/service/frd/frd.cpp:GetFriendKeyList:56: (STUBBED) called, unknown=0, frd_count=100
+[   5.148305] Service.FS <Error> core/hle/service/fs/fs_user.cpp:operator():728: failed to get a handle for archive archive_id=0x00000004 archive_path=[Empty]
+[   5.735579] Service.FS <Error> core/file_sys/savedata_archive.cpp:OpenDirectory:339: Path not found <repo>/recon/run/client/user/sdmc/Nintendo 3DS/00000000000000000000000000000000/00000000000000000000000000000000/title/00040000/00030800/data/00000001/system0.dat
+[   5.735851] Service.FS <Error> ./core/file_sys/archive_backend.h:GetOpenDelayNs:221: Delay generator was not initalized. Using default
+[   5.785573] Service.FS <Error> core/file_sys/savedata_archive.cpp:OpenDirectory:339: Path not found <repo>/recon/run/client/user/sdmc/Nintendo 3DS/00000000000000000000000000000000/00000000000000000000000000000000/title/00040000/00030800/data/00000001/system1.dat
+[   8.988162] Service.FS <Error> core/file_sys/savedata_archive.cpp:OpenDirectory:339: Path not found <repo>/recon/run/client/user/sdmc/Nintendo 3DS/00000000000000000000000000000000/00000000000000000000000000000000/title/00040000/00030800/data/00000001/system2.dat
+[   8.988190] Service.FS <Error> ./core/file_sys/archive_backend.h:GetOpenDelayNs:221: Delay generator was not initalized. Using default
+[  13.489457] Service.FRD <Warning> core/hle/service/frd/frd.cpp:GetMyFriendKey:95: (STUBBED) called
+[  13.489469] Service.FRD <Warning> core/hle/service/frd/frd.cpp:GetMyMii:139: (STUBBED) called
+[  13.489475] Service.FRD <Warning> core/hle/service/frd/frd.cpp:GetMyProfile:151: (STUBBED) called
+[  13.489483] Service.FRD <Warning> core/hle/service/frd/frd.cpp:GetFriendKeyList:56: (STUBBED) called, unknown=0, frd_count=100
+[  13.708855] Service.FRD <Warning> core/hle/service/frd/frd.cpp:GetMyFriendKey:95: (STUBBED) called
+[  13.790603] Service.APT <Warning> core/hle/service/apt/apt.cpp:AppletUtility:735: (STUBBED) called command=0X00000004, input_size=0X00000001, output_size=0X00000001
+[  18.623855] Service.FRD <Warning> core/hle/service/frd/frd.cpp:GetMyFriendKey:95: (STUBBED) called
+[  18.624394] Service <Info> core/hle/service/service.cpp:HandleSyncRequest:197: UDSTRACE v=1 kind=req wall=1792162614709512 port=ndm:u cmd=0x0001 name="EnterExclusiveState" tid=10 proc="MarioKar" hdr=0x00010042 words=0x00010042,0x00000002,0x00000020,0x0000000b
+[  18.624397] Service.NDM <Warning> core/hle/service/ndm/ndm_u.cpp:EnterExclusiveState:21: (STUBBED) exclusive_state=0x00000002
+[  18.624399] Service <Info> core/hle/service/service.cpp:HandleSyncRequest:229: UDSTRACE v=1 kind=rsp wall=1792162614709518 port=ndm:u cmd=0x0001 hdr=0x00010040 deferred=0 words=0x00010040,0x00000000
+[  18.624719] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:InitializeCltBase:45: shared mem size: 0xf000, max beacons: 4, constant mem size: 0x0, username: Player
+[  18.705408] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:StartScan:144: Starting scan worker
+[  19.795809] Render.Vulkan <Info> video_core/renderer_vulkan/vk_resource_pool.cpp:Allocate:173: Run out of pools, creating new one!
+[  19.797008] Render.Vulkan <Info> video_core/renderer_vulkan/vk_resource_pool.cpp:Allocate:173: Run out of pools, creating new one!
+[  41.066801] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:StopScan:162: Ending scan worker
+[  41.066980] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:FinalizeCltBase:57: called
+[  41.067141] Service <Info> core/hle/service/service.cpp:HandleSyncRequest:197: UDSTRACE v=1 kind=req wall=1792162637152142 port=ndm:u cmd=0x0002 name="LeaveExclusiveState" tid=10 proc="MarioKar" hdr=0x00020002 words=0x00020002,0x00000020,0x0000000b
+[  41.067144] Service.NDM <Warning> core/hle/service/ndm/ndm_u.cpp:LeaveExclusiveState:30: (STUBBED)
+[  41.067163] Service <Info> core/hle/service/service.cpp:HandleSyncRequest:229: UDSTRACE v=1 kind=rsp wall=1792162637152168 port=ndm:u cmd=0x0002 hdr=0x00020040 deferred=0 words=0x00020040,0x00000000
+[  41.803263] Service.APT <Warning> core/hle/service/apt/apt.cpp:AppletUtility:735: (STUBBED) called command=0X00000004, input_size=0X00000001, output_size=0X00000001
+[  76.744963] Service.FRD <Warning> core/hle/service/frd/frd.cpp:GetMyFriendKey:95: (STUBBED) called
+[  77.597554] Render.Vulkan <Info> video_core/renderer_vulkan/vk_resource_pool.cpp:Allocate:173: Run out of pools, creating new one!
+[  77.597864] Render.Vulkan <Info> video_core/renderer_vulkan/vk_resource_pool.cpp:Allocate:173: Run out of pools, creating new one!
+[  78.610505] Render.Vulkan <Info> video_core/renderer_vulkan/vk_resource_pool.cpp:Allocate:173: Run out of pools, creating new one!
+[  78.610650] Render.Vulkan <Info> video_core/renderer_vulkan/vk_resource_pool.cpp:Allocate:173: Run out of pools, creating new one!
+[  78.611486] Render.Vulkan <Info> video_core/renderer_vulkan/vk_resource_pool.cpp:Allocate:173: Run out of pools, creating new one!
+[  78.611640] Render.Vulkan <Info> video_core/renderer_vulkan/vk_resource_pool.cpp:Allocate:173: Run out of pools, creating new one!
+[  79.840524] Render.Vulkan <Info> video_core/renderer_vulkan/vk_resource_pool.cpp:Allocate:173: Run out of pools, creating new one!
+[  79.841933] Render.Vulkan <Info> video_core/renderer_vulkan/vk_resource_pool.cpp:Allocate:173: Run out of pools, creating new one!
+[  79.842055] Render.Vulkan <Info> video_core/renderer_vulkan/vk_resource_pool.cpp:Allocate:173: Run out of pools, creating new one!
+[  79.842286] Render.Vulkan <Info> video_core/renderer_vulkan/vk_resource_pool.cpp:Allocate:173: Run out of pools, creating new one!
+[  79.842392] Render.Vulkan <Info> video_core/renderer_vulkan/vk_resource_pool.cpp:Allocate:173: Run out of pools, creating new one!
+[  93.643662] Service.FRD <Warning> core/hle/service/frd/frd.cpp:GetMyFriendKey:95: (STUBBED) called
+[  93.643685] Service.FRD <Warning> core/hle/service/frd/frd.cpp:GetMyMii:139: (STUBBED) called
+[  93.643692] Service.FRD <Warning> core/hle/service/frd/frd.cpp:GetMyProfile:151: (STUBBED) called
+[  93.643698] Service.FRD <Warning> core/hle/service/frd/frd.cpp:GetFriendKeyList:56: (STUBBED) called, unknown=0, frd_count=100
+[  93.859822] Service.FRD <Warning> core/hle/service/frd/frd.cpp:GetMyFriendKey:95: (STUBBED) called
+[  94.044076] Service.APT <Warning> core/hle/service/apt/apt.cpp:AppletUtility:735: (STUBBED) called command=0X00000004, input_size=0X00000001, output_size=0X00000001
+[  98.323368] Service.FRD <Warning> core/hle/service/frd/frd.cpp:GetMyFriendKey:95: (STUBBED) called
+[  98.323456] Service <Info> core/hle/service/service.cpp:HandleSyncRequest:197: UDSTRACE v=1 kind=req wall=1792162694408167 port=ndm:u cmd=0x0001 name="EnterExclusiveState" tid=10 proc="MarioKar" hdr=0x00010042 words=0x00010042,0x00000002,0x00000020,0x0000000b
+[  98.323461] Service.NDM <Warning> core/hle/service/ndm/ndm_u.cpp:EnterExclusiveState:21: (STUBBED) exclusive_state=0x00000002
+[  98.323463] Service <Info> core/hle/service/service.cpp:HandleSyncRequest:229: UDSTRACE v=1 kind=rsp wall=1792162694408178 port=ndm:u cmd=0x0001 hdr=0x00010040 deferred=0 words=0x00010040,0x00000000
+[  98.323597] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:InitializeCltBase:45: shared mem size: 0xf000, max beacons: 4, constant mem size: 0x0, username: Player
+[  98.339366] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:StartScan:144: Starting scan worker
+[ 106.351385] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162702436056 port=nwm::UDS event="NWM::connection_status_event"
+[ 106.351391] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162702436065 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 106.351405] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 106.757390] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162702842062 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 106.757400] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162702842073 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 106.757402] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162702842075 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 106.757407] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162702842080 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 106.757411] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162702842084 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 106.757416] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162702842089 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 106.757419] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162702842092 port=nwm::UDS event="NWM::connection_status_event"
+[ 106.757423] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 107.314944] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162703399610 port=nwm::UDS event="NWM::connection_status_event"
+[ 107.314948] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162703399618 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 107.314967] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 107.754323] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162703838990 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 107.754330] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162703838998 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 107.754332] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162703839000 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 107.754334] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162703839002 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 107.754347] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162703839015 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 107.754357] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162703839025 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 107.754361] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162703839028 port=nwm::UDS event="NWM::connection_status_event"
+[ 107.754363] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 108.263314] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162704347977 port=nwm::UDS event="NWM::connection_status_event"
+[ 108.263319] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162704347984 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 108.263327] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 108.771536] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162704856198 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 108.771570] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162704856233 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 108.771574] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162704856237 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 108.771575] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162704856239 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 108.771590] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162704856253 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 108.771600] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162704856263 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 108.771604] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162704856267 port=nwm::UDS event="NWM::connection_status_event"
+[ 108.771607] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 109.229726] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162705314384 port=nwm::UDS event="NWM::connection_status_event"
+[ 109.229733] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162705314393 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 109.229750] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 109.268743] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162705353404 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 109.268749] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162705353410 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 109.268751] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162705353411 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 109.268753] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162705353413 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 109.268755] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162705353416 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 109.268761] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162705353422 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 109.268763] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162705353423 port=nwm::UDS event="NWM::connection_status_event"
+[ 109.268764] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 110.199481] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162706284133 port=nwm::UDS event="NWM::connection_status_event"
+[ 110.199487] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162706284142 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 110.199500] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 110.274045] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162706358700 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 110.274054] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162706358709 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 110.274055] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162706358711 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 110.274057] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162706358712 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 110.274058] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162706358713 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 110.274064] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162706358719 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 110.274068] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162706358723 port=nwm::UDS event="NWM::connection_status_event"
+[ 110.274070] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 111.144533] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162707229180 port=nwm::UDS event="NWM::connection_status_event"
+[ 111.144539] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162707229189 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 111.144550] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 111.261312] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162707345962 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 111.261319] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162707345969 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 111.261320] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162707345971 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 111.261321] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162707345972 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 111.261323] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162707345973 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 111.261330] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162707345980 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 111.261332] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162707345982 port=nwm::UDS event="NWM::connection_status_event"
+[ 111.261334] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 112.129622] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162708214266 port=nwm::UDS event="NWM::connection_status_event"
+[ 112.129632] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162708214277 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 112.129646] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 112.246689] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162708331334 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 112.246696] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162708331342 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 112.246698] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162708331343 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 112.246702] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162708331347 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 112.246703] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162708331349 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 112.246709] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162708331354 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 112.246711] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162708331356 port=nwm::UDS event="NWM::connection_status_event"
+[ 112.246713] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 113.081802] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162709166441 port=nwm::UDS event="NWM::connection_status_event"
+[ 113.081809] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162709166449 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 113.081814] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 113.249595] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162709334234 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 113.249602] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162709334242 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 113.249603] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162709334244 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 113.249607] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162709334247 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 113.249608] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162709334249 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 113.249617] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162709334257 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 113.249619] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162709334259 port=nwm::UDS event="NWM::connection_status_event"
+[ 113.249622] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 113.697833] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:StopScan:162: Ending scan worker
+[ 113.697854] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:FinalizeCltBase:57: called
+[ 113.697869] Service <Info> core/hle/service/service.cpp:HandleSyncRequest:197: UDSTRACE v=1 kind=req wall=1792162709782502 port=ndm:u cmd=0x0002 name="LeaveExclusiveState" tid=10 proc="MarioKar" hdr=0x00020002 words=0x00020002,0x00000020,0x0000000b
+[ 113.697873] Service.NDM <Warning> core/hle/service/ndm/ndm_u.cpp:LeaveExclusiveState:30: (STUBBED)
+[ 113.697875] Service <Info> core/hle/service/service.cpp:HandleSyncRequest:229: UDSTRACE v=1 kind=rsp wall=1792162709782512 port=ndm:u cmd=0x0002 hdr=0x00020040 deferred=0 words=0x00020040,0x00000000
+[ 114.432083] Service.APT <Warning> core/hle/service/apt/apt.cpp:AppletUtility:735: (STUBBED) called command=0X00000004, input_size=0X00000001, output_size=0X00000001
+[ 116.254658] Service.FRD <Warning> core/hle/service/frd/frd.cpp:GetMyFriendKey:95: (STUBBED) called
+[ 116.254732] Service <Info> core/hle/service/service.cpp:HandleSyncRequest:197: UDSTRACE v=1 kind=req wall=1792162712339351 port=ndm:u cmd=0x0001 name="EnterExclusiveState" tid=10 proc="MarioKar" hdr=0x00010042 words=0x00010042,0x00000002,0x00000020,0x0000000b
+[ 116.254737] Service.NDM <Warning> core/hle/service/ndm/ndm_u.cpp:EnterExclusiveState:21: (STUBBED) exclusive_state=0x00000002
+[ 116.254740] Service <Info> core/hle/service/service.cpp:HandleSyncRequest:229: UDSTRACE v=1 kind=rsp wall=1792162712339364 port=ndm:u cmd=0x0001 hdr=0x00010040 deferred=0 words=0x00010040,0x00000000
+[ 116.254902] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:InitializeCltBase:45: shared mem size: 0xf000, max beacons: 4, constant mem size: 0x0, username: Player
+[ 116.270999] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:StartScan:144: Starting scan worker
+[ 117.262911] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162713347528 port=nwm::UDS event="NWM::connection_status_event"
+[ 117.262918] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162713347537 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 117.262932] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 117.768426] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162713853043 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 117.768432] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162713853050 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 117.768436] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162713853054 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 117.768441] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162713853059 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 117.768456] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162713853074 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 117.768467] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162713853084 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 117.768473] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162713853090 port=nwm::UDS event="NWM::connection_status_event"
+[ 117.768475] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 118.238092] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162714322703 port=nwm::UDS event="NWM::connection_status_event"
+[ 118.238098] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162714322712 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 118.238102] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 118.258267] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162714342881 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 118.258272] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162714342887 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 118.258274] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162714342890 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 118.258302] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162714342917 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 118.258306] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162714342921 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 118.258316] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162714342931 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 118.258318] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162714342933 port=nwm::UDS event="NWM::connection_status_event"
+[ 118.258320] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 119.216129] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162715300736 port=nwm::UDS event="NWM::connection_status_event"
+[ 119.216133] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162715300743 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 119.216149] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 119.252385] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162715336995 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 119.252392] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162715337002 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 119.252393] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162715337004 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 119.252395] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162715337005 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 119.252415] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162715337025 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 119.252419] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162715337029 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 119.252421] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162715337031 port=nwm::UDS event="NWM::connection_status_event"
+[ 119.252423] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 120.168018] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162716252619 port=nwm::UDS event="NWM::connection_status_event"
+[ 120.168027] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162716252631 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 120.168038] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 120.264429] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162716349033 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 120.264435] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162716349039 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 120.264437] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162716349042 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 120.264451] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162716349056 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 120.264454] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162716349059 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 120.264461] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162716349066 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 120.264464] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162716349069 port=nwm::UDS event="NWM::connection_status_event"
+[ 120.264467] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 121.135200] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162717219798 port=nwm::UDS event="NWM::connection_status_event"
+[ 121.135206] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162717219805 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 121.135216] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 121.273497] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162717358095 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 121.273507] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162717358106 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 121.273510] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162717358110 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 121.273513] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162717358113 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 121.273523] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162717358122 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 121.273527] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162717358126 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 121.273530] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162717358130 port=nwm::UDS event="NWM::connection_status_event"
+[ 121.273532] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 122.091530] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162718176123 port=nwm::UDS event="NWM::connection_status_event"
+[ 122.091534] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162718176129 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 122.091549] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 122.263344] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162718347937 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 122.263350] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162718347945 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 122.263352] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162718347946 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 122.263356] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162718347951 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 122.263360] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162718347955 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 122.263368] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162718347962 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 122.263370] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162718347964 port=nwm::UDS event="NWM::connection_status_event"
+[ 122.263372] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 123.049898] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162719134485 port=nwm::UDS event="NWM::connection_status_event"
+[ 123.049903] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162719134493 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 123.049910] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 123.270856] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162719355444 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 123.270867] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162719355456 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 123.270868] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162719355458 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 123.270872] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162719355461 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 123.270875] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162719355464 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 123.270885] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162719355475 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 123.270890] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162719355479 port=nwm::UDS event="NWM::connection_status_event"
+[ 123.270893] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 124.024077] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162720108661 port=nwm::UDS event="NWM::connection_status_event"
+[ 124.024082] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162720108668 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 124.024100] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 124.249696] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162720334279 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 124.249703] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162720334287 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 124.249704] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162720334289 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 124.249705] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162720334290 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 124.249707] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162720334291 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 124.249713] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162720334297 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 124.249715] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162720334299 port=nwm::UDS event="NWM::connection_status_event"
+[ 124.249718] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 124.982134] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162721066713 port=nwm::UDS event="NWM::connection_status_event"
+[ 124.982139] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162721066719 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 124.982155] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 125.261212] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162721345790 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 125.261222] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162721345802 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 125.261224] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162721345804 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 125.261228] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162721345807 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 125.261230] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162721345809 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 125.261234] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162721345813 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 125.261237] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162721345816 port=nwm::UDS event="NWM::connection_status_event"
+[ 125.261240] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 125.949080] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162722033653 port=nwm::UDS event="NWM::connection_status_event"
+[ 125.949089] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162722033664 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 125.949101] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 126.250432] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162722335005 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 126.250437] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162722335012 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 126.250439] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162722335013 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 126.250442] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162722335017 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 126.250445] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162722335020 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 126.250448] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162722335023 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 126.250450] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162722335024 port=nwm::UDS event="NWM::connection_status_event"
+[ 126.250453] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 126.903182] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162722987752 port=nwm::UDS event="NWM::connection_status_event"
+[ 126.903190] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162722987760 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 126.903208] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 127.257640] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162723342207 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 127.257647] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162723342217 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 127.257651] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162723342220 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 127.257654] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162723342224 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 127.257655] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162723342225 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 127.257663] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162723342232 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 127.257667] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162723342236 port=nwm::UDS event="NWM::connection_status_event"
+[ 127.257669] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 127.858927] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162723943490 port=nwm::UDS event="NWM::connection_status_event"
+[ 127.858931] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162723943497 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 127.858939] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 128.270105] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162724354668 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 128.270111] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162724354675 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 128.270112] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162724354677 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 128.270114] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162724354678 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 128.270146] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162724354710 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 128.270156] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162724354719 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 128.270161] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162724354725 port=nwm::UDS event="NWM::connection_status_event"
+[ 128.270163] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 128.835540] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162724920099 port=nwm::UDS event="NWM::connection_status_event"
+[ 128.835548] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162724920108 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 128.835560] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 129.270033] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162725354591 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 129.270041] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162725354600 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 129.270046] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162725354605 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 129.270049] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162725354608 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 129.270050] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162725354610 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 129.270056] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162725354615 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 129.270059] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162725354617 port=nwm::UDS event="NWM::connection_status_event"
+[ 129.270061] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 129.788275] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162725872829 port=nwm::UDS event="NWM::connection_status_event"
+[ 129.788282] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162725872837 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 129.788293] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 130.265075] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162726349628 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 130.265081] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162726349635 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 130.265083] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162726349637 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 130.265085] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162726349639 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 130.265099] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162726349653 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 130.265109] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162726349663 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 130.265112] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162726349665 port=nwm::UDS event="NWM::connection_status_event"
+[ 130.265114] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 130.761609] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162726846157 port=nwm::UDS event="NWM::connection_status_event"
+[ 130.761615] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162726846166 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 130.761634] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 131.261657] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162727346205 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 131.261664] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162727346213 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 131.261669] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162727346218 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 131.261674] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162727346223 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 131.261690] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162727346239 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 131.261700] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162727346249 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 131.261707] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162727346256 port=nwm::UDS event="NWM::connection_status_event"
+[ 131.261710] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 131.720670] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162727805213 port=nwm::UDS event="NWM::connection_status_event"
+[ 131.720676] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162727805222 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 131.720680] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 131.757176] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162727841722 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 131.757183] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162727841730 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 131.757186] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162727841733 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 131.757188] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162727841735 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 131.757211] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162727841758 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 131.757222] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162727841768 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 131.757227] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162727841773 port=nwm::UDS event="NWM::connection_status_event"
+[ 131.757229] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 132.679048] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162728763587 port=nwm::UDS event="NWM::connection_status_event"
+[ 132.679054] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162728763595 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 132.679069] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 132.756732] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162728841273 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 132.756739] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162728841280 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 132.756755] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162728841296 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 132.756756] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162728841298 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 132.756767] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162728841308 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 132.756773] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162728841314 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 132.756775] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162728841316 port=nwm::UDS event="NWM::connection_status_event"
+[ 132.756777] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 133.653807] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162729738342 port=nwm::UDS event="NWM::connection_status_event"
+[ 133.653811] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162729738347 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 133.653822] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 133.766747] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162729851282 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 133.766754] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162729851290 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 133.766756] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162729851292 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 133.766758] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162729851294 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 133.766774] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162729851310 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 133.766781] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162729851317 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 133.766785] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162729851321 port=nwm::UDS event="NWM::connection_status_event"
+[ 133.766788] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 134.617348] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162730701878 port=nwm::UDS event="NWM::connection_status_event"
+[ 134.617352] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162730701884 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 134.617359] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 134.769625] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162730854155 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 134.769632] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162730854164 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 134.769637] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162730854168 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 134.769640] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162730854171 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 134.769643] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162730854175 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 134.769653] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162730854184 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 134.769655] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162730854186 port=nwm::UDS event="NWM::connection_status_event"
+[ 134.769657] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 135.571358] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162731655883 port=nwm::UDS event="NWM::connection_status_event"
+[ 135.571364] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162731655890 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 135.571377] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 135.765460] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162731849985 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 135.765465] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162731849992 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 135.765467] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162731849994 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 135.765469] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162731849995 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 135.765470] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162731849997 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 135.765478] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162731850004 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 135.765482] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162731850007 port=nwm::UDS event="NWM::connection_status_event"
+[ 135.765484] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 136.549328] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162732633849 port=nwm::UDS event="NWM::connection_status_event"
+[ 136.549332] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162732633854 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 136.549340] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 136.758370] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162732842890 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 136.758377] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162732842898 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 136.758379] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162732842900 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 136.758390] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162732842911 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 136.758394] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162732842915 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 136.758401] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162732842922 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 136.758403] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162732842923 port=nwm::UDS event="NWM::connection_status_event"
+[ 136.758405] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 137.498051] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162733582566 port=nwm::UDS event="NWM::connection_status_event"
+[ 137.498056] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162733582573 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 137.498068] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 137.758588] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162733843102 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 137.758595] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162733843111 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 137.758600] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162733843116 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 137.758604] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162733843120 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 137.758605] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162733843121 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 137.758611] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162733843127 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 137.758616] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162733843131 port=nwm::UDS event="NWM::connection_status_event"
+[ 137.758618] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 138.450837] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162734535347 port=nwm::UDS event="NWM::connection_status_event"
+[ 138.450842] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162734535354 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 138.450864] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 138.758210] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162734842720 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 138.758218] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162734842729 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 138.758220] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162734842731 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 138.758223] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162734842734 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 138.758228] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162734842739 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 138.758240] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162734842751 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 138.758242] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162734842753 port=nwm::UDS event="NWM::connection_status_event"
+[ 138.758244] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 139.416738] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162735501242 port=nwm::UDS event="NWM::connection_status_event"
+[ 139.416743] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162735501250 port=nwm::UDS event="dlp_connect_to_beacon"
+[ 139.416756] Service.DLP <Info> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:509: Connected to spec to network
+[ 139.761972] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162735846477 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 139.761981] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162735846487 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 139.761983] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162735846489 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 139.761984] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162735846490 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 139.761985] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162735846491 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 139.762006] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162735846511 port=nwm::UDS event="NWM::BindNodeEvent1"
+[ 139.762011] Service <Info> core/hle/service/nwm/nwm_uds.cpp:SignalEventAsync:1715: UDSTRACE v=1 kind=signal wall=1792162735846517 port=nwm::UDS event="NWM::connection_status_event"
+[ 139.762013] Service.DLP <Warning> core/hle/service/dlp/dlp_clt_base.cpp:CacheBeaconTitleInfo:573: Got title info, but it did not match title id filter
+[ 139.773907] Audio.Sink <Info> audio_core/cubeb_sink.cpp:StateCallback:139: Cubeb Audio Stream Stopped
+[ 139.779763] Kernel <Info> core/hle/kernel/process.cpp:~Process:692: Cleaning up process 11
+[ 139.779763] Kernel <Info> core/hle/kernel/process.cpp:~Process:692: Cleaning up process 11
