@@ -611,7 +611,9 @@ func (c *ShimConsole) PullPacket(bindID uint32, maxSize int) (Packet, bool, uint
 		maxSize = 0x5dc
 	}
 	r := c.request([]uint32{0x001400C0, bindID, uint32((maxSize + 3) / 4), uint32(maxSize)})
-	if len(r.words) != 6 || r.words[0] != 0x001400C2 || r.words[4] != staticDesc(0x5C8, 0) || len(r.bufs) != 1 {
+	// NWM describes the size asked for, up to 0x5C8; more would overflow the client's buffer.
+	if len(r.words) != 6 || r.words[0] != 0x001400C2 || r.words[4] != staticDesc(min(maxSize, 0x5C8), 0) ||
+		len(r.bufs) != 1 {
 		c.problem("PullPacket reply %#x", r.words)
 		return Packet{}, false, r.result()
 	}

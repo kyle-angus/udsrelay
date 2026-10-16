@@ -112,6 +112,14 @@ Two consoles side by side, Local Play, one race, sysmodule 0.5.0 in trace mode; 
 
 Relay mode also registers `uds:dlp`, so Download Play's `nwm::UDS` goes to the emulator like the game's, and games that run their lobby through Download Play can use the relay. `ndm:dlp` stays unregistered (Download Play keeps the real NDM, which it never called in the trace). The start-up line reads `serving uds:rly, ndm:rly and uds:dlp`. Not yet tested on hardware: the spectator join is the first use of that path.
 
+**0.5.1 crashed both consoles** when creating a Mario Kart 7 room: a kernel panic in the sysmodule's process (Luma dumps `crash_dump_00000000/1.dmp`, PC on the kernel's panic stub, `r7` = Download Play's receive buffer `0x14cb00`, `r0` = `0x5BC`). PullPacket's reply always described a 0x5C8-byte static buffer, which is what X/Y's 0x5DC-byte request gets; Download Play asks for 0x5BC, and an IPC reply larger than the client's receive buffer panics the kernel. NWM replies with the size asked for, up to 0x5C8 (`0x016f0002` in mk7-trace-hw-01), and 0.5.2 does the same. 0.5.2 also reports a spectator's node ID as `0xFFFF`, as NWM does, not 0. With both fixes, replaying mk7-trace-hw-01 through the C emulator gets through Download Play's lobby (spectator, then client, then teardown) and into the race. It is not in the required replay tests, because Download Play streams to channel 1 before the spectator joins, so which frames the spectator sees depends on timing.
+
+**0.5.2: the room was found, but the joiner never got past spectating.** The joining Download Play joined as a spectator, pulled one frame, disconnected, rescanned and joined again, ten times a second for 40 s (the relay logged each `spectator joined`). On hardware it pulls all five frames of the host's broadcast (metadata, icon, title list) and then joins as a client. Per [3dbrew's Download Play page](https://3dbrew.org/wiki/Download_Play), each frame carries a checksum seeded from the host's MAC address. The host's Download Play reads the console's real MAC from NWM, but the emulator advertised a made-up one (`02:…` from the relay session), so the spectator rejected every frame. 0.5.3 reads the console's MAC at startup (`nwm::SOC` GetMACAddress, now in the exheader's service list) and uses it for hosted networks and beacons. The console's MAC then reaches the relay and the other consoles in the lobby, as it would reach consoles in radio range.
+
+One difference is still unexplained: the host's frames have `0x02` in byte 1, where hardware had `0x00`. 3dbrew does not document that byte.
+
+**0.5.3 worked (2026-10-16):** two consoles on the same network, over the relay. The joiner found the room, spectated, joined Download Play's network, then joined the race network (`0x00030810`) as node 2. The race started and ran, and both consoles exited cleanly mid-race. Both logs show `log ring full: dropped … lines` throughout: at payload_max 64, the race's frame rate (about 20 SendTo and PullPacket calls a second on each side, plus GetNodeInformation polling) outruns the SD writer, so these logs are incomplete. Use a smaller payload_max for long race logs.
+
 ## What to look for
 
 | Symptom | Meaning |
@@ -133,5 +141,4 @@ Relay mode also registers `uds:dlp`, so Download Play's `nwm::UDS` goes to the e
 
 - Sleep mode: the sysmodule does not handle sleep notifications; after waking, the relay resets its session and it says HELLO again, but a game in local play at that moment will see the network drop.
 - No status display: the plugin's menu and notifications have no counterpart; the log is the only output.
-- Mario Kart 7 over the relay (0.5.1): built, not yet tested on hardware.
 - Memory: about 950 KB of BASE-region memory (mostly eight sessions' receive buffers), plus a 128 KB socket buffer from the SYSTEM region. 0.5.0 started on both consoles.

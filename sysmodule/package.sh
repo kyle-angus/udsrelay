@@ -129,7 +129,7 @@ chmod 600 "$output"
 echo "wrote $output (sysmodule $version, mode $mode)"
 unzip -l "$output" | sed -n '4,$p' | sed '$d' | sed '$d' | awk '{print "  " $4}'
 echo
-if [[ "$mode" == relay ]]; then expect="serving uds:rly and ndm:rly"; else expect="in trace mode"; fi
+if [[ "$mode" == relay ]]; then expect="serving uds:rly, ndm:rly and uds:dlp"; else expect="in trace mode"; fi
 echo "On each console: unzip, then copy luma/ and udsrelay/ onto the SD card root, MERGING with the"
 echo "folders already there (in macOS Finder hold Option and choose Merge; Replace would delete the"
 echo "existing luma folder). Luma's \"Enable loading external FIRMs and modules\" must be on and the"

@@ -462,6 +462,12 @@ int shim_uds_init(shim_uds *u, const shim_uds_ops *ops, const char *key, size_t 
     return 0;
 }
 
+void shim_uds_set_mac(shim_uds *u, const uint8_t mac[6]) {
+    u->ops->lock(u->ops->ctx);
+    memcpy(u->mac, mac, 6);
+    u->ops->unlock(u->ops->ctx);
+}
+
 void shim_uds_net_input(shim_uds *u, const uint8_t *b, size_t n) {
     u->ops->lock(u->ops->ctx);
     shim_relay_input(&u->relay, b, n, now(u));
@@ -856,7 +862,8 @@ static void connect_network(shim_uds *u, uint32_t *cmd, const shim_ipc_msg *m) {
     memset(&u->st, 0, sizeof(u->st));
     u->st.status = ct == SHIM_RELAY_CONN_SPECTATOR ? SHIM_UDS_SPECTATOR : SHIM_UDS_CLIENT;
     u->st.reason = SHIM_UDS_REASON_ESTABLISHED;
-    u->st.node_id = get16be(u->resp);
+    // The relay gives a spectator node 0; NWM reports 0xFFFF (mk7-trace-hw-01).
+    u->st.node_id = ct == SHIM_RELAY_CONN_SPECTATOR ? 0xFFFF : get16be(u->resp);
     u->st.changed = net.bitmask;
     u->st.total = net.netinfo[NI_TOTAL];
     u->st.max = net.netinfo[NI_MAX];
@@ -985,7 +992,10 @@ static void send_to(shim_uds *u, uint32_t *cmd, const shim_ipc_msg *m) {
 
 static void pull_packet(shim_uds *u, uint32_t *cmd, uint8_t *out) {
     const uint32_t id = cmd[1];
-    const uint32_t max = cmd[3];
+    // The reply's static buffer is the size the client asked for, up to 0x5C8: X/Y asks for 0x5DC
+    // and gets 0x5C8, Download Play asks for 0x5BC and gets 0x5BC (mk7-trace-hw-01). Describing
+    // more than the client's receive buffer holds makes the kernel panic.
+    const uint32_t cap = cmd[3] < SHIM_UDS_MAX_FRAME ? cmd[3] : SHIM_UDS_MAX_FRAME;
     uint32_t result = 0, size = 0, src = 0;
     shim_uds_bind *b = find_bind(u, id);
     if (!in_network(u)) {
@@ -994,7 +1004,7 @@ static void pull_packet(shim_uds *u, uint32_t *cmd, uint8_t *out) {
         result = SHIM_UDS_RESULT_NO_BIND;
     } else if (b->head != NONE) {
         const uint16_t f = b->head;
-        if (max && u->chunks[f].len > max) {
+        if (u->chunks[f].len > cap) {
             result = SHIM_UDS_RESULT_INVALID_STATE; // what NWM does here is untested; keep the frame
         } else {
             size = u->chunks[f].len;
@@ -1008,11 +1018,11 @@ static void pull_packet(shim_uds *u, uint32_t *cmd, uint8_t *out) {
             b->queued_bytes -= size;
         }
     }
-    // Hardware always replies in this shape, describing a 0x5C8-byte buffer, even for errors.
+    // Hardware always replies in this shape, even for errors.
     reply(cmd, 0x0014, 3, 2, result);
     cmd[2] = size;
     cmd[3] = src;
-    cmd[4] = SHIM_IPC_STATIC_DESC(SHIM_UDS_MAX_FRAME, 0);
+    cmd[4] = SHIM_IPC_STATIC_DESC(cap, 0);
     cmd[5] = u->ops->addr_of(u->ops->ctx, out);
 }
 

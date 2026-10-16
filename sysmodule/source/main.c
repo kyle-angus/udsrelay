@@ -38,7 +38,7 @@
 #include "shim/trace.h"
 #include "shim/uds.h"
 
-#define VERSION "0.5.1"
+#define VERSION "0.5.3"
 
 #define MAX_SESSIONS 8 // trace mode can see the game and Download Play at once
 #define SLOT_SIZE 0x800 // largest UDS static buffer is SendTo's 0x5F4
@@ -534,6 +534,36 @@ static void Dispatch(const char *port, const char *client, Handle server, Handle
          index);
 }
 
+// Download Play checksums its frames with a seed made from the host's MAC address, which the host
+// reads from NWM itself and a joining console takes from the beacon (3dbrew Download_Play). So
+// the beacons must carry the console's real MAC: nwm::SOC GetMACAddress (0x0008).
+static Result GetConsoleMac(u8 mac[6]) {
+    Handle h = 0;
+    Result rc = srvGetServiceHandle(&h, "nwm::SOC");
+    if (R_FAILED(rc)) {
+        return rc;
+    }
+    u8 buf[8] __attribute__((aligned(4)));
+    u32 *cmd = getThreadCommandBuffer();
+    u32 *sb = getThreadStaticBuffers();
+    const u32 saved[2] = {sb[0], sb[1]};
+    sb[0] = IPC_Desc_StaticBuffer(6, 0);
+    sb[1] = (u32)buf;
+    cmd[0] = IPC_MakeHeader(0x0008, 1, 0);
+    cmd[1] = 6;
+    rc = svcSendSyncRequest(h);
+    if (R_SUCCEEDED(rc)) {
+        rc = (Result)cmd[1];
+    }
+    sb[0] = saved[0];
+    sb[1] = saved[1];
+    svcCloseHandle(h);
+    if (R_SUCCEEDED(rc)) {
+        memcpy(mac, buf, 6);
+    }
+    return rc;
+}
+
 // ---- relay thread --------------------------------------------------------------------------
 
 static bool SocInitSystemRegion(void) {
@@ -664,6 +694,15 @@ int main(void) {
             Note("Error", "Start", "bad lobby key in %s; not serving", CONFIG_PATH);
             svcSleepThread(2000 * NS_PER_MS);
             return 0;
+        }
+        u8 mac[6];
+        const Result macRc = GetConsoleMac(mac);
+        if (R_SUCCEEDED(macRc)) {
+            shim_uds_set_mac(&g_uds, mac);
+            Note("Info", "Start", "using the console's MAC address for hosted networks");
+        } else {
+            Note("Warning", "Start", "cannot read the console's MAC address (0x%08lx); Download Play will not work",
+                 (unsigned long)macRc);
         }
     }
 

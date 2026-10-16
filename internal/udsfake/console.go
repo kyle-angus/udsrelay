@@ -415,12 +415,13 @@ func (c *Console) ConnectToNetwork(netInfo []byte, passphrase []byte, connType u
 	defer c.mu.Unlock()
 	c.netInfo = res.Network.NetInfo
 	c.nodes = res.Network.Nodes
-	status := uint32(StatusConnectedAsClient)
+	status, node := uint32(StatusConnectedAsClient), res.Node
 	if connType == relay.ConnSpectator {
-		status = StatusConnectedAsSpectator
+		// The relay gives a spectator node 0; NWM reports 0xFFFF (mk7-trace-hw-01).
+		status, node = StatusConnectedAsSpectator, 0xFFFF
 	}
 	c.st = ConnectionStatus{
-		Status: status, Reason: ReasonConnectionEstablished, NodeID: res.Node,
+		Status: status, Reason: ReasonConnectionEstablished, NodeID: node,
 		ChangedNodes: res.Network.Bitmask, TotalNodes: res.Network.TotalNodes(),
 		MaxNodes: res.Network.MaxNodes(), NodeBitmask: res.Network.Bitmask,
 	}

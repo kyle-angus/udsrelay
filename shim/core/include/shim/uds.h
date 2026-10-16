@@ -157,6 +157,10 @@ typedef struct {
 /// relay session ID. Returns 0, or -1 for a bad key or session. HELLO starts on the first poll.
 int shim_uds_init(shim_uds *u, const shim_uds_ops *ops, const char *key, size_t key_len, uint32_t session);
 
+/// Uses mac for hosted networks and beacons instead of the made-up one shim_uds_init picks.
+/// Download Play needs the console's real MAC: it seeds its frame checksums with it.
+void shim_uds_set_mac(shim_uds *u, const uint8_t mac[6]);
+
 /// Answers one nwm::UDS request: `cmd` is the received command buffer (64 words) and is
 /// rewritten into the reply. `out` is SHIM_UDS_OUT_SIZE bytes of the calling session's own, which
 /// static-buffer replies point at; it must stay untouched until the reply has been sent. Request
