@@ -23,6 +23,7 @@
 #
 # Options:
 #   --payload-max N   bytes of each frame to log (default 64; -1 logs whole frames)
+#   --log-frames N    relay mode's per-frame logging: 0 none (default), 1 all, 2 all but empty pulls
 #   --no-build        package sysmodule/out as it is instead of building first
 #   -o FILE           output zip (default sysmodule/out/udsrelay-sd-<mode>.zip)
 #   --force           overwrite an existing output zip
@@ -33,18 +34,19 @@ OUT_DIR="$HERE/out"
 TITLE_CXI="0004013000F00D02.cxi"
 
 die() { echo "package: $*" >&2; exit 1; }
-usage() { sed -n '2,29p' "$0" | sed 's/^# \{0,1\}//'; exit 2; }
+usage() { sed -n '2,30p' "$0" | sed 's/^# \{0,1\}//'; exit 2; }
 
 mode="${1:-}"
 [[ "$mode" == relay || "$mode" == trace ]] || usage
 shift
 
-relay="" lobby_file="" payload_max=64 build=1 output="" force=0
+relay="" lobby_file="" payload_max=64 log_frames="" build=1 output="" force=0
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --relay) relay="${2:?--relay needs host:port}"; shift 2 ;;
     --lobby-file) lobby_file="${2:?--lobby-file needs a path}"; shift 2 ;;
     --payload-max) payload_max="${2:?--payload-max needs a number}"; shift 2 ;;
+    --log-frames) log_frames="${2:?--log-frames needs 0, 1 or 2}"; shift 2 ;;
     --no-build) build=0; shift ;;
     -o) output="${2:?-o needs a path}"; shift 2 ;;
     --force) force=1; shift ;;
@@ -54,8 +56,10 @@ while [[ $# -gt 0 ]]; do
 done
 
 [[ "$payload_max" =~ ^-?[0-9]+$ ]] || die "--payload-max must be a number, got $payload_max"
+[[ -z "$log_frames" || "$log_frames" =~ ^[012]$ ]] || die "--log-frames must be 0, 1 or 2, got $log_frames"
 output="${output:-$OUT_DIR/udsrelay-sd-$mode.zip}"
 [[ "$output" == *.zip ]] || die "output must end in .zip: $output"
+[[ "$output" == /* ]] || output="$PWD/$output" # zip runs from the staging folder
 if [[ -e "$output" && $force -eq 0 ]]; then
   die "$output exists; pass --force to replace it"
 fi
@@ -118,6 +122,12 @@ version="$(sed -n 's/^#define VERSION "\(.*\)"$/\1/p' "$HERE/source/main.c")"
   echo
   echo "# Bytes of each frame to log; -1 logs whole frames."
   echo "payload_max = $payload_max"
+  if [[ -n "$log_frames" ]]; then
+    echo
+    echo "# nwm::UDS's per-frame calls: 0 not logged, 1 all logged, 2 all but PullPackets that got nothing."
+    echo "# Logging them slows a game's data transfer."
+    echo "log_frames = $log_frames"
+  fi
 } > "$stage/udsrelay/shim.ini"
 chmod 600 "$stage/udsrelay/shim.ini"
 

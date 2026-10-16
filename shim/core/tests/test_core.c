@@ -178,6 +178,10 @@ static void test_config(void) {
     CHECK(shim_config_parse(&cfg, badrelay, sizeof(badrelay) - 1) == 5);
     CHECK(strcmp(cfg.relay_host, "relay.example.net") == 0 && cfg.relay_port == 28300); // unchanged
 
+    CHECK(cfg.log_frames == -1);
+    const char frames[] = "log_frames = 2\nlog_frames = yes\nlog_frames = 3\n";
+    CHECK(shim_config_parse(&cfg, frames, sizeof(frames) - 1) == 2 && cfg.log_frames == 2);
+
     CHECK(!cfg.relay_mode);
     const char mode[] = "mode = relay\n";
     CHECK(shim_config_parse(&cfg, mode, sizeof(mode) - 1) == 0 && cfg.relay_mode == 1);
@@ -490,8 +494,8 @@ static void test_session(const char *fixture_path) {
     s.proc = "000400000FFFFF00";
     s.payload_max = 512;
     s.slot_size = 0x200;
-    s.bank_req = arena_alloc(&k, SHIM_STATIC_SLOTS * s.slot_size);
-    s.bank_rsp = arena_alloc(&k, SHIM_STATIC_SLOTS * s.slot_size);
+    s.bank_req = arena_alloc(&k, SHIM_SESSION_SLOTS * s.slot_size);
+    s.bank_rsp = arena_alloc(&k, SHIM_SESSION_SLOTS * s.slot_size);
     s.line = malloc(SHIM_TRACE_LINE_MAX);
 
     shim_ops ops = {&k, f_cmdbuf, f_static, f_send_sync, f_reply_and_receive, f_close,
@@ -562,8 +566,8 @@ static void test_session_error_result(void) {
     s.real = 2;
     s.proc = "";
     s.slot_size = 0x100;
-    s.bank_req = arena_alloc(&k, SHIM_STATIC_SLOTS * s.slot_size);
-    s.bank_rsp = arena_alloc(&k, SHIM_STATIC_SLOTS * s.slot_size);
+    s.bank_req = arena_alloc(&k, SHIM_SESSION_SLOTS * s.slot_size);
+    s.bank_rsp = arena_alloc(&k, SHIM_SESSION_SLOTS * s.slot_size);
     s.line = malloc(SHIM_TRACE_LINE_MAX);
     shim_ops ops = {&k, f_cmdbuf, f_static, f_send_sync, f_reply_and_receive, f_close,
                     f_addr_of, f_view, f_now, f_log, NULL};
@@ -622,8 +626,8 @@ static void test_session_answer(void) {
     s.real = 2;
     s.proc = "";
     s.slot_size = 0x100;
-    s.bank_req = arena_alloc(&k, SHIM_STATIC_SLOTS * s.slot_size);
-    s.bank_rsp = arena_alloc(&k, SHIM_STATIC_SLOTS * s.slot_size);
+    s.bank_req = arena_alloc(&k, SHIM_SESSION_SLOTS * s.slot_size);
+    s.bank_rsp = arena_alloc(&k, SHIM_SESSION_SLOTS * s.slot_size);
     s.line = malloc(SHIM_TRACE_LINE_MAX);
     shim_ops ops = {&k, f_cmdbuf, f_static, f_send_sync, f_reply_and_receive, f_close,
                     f_addr_of, f_view, f_now, f_log, answer_ndm};

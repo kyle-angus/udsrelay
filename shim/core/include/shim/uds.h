@@ -150,7 +150,11 @@ typedef struct {
 
     struct {
         uint32_t status_signals, bind_signals, dropped, unknown, relay_failures;
+        uint32_t queue_full; ///< frames dropped because their bind's queue was full
     } stats;
+    uint64_t last_stats;  ///< when the loss counters were last noted
+    uint32_t noted_lost, noted_full, noted_send_failed;
+    uint32_t send_failed; ///< frames the platform could not send (ops->send reports these)
 } shim_uds;
 
 /// Sets up the emulator and its relay client. key is the lobby key; session is a random non-zero
@@ -175,6 +179,9 @@ void shim_uds_net_poll(shim_uds *u);
 
 /// Status without clearing the changed mask (tests and diagnostics).
 void shim_uds_peek(shim_uds *u, shim_uds_status *st);
+
+/// Counts a frame the platform failed to send; noted with the other loss counters.
+void shim_uds_send_failed(shim_uds *u);
 
 /// Frames queued on a bind; -1 when not in a network, -2 when there is no such bind (PullPacket
 /// would then fail with SHIM_UDS_RESULT_INVALID_STATE or SHIM_UDS_RESULT_NO_BIND).

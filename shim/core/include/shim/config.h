@@ -29,13 +29,18 @@ typedef struct {
     /// session, the Download Play module's included, to the real services. The plugin treats it
     /// as passthrough.
     int trace_mode;
+    /// log_frames = 0, 1 or 2: log none, all, or all but the empty PullPackets of nwm::UDS's
+    /// per-frame calls (see shim_session.quiet_frames). -1 when shim.ini does not say; the plugin
+    /// then logs them all, the sysmodule in relay mode none.
+    int log_frames;
 } shim_config;
 
 /// Defaults: ports nwm::UDS and ndm:u, payload_max 512.
 void shim_config_defaults(shim_config *cfg);
 
 /// Applies `key = value` lines; '#' starts a comment. Keys: ports (comma-separated),
-/// payload_max, relay (host:port), lobby, fake_ndm (0 or 1), mode (passthrough, relay or trace).
+/// payload_max, relay (host:port), lobby, fake_ndm (0 or 1), mode (passthrough, relay or trace),
+/// log_frames (0, 1 or 2).
 /// Returns the number of lines it could not understand.
 int shim_config_parse(shim_config *cfg, const char *text, size_t len);
 

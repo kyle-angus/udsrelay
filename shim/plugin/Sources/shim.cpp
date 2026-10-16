@@ -68,8 +68,8 @@ struct SessionSlot {
     LightEvent start;
     char port[SHIM_PORT_NAME_MAX + 1];
     shim_session session;
-    u8 bankReq[SHIM_STATIC_SLOTS * kSlotSize];
-    u8 bankRsp[SHIM_STATIC_SLOTS * kSlotSize];
+    u8 bankReq[SHIM_SESSION_SLOTS * kSlotSize];
+    u8 bankRsp[SHIM_SESSION_SLOTS * kSlotSize];
     char line[SHIM_TRACE_LINE_MAX];
 };
 

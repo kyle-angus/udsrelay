@@ -38,9 +38,12 @@
 #include "shim/trace.h"
 #include "shim/uds.h"
 
-#define VERSION "0.5.3"
+#define VERSION "0.5.8"
 
-#define MAX_SESSIONS 8 // trace mode can see the game and Download Play at once
+// Three at once is the most any log shows (the game's two nwm::UDS sessions and ndm:u, or
+// Download Play's two). Each costs 32 KB of BASE memory, which games' on-demand modules share:
+// at 8, Animal Crossing's RO module could not load (0.5.3).
+#define MAX_SESSIONS 6
 #define SLOT_SIZE 0x800 // largest UDS static buffer is SendTo's 0x5F4
 #define RING_SIZE (64 * 1024)
 #define HEAP_SIZE (192 * 1024) // thread stacks and newlib's socket bookkeeping
@@ -351,10 +354,96 @@ static void UdsWake(void *ctx) {
     (void)ctx;
     CondVar_Broadcast(&g_udsCv);
 }
+// Sends one datagram now, retrying for up to 20 ms while the non-blocking socket's buffer is full
+// (see RelayThread). Returns false if it could not.
+static bool SendNow(const uint8_t *b, size_t n) {
+    for (int attempt = 0; attempt < 20; attempt++) {
+        if (sendto(g_relayFd, b, n, 0, (const struct sockaddr *)&g_relayAddr, sizeof(g_relayAddr)) >= 0) {
+            return true;
+        }
+        if (errno != EAGAIN && errno != EWOULDBLOCK && errno != ENOBUFS) {
+            break;
+        }
+        svcSleepThread(1 * NS_PER_MS);
+    }
+    return false;
+}
+
+// Datagrams wait here for the relay thread. A socket call takes milliseconds, and real NWM answers
+// SendTo in under one (0.83 ms median in battle-hw-01), so the game's SendTo only queues its
+// frame: Animal Crossing sends its town one frame per call and gave up at ~43 frames a second.
+#define SEND_QUEUE 24
+typedef struct {
+    u16 len;
+    u8 data[SHIM_RELAY_MAX_DATAGRAM];
+} QueuedDatagram;
+static QueuedDatagram g_sendQueue[SEND_QUEUE];
+static unsigned g_sendHead, g_sendCount; // guarded by g_sendLock
+static LightLock g_sendLock;
+static LightEvent g_sendReady; // something to send, or the relay thread should look again
+
+// Called with g_udsLock held, from session threads and the relay thread.
 static void UdsSend(void *ctx, const uint8_t *b, size_t n) {
     (void)ctx;
-    if (g_relayFd >= 0) {
-        sendto(g_relayFd, b, n, 0, (const struct sockaddr *)&g_relayAddr, sizeof(g_relayAddr));
+    if (g_relayFd < 0 || n > SHIM_RELAY_MAX_DATAGRAM) {
+        return;
+    }
+    LightLock_Lock(&g_sendLock);
+    if (g_sendCount < SEND_QUEUE) {
+        QueuedDatagram *q = &g_sendQueue[(g_sendHead + g_sendCount) % SEND_QUEUE];
+        q->len = (u16)n;
+        memcpy(q->data, b, n);
+        g_sendCount++;
+        LightLock_Unlock(&g_sendLock);
+        LightEvent_Signal(&g_sendReady);
+        return;
+    }
+    LightLock_Unlock(&g_sendLock);
+    // Queue full: send it here, as before the queue (it may overtake queued frames).
+    if (!SendNow(b, n)) {
+        shim_uds_send_failed(&g_uds);
+    }
+}
+
+static u8 g_recvBuf[SHIM_RELAY_MAX_DATAGRAM]; // relay thread only
+
+// Relay thread: hands everything that has arrived to the emulator. Returns whether there was any.
+static bool ReceiveAll(void) {
+    bool any = false;
+    ssize_t n;
+    while ((n = recv(g_relayFd, g_recvBuf, sizeof(g_recvBuf), 0)) > 0) {
+        shim_uds_net_input(&g_uds, g_recvBuf, (size_t)n);
+        any = true;
+    }
+    return any;
+}
+
+// Relay thread: sends everything queued, reading between sends. A console streaming its town at
+// 120 frames a second kept this thread sending, its socket's receive buffer overflowed, and it
+// lost 889 of ~970 datagrams from the relay (0.5.6).
+static bool DrainSendQueue(void) {
+    bool any = false;
+    for (;;) {
+        LightLock_Lock(&g_sendLock);
+        if (!g_sendCount) {
+            LightLock_Unlock(&g_sendLock);
+            return any;
+        }
+        QueuedDatagram *q = &g_sendQueue[g_sendHead];
+        LightLock_Unlock(&g_sendLock);
+        // The slot stays ours until the head moves on: UdsSend only writes past the tail.
+        const bool ok = SendNow(q->data, q->len);
+        LightLock_Lock(&g_sendLock);
+        g_sendHead = (g_sendHead + 1) % SEND_QUEUE;
+        g_sendCount--;
+        LightLock_Unlock(&g_sendLock);
+        if (!ok) {
+            LightLock_Lock(&g_udsLock);
+            shim_uds_send_failed(&g_uds);
+            LightLock_Unlock(&g_udsLock);
+        }
+        ReceiveAll();
+        any = true;
     }
 }
 static shim_handle_t UdsCreateEvent(void *ctx) {
@@ -471,8 +560,8 @@ typedef struct {
     LightEvent start;
     char port[SHIM_PORT_NAME_MAX + 1];
     shim_session session;
-    u8 bankReq[SHIM_STATIC_SLOTS * SLOT_SIZE];
-    u8 bankRsp[SHIM_STATIC_SLOTS * SLOT_SIZE];
+    u8 bankReq[SHIM_SESSION_SLOTS * SLOT_SIZE];
+    u8 bankRsp[SHIM_SESSION_SLOTS * SLOT_SIZE];
     char line[SHIM_TRACE_LINE_MAX];
 } SessionSlot;
 
@@ -523,6 +612,8 @@ static void Dispatch(const char *port, const char *client, Handle server, Handle
     slot->session.real = real;
     slot->session.proc = g_proc;
     slot->session.payload_max = g_cfg.payload_max;
+    // Relay mode logs no per-frame calls unless shim.ini's log_frames says so; trace mode all.
+    slot->session.quiet_frames = g_trace || g_cfg.log_frames == 1 ? 0 : g_cfg.log_frames == 2 ? 2 : 1;
     slot->session.bank_req = slot->bankReq;
     slot->session.bank_rsp = slot->bankRsp;
     slot->session.slot_size = SLOT_SIZE;
@@ -630,17 +721,18 @@ static void RelayThread(void *arg) {
     // non-blocking; the thread drains what has arrived and sleeps 2 ms outside the service
     // when there is nothing.
     fcntl(fd, F_SETFL, fcntl(fd, F_GETFL, 0) | O_NONBLOCK);
-    static u8 buf[SHIM_RELAY_MAX_DATAGRAM];
+    // Room for a burst while this thread is busy sending (the 3DS's default is small).
+    const int rcvbuf = 64 * 1024;
+    if (setsockopt(fd, SOL_SOCKET, SO_RCVBUF, &rcvbuf, sizeof(rcvbuf)) != 0) {
+        Note("Warning", "Relay", "cannot enlarge the socket's receive buffer, errno %d", errno);
+    }
     u64 lastPoll = 0;
     for (;;) {
-        bool got = false;
-        ssize_t n;
-        while ((n = recv(fd, buf, sizeof(buf), 0)) > 0) {
-            shim_uds_net_input(&g_uds, buf, (size_t)n);
-            got = true;
-        }
-        if (!got) {
-            svcSleepThread(2 * NS_PER_MS);
+        bool busy = ReceiveAll();
+        busy = DrainSendQueue() || busy;
+        if (!busy) {
+            // Outside the socket service; a queued frame wakes it at once.
+            LightEvent_WaitTimeout(&g_sendReady, 2 * NS_PER_MS);
         }
         if (UdsNow(NULL) - lastPoll >= 20) {
             shim_uds_net_poll(&g_uds);
@@ -660,6 +752,8 @@ int main(void) {
     LightLock_Init(&g_logLock);
     LightLock_Init(&g_slotLock);
     LightLock_Init(&g_udsLock);
+    LightLock_Init(&g_sendLock);
+    LightEvent_Init(&g_sendReady, RESET_ONESHOT);
     CondVar_Init(&g_udsCv);
     LightEvent_Init(&g_relayWanted, RESET_STICKY);
     LightEvent_Init(&g_sdReady, RESET_STICKY);
@@ -667,8 +761,9 @@ int main(void) {
 
     s64 baseUsed = 0;
     svcGetSystemInfo(&baseUsed, 0, 3); // BASE region in use
-    Note("Info", "Startup", "udsrelay sysmodule %s started; fsInit 0x%08lx; BASE region in use 0x%llx", VERSION,
-         (unsigned long)g_fsInitResult, (unsigned long long)baseUsed);
+    Note("Info", "Startup", "udsrelay sysmodule %s started; fsInit 0x%08lx; BASE region in use 0x%llx of 0x%lx",
+         VERSION, (unsigned long)g_fsInitResult, (unsigned long long)baseUsed,
+         (unsigned long)osGetMemRegionSize(MEMREGION_BASE));
     if (!threadCreate(WriterThread, NULL, WRITER_STACK, WRITER_PRIORITY, -2, true)) {
         // Nothing can be logged without the writer, but the services can still run.
         Note("Error", "Startup", "could not start the log writer");

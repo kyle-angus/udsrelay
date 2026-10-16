@@ -47,6 +47,11 @@ typedef struct {
     int (*answer)(void *ctx, struct shim_session *s, uint32_t *cmd);
 } shim_ops;
 
+/// Receive static buffers a session provides: nwm::UDS uses IDs 0-5 (SendTo's payload is ID 5)
+/// and ndm:u none, in every trace so far. The kernel has room for SHIM_STATIC_SLOTS; the rest are
+/// left at size 0, which keeps each session's banks at half the memory.
+#define SHIM_SESSION_SLOTS 8
+
 typedef struct shim_session {
     const char *port;     ///< service name, e.g. "nwm::UDS"
     int sess;             ///< logged as sess= to tell concurrent sessions apart; < 0 omits it
@@ -54,12 +59,17 @@ typedef struct shim_session {
     shim_handle_t real;   ///< session to the real service
     const char *proc;     ///< logged as proc=, e.g. the title ID
     long payload_max;     ///< bytes of send/recv/beacon payloads to log, -1 for all
-    /// Two banks of SHIM_STATIC_SLOTS receive buffers, slot_size bytes each: one receives the
+    /// Two banks of SHIM_SESSION_SLOTS receive buffers, slot_size bytes each: one receives the
     /// game's request static buffers, the other the real service's reply static buffers.
     uint8_t *bank_req;
     uint8_t *bank_rsp;
     size_t slot_size;
     char *line; ///< scratch, SHIM_TRACE_LINE_MAX bytes
+    /// 0 logs every request. 1 skips the trace lines of nwm::UDS's per-frame commands
+    /// (PullPacket, SendTo, GetConnectionStatus, GetNodeInformation): logging them costs
+    /// milliseconds a call, which a game streaming data waits out on every frame. 2 skips only
+    /// PullPackets that found nothing, most of the volume (a game polls 150 times a second).
+    int quiet_frames;
 
     uint32_t requests;
     uint32_t failures; ///< forwarded requests whose send failed
@@ -73,7 +83,7 @@ typedef struct shim_session {
 /// that does not clear (returns that error). Closes `server` and `real` before returning.
 shim_result_t shim_session_run(shim_session *s, const shim_ops *ops);
 
-/// Points the thread's receive static buffers at `bank` (SHIM_STATIC_SLOTS * slot_size bytes).
+/// Points the thread's receive static buffers at `bank` (SHIM_SESSION_SLOTS * slot_size bytes).
 void shim_session_set_static_bufs(const shim_ops *ops, uint8_t *bank, size_t slot_size);
 
 #ifdef __cplusplus

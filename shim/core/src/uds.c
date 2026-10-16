@@ -333,6 +333,9 @@ static shim_uds_bind *find_bind(shim_uds *u, uint32_t id) {
 
 // ---- relay callbacks (network thread, lock held) --------------------------------------------
 
+#define QUEUE_FACTOR 4
+#define STATS_NOTE_MS 10000
+
 static void r_send(void *ctx, const uint8_t *b, size_t n) {
     shim_uds *u = (shim_uds *)ctx;
     u->ops->send(u->ops->ctx, b, n);
@@ -352,7 +355,12 @@ static void r_data(void *ctx, uint16_t src, uint16_t dst, uint8_t channel, uint8
         if (!b->used || b->channel != channel || (b->node != SHIM_RELAY_BROADCAST && b->node != src)) {
             continue;
         }
-        if (b->queued_bytes + n > b->buf_size) {
+        // NWM drops frames once a bind holds buf_size bytes, but radio paces frames out. Over the
+        // internet they arrive in clumps: Animal Crossing binds 0x2E30 bytes, 8 of its 1448-byte
+        // frames, so 9 arriving between two pulls lost one. Queue up to QUEUE_FACTOR times as
+        // much; the game cannot see how much is queued.
+        if (b->queued_bytes + n > b->buf_size * QUEUE_FACTOR) {
+            u->stats.queue_full++;
             continue;
         }
         const uint16_t f = store_frame(u, src, p, n);
@@ -496,8 +504,28 @@ void shim_uds_net_poll(shim_uds *u) {
             u->last_hello = t;
         }
     }
+    // Frame losses, every 10 s while they grow: lost on the way from the relay, dropped for a
+    // full bind queue, or not sent.
+    if (t - u->last_stats >= STATS_NOTE_MS) {
+        u->last_stats = t;
+        if (u->relay.stats.lost != u->noted_lost || u->stats.queue_full != u->noted_full ||
+            u->send_failed != u->noted_send_failed) {
+            note(u, "Warning",
+                 "frames lost: %lu from the relay never arrived, %lu dropped for a full bind queue, %lu not "
+                 "sent (totals; %lu received)",
+                 (unsigned long)u->relay.stats.lost, (unsigned long)u->stats.queue_full,
+                 (unsigned long)u->send_failed, (unsigned long)u->relay.stats.data_in);
+            u->noted_lost = u->relay.stats.lost;
+            u->noted_full = u->stats.queue_full;
+            u->noted_send_failed = u->send_failed;
+        }
+    }
     u->ops->wake(u->ops->ctx);
     u->ops->unlock(u->ops->ctx);
+}
+
+void shim_uds_send_failed(shim_uds *u) {
+    u->send_failed++; // called from ops->send, with the lock held
 }
 
 void shim_uds_peek(shim_uds *u, shim_uds_status *st) {

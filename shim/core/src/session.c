@@ -8,8 +8,9 @@
 void shim_session_set_static_bufs(const shim_ops *ops, uint8_t *bank, size_t slot_size) {
     uint32_t *sb = ops->static_bufs(ops->ctx);
     for (unsigned i = 0; i < SHIM_STATIC_SLOTS; i++) {
-        sb[2 * i] = SHIM_IPC_STATIC_DESC(slot_size, i);
-        sb[2 * i + 1] = ops->addr_of(ops->ctx, bank + i * slot_size);
+        const int have = i < SHIM_SESSION_SLOTS;
+        sb[2 * i] = SHIM_IPC_STATIC_DESC(have ? slot_size : 0, i);
+        sb[2 * i + 1] = have ? ops->addr_of(ops->ctx, bank + i * slot_size) : 0;
     }
 }
 
@@ -126,6 +127,10 @@ static int collect_copy_handles(const shim_ipc_msg *msg, const uint32_t *words, 
     return n;
 }
 
+static int frame_command(const shim_session *s, uint16_t id) {
+    return (id == 0x0014 || id == 0x0017 || id == 0x000B || id == 0x000D) && strcmp(s->port, "nwm::UDS") == 0;
+}
+
 shim_result_t shim_session_run(shim_session *s, const shim_ops *ops) {
     uint32_t req[SHIM_IPC_MAX_WORDS];
     shim_handle_t pending_close[MAX_PENDING_CLOSE];
@@ -176,11 +181,16 @@ shim_result_t shim_session_run(shim_session *s, const shim_ops *ops) {
         memcpy(req, cmd, nreq * sizeof(uint32_t));
         const uint16_t id = msg.cmd;
         s->requests++;
+        const int logged = !(s->quiet_frames == 1 && frame_command(s, id));
+        // quiet_frames 2: a PullPacket's lines wait for its answer, and go only if it got a frame.
+        const int pull_deferred = s->quiet_frames == 2 && id == 0x0014 && frame_command(s, id);
 
-        emit(ops, s->line,
-             shim_trace_msg(s->line, SHIM_TRACE_LINE_MAX, ops->now(ops->ctx), "req", s->port, s->sess, id,
-                            shim_command_name(s->port, id), 0, s->proc, req, 0));
-        log_buffers(s, ops, &msg, req, req, 0);
+        if (logged && !pull_deferred) {
+            emit(ops, s->line,
+                 shim_trace_msg(s->line, SHIM_TRACE_LINE_MAX, ops->now(ops->ctx), "req", s->port, s->sess, id,
+                                shim_command_name(s->port, id), 0, s->proc, req, 0));
+            log_buffers(s, ops, &msg, req, req, 0);
+        }
 
         // Our duplicates of the game's copy handles; the real service gets its own.
         shim_handle_t req_copies[MAX_PENDING_CLOSE];
@@ -217,10 +227,18 @@ shim_result_t shim_session_run(shim_session *s, const shim_ops *ops) {
 
         shim_ipc_msg rsp;
         if (shim_ipc_parse(cmd, &rsp) == 0) {
-            emit(ops, s->line,
-                 shim_trace_msg(s->line, SHIM_TRACE_LINE_MAX, ops->now(ops->ctx), "rsp", s->port,
-                                s->sess, id, NULL, 0, NULL, cmd, 0));
-            log_buffers(s, ops, &rsp, cmd, req, 1);
+            const int empty_pull = pull_deferred && cmd[1] == 0 && cmd[2] == 0;
+            if (pull_deferred && !empty_pull) {
+                emit(ops, s->line,
+                     shim_trace_msg(s->line, SHIM_TRACE_LINE_MAX, ops->now(ops->ctx), "req", s->port, s->sess,
+                                    id, shim_command_name(s->port, id), 0, s->proc, req, 0));
+            }
+            if (logged && !empty_pull) {
+                emit(ops, s->line,
+                     shim_trace_msg(s->line, SHIM_TRACE_LINE_MAX, ops->now(ops->ctx), "rsp", s->port,
+                                    s->sess, id, NULL, 0, NULL, cmd, 0));
+                log_buffers(s, ops, &rsp, cmd, req, 1);
+            }
             if (!answered) {
                 npending = collect_copy_handles(&rsp, cmd, pending_close, 0);
             }

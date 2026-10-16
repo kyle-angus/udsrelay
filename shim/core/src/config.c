@@ -32,6 +32,7 @@ void shim_config_defaults(shim_config *cfg) {
     memset(cfg, 0, sizeof(*cfg));
     set_ports(cfg, defaults, sizeof(defaults) - 1);
     cfg->payload_max = 512;
+    cfg->log_frames = -1;
 }
 
 int shim_config_parse(shim_config *cfg, const char *text, size_t len) {
@@ -120,6 +121,12 @@ int shim_config_parse(shim_config *cfg, const char *text, size_t len) {
                 } else if (klen == 8 && memcmp(text + i, "fake_ndm", 8) == 0) {
                     if (vlen == 1 && (*v == '0' || *v == '1')) {
                         cfg->fake_ndm = *v == '1';
+                    } else {
+                        bad++;
+                    }
+                } else if (klen == 10 && memcmp(text + i, "log_frames", 10) == 0) {
+                    if (vlen == 1 && *v >= '0' && *v <= '2') {
+                        cfg->log_frames = *v - '0';
                     } else {
                         bad++;
                     }

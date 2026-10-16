@@ -185,6 +185,18 @@ void shim_relay_input(shim_relay_client *c, const uint8_t *b, size_t n, uint64_t
     }
     const uint8_t *p = b + SHIM_RELAY_HEADER_SIZE;
     const size_t pn = (size_t)body - SHIM_RELAY_HEADER_SIZE;
+    // The server numbers data, replies and keepalive answers as one stream per session (events
+    // have their own), so a gap there is a datagram the network lost. Resent replies repeat an
+    // old number and are not counted.
+    if (h.type != SHIM_RELAY_NODE_EVENT) {
+        if (c->in_any && seq_after(h.seq, c->in_last)) {
+            c->stats.lost += (uint16_t)(h.seq - c->in_last - 1);
+        }
+        if (!c->in_any || seq_after(h.seq, c->in_last)) {
+            c->in_last = h.seq;
+            c->in_any = 1;
+        }
+    }
     switch (h.type) {
     case SHIM_RELAY_DATA:
         if (pn >= 6 && c->ops->on_data) {

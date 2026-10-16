@@ -99,9 +99,12 @@ typedef struct {
 
     uint16_t ev_last; ///< newest NODE_EVENT seq delivered
     int ev_any;
+    uint16_t in_last; ///< newest seq of the server's other datagrams (data, replies), numbered as one stream
+    int in_any;
 
     struct {
         uint32_t data_in, data_out, bad_tag, retries, events, resets;
+        uint32_t lost; ///< datagrams from the server that never arrived (gaps in in_last's stream)
     } stats;
 } shim_relay_client;
 
