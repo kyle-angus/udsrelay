@@ -98,6 +98,20 @@ Trace mode records what Download Play actually does, before the emulator is taug
 4. Copy both logs. `Dispatch` lines say which sessions serve `the game` and which `Download Play`, with their `sess=` numbers.
 5. Set `mode = relay` again afterwards.
 
+### What the Mario Kart 7 trace showed (`recon/traces/mk7-trace-hw-01`)
+
+Two consoles side by side, Local Play, one race, sysmodule 0.5.0 in trace mode; local wireless worked normally through it.
+
+- **Lobby: Download Play.** The host's Download Play hosts its own network (comm ID `0x00002810`, ID8 `0x55`, 8 nodes, no app data, 18-byte passphrase) and broadcasts on channel 1. The joining Download Play connects first as a **spectator** (conn_type 2) to listen on channel 1, then disconnects and rejoins as a client (conn_type 1) on channel 2. The host then calls UpdateNetworkAttribute (bitmask `0x0002`, flag 1), unbinds and destroys the network. Download Play never uses `ndm:u`.
+- **Race: the game itself.** After Download Play shuts down, Mario Kart opens its own two `nwm::UDS` sessions, hosts comm ID `0x00030810` (ID8 0, 8 nodes) and sends on channel 243 with flags `0x03`, mostly broadcast, while polling GetNodeInformation over a thousand times.
+- **The two never overlap**, so one emulator serves them in turn.
+- **No deprecated commands**: everything is a command the emulator handles. One new result: PullPacket on a bind that no longer exists while in a network returns `0xE10113EA` (the emulator now does too; `0xC8A113EA` stays for not being in a network).
+- Download Play leaves stack leftovers, including pieces of the console's friend-code seed, in the unused upper bits of SendTo's and Bind's narrow arguments; `udstrace redact` now masks those bits in every trace.
+
+### Relay mode and Download Play (0.5.1)
+
+Relay mode also registers `uds:dlp`, so Download Play's `nwm::UDS` goes to the emulator like the game's, and games that run their lobby through Download Play can use the relay. `ndm:dlp` stays unregistered (Download Play keeps the real NDM, which it never called in the trace). The start-up line reads `serving uds:rly, ndm:rly and uds:dlp`. Not yet tested on hardware: the spectator join is the first use of that path.
+
 ## What to look for
 
 | Symptom | Meaning |
@@ -119,4 +133,5 @@ Trace mode records what Download Play actually does, before the emulator is taug
 
 - Sleep mode: the sysmodule does not handle sleep notifications; after waking, the relay resets its session and it says HELLO again, but a game in local play at that moment will see the network drop.
 - No status display: the plugin's menu and notifications have no counterpart; the log is the only output.
-- Memory: about 670 KB of BASE-region memory (mostly four sessions' receive buffers), plus a 128 KB socket buffer from the SYSTEM region. Fine on both models in principle; untested.
+- Mario Kart 7 over the relay (0.5.1): built, not yet tested on hardware.
+- Memory: about 950 KB of BASE-region memory (mostly eight sessions' receive buffers), plus a 128 KB socket buffer from the SYSTEM region. 0.5.0 started on both consoles.

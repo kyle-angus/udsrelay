@@ -25,7 +25,10 @@ const (
 	// ResultInvalidState is what hardware returns for DestroyNetwork with no network up and for
 	// PullPacket once the network is gone (battle-hw-01). Azahar returns ResultAzaharNotHosting
 	// for the first.
-	ResultInvalidState     = 0xC8A113EA
+	ResultInvalidState = 0xC8A113EA
+	// ResultNoBind is PullPacket's result for a bind that does not exist while in a network
+	// (Download Play after Unbind, before DestroyNetwork, in mk7-trace-hw-01).
+	ResultNoBind           = 0xE10113EA
 	ResultAzaharNotHosting = 0xC8A111EA
 	// ResultConnectFailed is returned when the relay refuses a join or cannot be reached. No
 	// trace shows what NWM returns here; this placeholder reuses the invalid-state code until
@@ -552,7 +555,7 @@ func (c *Console) pull(bindID uint32, maxSize int) (Packet, bool, uint32) {
 	}
 	b := c.binds[bindID]
 	if b == nil {
-		return Packet{}, false, ResultInvalidState
+		return Packet{}, false, ResultNoBind
 	}
 	if len(b.queue) == 0 {
 		return Packet{}, false, ResultOK
@@ -655,8 +658,11 @@ func (c *Console) onReset() {
 func (c *Console) PollPacket(bindID uint32) (queued int, result uint32) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	if !c.inNetwork() || c.binds[bindID] == nil {
+	if !c.inNetwork() {
 		return 0, ResultInvalidState
+	}
+	if c.binds[bindID] == nil {
+		return 0, ResultNoBind
 	}
 	return len(c.binds[bindID].queue), ResultOK
 }

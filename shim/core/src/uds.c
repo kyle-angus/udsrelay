@@ -503,7 +503,7 @@ void shim_uds_peek(shim_uds *u, shim_uds_status *st) {
 int shim_uds_queued(shim_uds *u, uint32_t bind_id) {
     u->ops->lock(u->ops->ctx);
     const shim_uds_bind *b = find_bind(u, bind_id);
-    const int n = b && in_network(u) ? (int)b->count : -1;
+    const int n = !in_network(u) ? -1 : !b ? -2 : (int)b->count;
     u->ops->unlock(u->ops->ctx);
     return n;
 }
@@ -988,8 +988,10 @@ static void pull_packet(shim_uds *u, uint32_t *cmd, uint8_t *out) {
     const uint32_t max = cmd[3];
     uint32_t result = 0, size = 0, src = 0;
     shim_uds_bind *b = find_bind(u, id);
-    if (!in_network(u) || !b) {
+    if (!in_network(u)) {
         result = SHIM_UDS_RESULT_INVALID_STATE;
+    } else if (!b) {
+        result = SHIM_UDS_RESULT_NO_BIND;
     } else if (b->head != NONE) {
         const uint16_t f = b->head;
         if (max && u->chunks[f].len > max) {

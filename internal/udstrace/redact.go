@@ -17,6 +17,9 @@ import (
 //   - netinfo payloads keep everything but the host MAC (bytes 0-5), which is zeroed.
 //   - NodeInfo friend-code seeds are zeroed: words 2-3 of InitializeWithVersion requests and of
 //     GetNodeInformation replies. The seed identifies a console's friend code.
+//   - nwm::UDS request words that carry an 8- or 16-bit argument are masked to the bits the
+//     argument uses: callers leave stack leftovers in the rest, and the Download Play module's
+//     leftovers include pieces of the console's friend-code seed (mk7-trace-hw-01).
 //   - The relay's address in the shim's own notes ("relay mode: host:port", "checking
 //     host:port", "cannot resolve host") becomes <relay>: it says where the relay runs.
 //   - Every seed the log reveals (the two places above, and each node in DecryptBeaconData's
@@ -145,6 +148,43 @@ var (
 	cmdField   = regexp.MustCompile(` cmd=0x([0-9a-fA-F]{4})`)
 )
 
+// narrowArgs lists, per nwm::UDS request, the words holding an 8- or 16-bit argument and the
+// bits it uses (from the argument types Azahar's handlers read).
+var narrowArgs = map[string]map[int]uint32{
+	"0005": {1: 0xFFFF},                   // EjectClient(node)
+	"0007": {1: 0xFFFF, 2: 0xFF},          // UpdateNetworkAttribute(bitmask, flag)
+	"000d": {1: 0xFFFF},                   // GetNodeInformation(node)
+	"0012": {3: 0xFF, 4: 0xFFFF},          // Bind(id, size, channel, node)
+	"0017": {2: 0xFFFF, 3: 0xFF, 6: 0xFF}, // SendTo(unk, dest, channel, unk, size, flags)
+	"001e": {1: 0xFF},                     // ConnectToNetwork(conn_type, ...)
+}
+
+// maskNarrowArgs clears the unused bits of a request's narrow arguments.
+func maskNarrowArgs(line, cmd string) (string, bool) {
+	masks := narrowArgs[cmd]
+	m := wordsField.FindStringSubmatchIndex(line)
+	if masks == nil || m == nil {
+		return line, false
+	}
+	words := strings.Split(line[m[2]:m[3]], ",")
+	changed := false
+	for i, mask := range masks {
+		if i >= len(words) {
+			continue
+		}
+		var v uint32
+		if _, err := fmt.Sscanf(words[i], "0x%x", &v); err != nil || v&^mask == 0 {
+			continue
+		}
+		words[i] = fmt.Sprintf("0x%08x", v&mask)
+		changed = true
+	}
+	if !changed {
+		return line, false
+	}
+	return mark(line[:m[2]]+strings.Join(words, ",")+line[m[3]:], "padding"), true
+}
+
 func redactLine(line string) (string, bool) {
 	if !strings.Contains(line, "UDSTRACE v=1 ") {
 		if strings.Contains(line, "Plugin <") && relayAddr.MatchString(line) {
@@ -181,6 +221,9 @@ func redactLine(line string) (string, bool) {
 		if (kind == "req" && cmd == "001b") || (kind == "rsp" && cmd == "000d") {
 			return zeroWords(line, 2, 3)
 		}
+		if kind == "req" {
+			return maskNarrowArgs(line, cmd)
+		}
 	}
 	return line, false
 }
@@ -208,6 +251,9 @@ func zeroWords(line string, idx ...int) (string, bool) {
 // mark inserts redacted=<what> before the payload (hex= or words=) so it reads next to it.
 func mark(line, what string) string {
 	tag := fmt.Sprintf(" redacted=%s", what)
+	if strings.Contains(line, tag+" ") {
+		return line // redacting an already redacted log changes nothing
+	}
 	for _, f := range []string{" hex=", " words="} {
 		if i := strings.LastIndex(line, f); i >= 0 {
 			return line[:i] + tag + line[i:]

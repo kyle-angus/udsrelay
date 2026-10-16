@@ -224,11 +224,17 @@ func TestRedact(t *testing.T) {
 		// The relay's address in the shim's notes.
 		"[ 0.01] Plugin <Info> shim:Relay:0: relay mode: 203.0.113.7:28300\n" +
 		"[ 0.02] Plugin <Info> shim:RelayCheck:0: sockets ready; checking relay.example.net:28300 every 5 s (fake_ndm 0)\n" +
-		"[ 0.03] Plugin <Warning> shim:Relay:0: cannot resolve relay.example.net; retrying in 5 s\n"
+		"[ 0.03] Plugin <Warning> shim:Relay:0: cannot resolve relay.example.net; retrying in 5 s\n" +
+		// Stack leftovers above SendTo's 16-bit dest and 8-bit channel (Download Play's held seed
+		// pieces); the 32-bit size and the clean flags word stay.
+		pfx + `kind=req wall=10 port=nwm::UDS sess=1 cmd=0x0017 name="SendTo" tid=0 proc="p" hdr=0x00170182 words=0x00170182,0x00000001,0x03100002,0x0afb0002,0x00000005,0x00000014,0x00000001,0x00051402,0x001350a8` + "\n"
 	var out bytes.Buffer
 	n, err := Redact(strings.NewReader(in), &out)
-	if err != nil || n != 10 {
-		t.Fatalf("Redact = %d, %v; want 10 lines", n, err)
+	if err != nil || n != 11 {
+		t.Fatalf("Redact = %d, %v; want 11 lines", n, err)
+	}
+	if !strings.Contains(out.String(), "redacted=padding words=0x00170182,0x00000001,0x00000002,0x00000002,0x00000005,0x00000014,0x00000001,0x00051402,0x001350a8\n") {
+		t.Errorf("SendTo padding not masked:\n%s", out.String())
 	}
 	for _, leak := range []string{"203.0.113.7", "relay.example.net"} {
 		if strings.Contains(out.String(), leak) {
@@ -266,7 +272,7 @@ func TestRedact(t *testing.T) {
 		}
 	}
 	recs, err := Parse(strings.NewReader(got), "console")
-	if err != nil || len(recs) != 12 || recs[0].Size != 12 || len(recs[0].Data) != 0 || recs[3].Words[2] != 0 {
+	if err != nil || len(recs) != 13 || recs[0].Size != 12 || len(recs[0].Data) != 0 || recs[3].Words[2] != 0 {
 		t.Errorf("redacted log does not parse cleanly: %v %+v", err, recs)
 	}
 }

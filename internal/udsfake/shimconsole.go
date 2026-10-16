@@ -644,7 +644,10 @@ func (c *ShimConsole) PollPacket(bindID uint32) (int, uint32) {
 		return 0, ResultInvalidState
 	}
 	n, _ := strconv.Atoi(strings.TrimPrefix(resp, "queued "))
-	if n < 0 {
+	switch {
+	case n == -2:
+		return 0, ResultNoBind
+	case n < 0:
 		return 0, ResultInvalidState
 	}
 	return n, ResultOK

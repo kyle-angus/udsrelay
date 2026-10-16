@@ -27,6 +27,9 @@ extern "C" {
 
 /// Hardware's result for DestroyNetwork with no network, and PullPacket once the network is gone.
 #define SHIM_UDS_RESULT_INVALID_STATE 0xC8A113EAu
+/// PullPacket on a bind that does not exist while in a network (Download Play's receive thread,
+/// woken by Unbind before DestroyNetwork, in mk7-trace-hw-01).
+#define SHIM_UDS_RESULT_NO_BIND 0xE10113EAu
 /// A refused or failed host or join. No trace shows NWM's code; this reuses invalid state.
 #define SHIM_UDS_RESULT_CONNECT_FAILED SHIM_UDS_RESULT_INVALID_STATE
 /// InitializeWithVersion when the relay does not answer: what real NWM returned on hardware when
@@ -169,7 +172,8 @@ void shim_uds_net_poll(shim_uds *u);
 /// Status without clearing the changed mask (tests and diagnostics).
 void shim_uds_peek(shim_uds *u, shim_uds_status *st);
 
-/// Frames queued on a bind, or -1 if there is no such bind.
+/// Frames queued on a bind; -1 when not in a network, -2 when there is no such bind (PullPacket
+/// would then fail with SHIM_UDS_RESULT_INVALID_STATE or SHIM_UDS_RESULT_NO_BIND).
 int shim_uds_queued(shim_uds *u, uint32_t bind_id);
 
 /// Nonzero once the relay has answered HELLO.

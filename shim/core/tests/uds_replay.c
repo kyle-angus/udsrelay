@@ -15,7 +15,7 @@
 //                         mapped buffer in the reply.
 //   peek                  "status <status> <reason> <node> <changed> <total> <max> <bitmask>",
 //                         without clearing the changed mask.
-//   queued <bind>         "queued <frames>", -1 for no such bind.
+//   queued <bind>         "queued <frames>": -1 when not in a network, -2 for no such bind.
 //   signals <handle>      "signals <count>" for an event the emulator created.
 //   quit                  Exits without leaving any network (like a console losing power). Exit
 //                         status 3 if the emulator closed a handle twice or one it did not own.

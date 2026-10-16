@@ -38,7 +38,7 @@
 #include "shim/trace.h"
 #include "shim/uds.h"
 
-#define VERSION "0.5.0"
+#define VERSION "0.5.1"
 
 #define MAX_SESSIONS 8 // trace mode can see the game and Download Play at once
 #define SLOT_SIZE 0x800 // largest UDS static buffer is SendTo's 0x5F4
@@ -677,8 +677,11 @@ int main(void) {
         return 0;
     }
 
-    // What each registered name stands in for. Relay mode serves games only; trace mode also
-    // serves the Download Play module, under the names the patched sm gives it.
+    // What each registered name stands in for. Relay mode serves the game's nwm::UDS and ndm:u
+    // and Download Play's nwm::UDS: games like Mario Kart 7 run their lobby through Download Play,
+    // then their race themselves, never both at once, so one emulator serves them in turn.
+    // Download Play never used ndm:u in mk7-trace-hw-01, so relay mode leaves it the real one.
+    // Trace mode registers all four and forwards everything.
     static const struct {
         const char *name, *port, *client;
     } services[] = {
@@ -687,7 +690,7 @@ int main(void) {
         {"uds:dlp", "nwm::UDS", "Download Play"},
         {"ndm:dlp", "ndm:u", "Download Play"},
     };
-    const int nservices = g_trace ? 4 : 2;
+    const int nservices = g_trace ? 4 : 3;
     Handle ports[4] = {0, 0, 0, 0};
     for (int i = 0; i < nservices; i++) {
         const Result rc = srvRegisterService(&ports[i], services[i].name, MAX_SESSIONS);
@@ -707,7 +710,7 @@ int main(void) {
              "real services; payload_max %ld",
              VERSION, g_cfg.payload_max);
     } else {
-        Note("Info", "Start", "udsrelay sysmodule %s serving uds:rly and ndm:rly; payload_max %ld", VERSION,
+        Note("Info", "Start", "udsrelay sysmodule %s serving uds:rly, ndm:rly and uds:dlp; payload_max %ld", VERSION,
              g_cfg.payload_max);
     }
 
