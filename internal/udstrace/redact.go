@@ -17,6 +17,8 @@ import (
 //   - netinfo payloads keep everything but the host MAC (bytes 0-5), which is zeroed.
 //   - NodeInfo friend-code seeds are zeroed: words 2-3 of InitializeWithVersion requests and of
 //     GetNodeInformation replies. The seed identifies a console's friend code.
+//   - The relay's address in the shim's own notes ("relay mode: host:port", "checking
+//     host:port", "cannot resolve host") becomes <relay>: it says where the relay runs.
 //   - Every seed the log reveals (the two places above, and each node in DecryptBeaconData's
 //     node list) is also zeroed wherever it appears in a payload: X/Y sends each console's seed
 //     in one of its own data frames during a trade.
@@ -137,13 +139,20 @@ func scrubSeeds(line string, seeds map[string]bool) (string, bool) {
 
 var (
 	hexField   = regexp.MustCompile(` hex=([0-9a-fA-F]*)`)
+	relayAddr  = regexp.MustCompile(`(relay mode: |sockets ready; checking |cannot resolve )[^\s;]+`)
 	wordsField = regexp.MustCompile(` words=(\S*)`)
 	tagField   = regexp.MustCompile(` tag=(\S+)`)
 	cmdField   = regexp.MustCompile(` cmd=0x([0-9a-fA-F]{4})`)
 )
 
 func redactLine(line string) (string, bool) {
-	if !strings.Contains(line, "UDSTRACE v=1 ") || !strings.Contains(line, "port="+PortUDS+" ") {
+	if !strings.Contains(line, "UDSTRACE v=1 ") {
+		if strings.Contains(line, "Plugin <") && relayAddr.MatchString(line) {
+			return relayAddr.ReplaceAllString(line, "${1}<relay>"), true
+		}
+		return line, false
+	}
+	if !strings.Contains(line, "port="+PortUDS+" ") {
 		return line, false
 	}
 	kind := field(line, "kind")

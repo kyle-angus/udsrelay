@@ -194,7 +194,7 @@ How it is put together:
 - If the relay does not answer HELLO within 3 s of InitializeWithVersion, the emulator fails it with `0xE06113F9`, what real NWM returned in section 7, so the game shows its usual communication error.
 - Results follow `battle-hw-01`: 0x0021 succeeds, 0x0023 returns a word ending `1fff`, DestroyNetwork with no network and PullPacket after leaving fail with `0xC8A113EA`. Commands it does not know succeed with no output and are logged as `not emulated`.
 
-On a PC, `TestReplayTracesShim` (in `internal/udsfake`) runs each of the seven two-console traces, including `relay-hw-01` from this mode on hardware, through two copies of the emulator (`shim/core/tests/uds_replay.c`) against the Go relay, as the game's side: it sends hardware-shaped IPC requests, parses the beacons and joins through DecryptBeaconData's node list. It checks every reply against the recording, every frame byte for byte, the reply layouts, and that every status change was signalled.
+On a PC, `TestReplayTracesShim` (in `internal/udsfake`) runs each of the eight two-console traces, including `relay-hw-01` and `internet-hw-01` from this mode on hardware, through two copies of the emulator (`shim/core/tests/uds_replay.c`) against the Go relay, as the game's side: it sends hardware-shaped IPC requests, parses the beacons and joins through DecryptBeaconData's node list. It checks every reply against the recording, every frame byte for byte, the reply layouts, and that every status change was signalled.
 
 ### On two consoles
 
@@ -219,7 +219,26 @@ What to look for: whether the client sees the host's network in PSS, whether the
 - **0.3.0:** PSS found the other console and a full trade completed over the relay, but both consoles then froze on a black screen (music still playing). After DisconnectNetwork or DestroyNetwork and the Unbinds, the game waits for its receive thread, which waits on the bind event. Real NWM signals the bind events on teardown and Unbind, so the thread pulls once, gets `0xC8A113EA` and exits (`battle-hw-01` shows that pull). The emulator did not signal them.
 - **0.3.1** signals every bind's event on Unbind, Shutdown, DestroyNetwork, DisconnectNetwork and a lost network. A full trade and a full battle completed over the relay, each returning to PSS normally, with no warnings and no unhandled commands in either log. The host sent 884 frames and the client received 883; the client sent 773 and the host received all 773. The replay test now checks these signals. The redacted logs are `recon/traces/relay-hw-01/`.
 - **0.3.2** came from replaying `relay-hw-01`. Received frames were capped at 32 across all binds, where NWM limits each bind to the buffer size the game asks for (0x2E30 bytes in X/Y, roughly 180 of its frames). The replay delivers frames in bursts, as internet latency will, and lost frames past the cap. The queue now holds 64 KB of 120-byte chunks with NWM's per-bind byte limit. Not yet run on hardware.
-- Still unconfirmed: the reason code a client sees when the host quits mid-match, and play across two networks (Phase 5).
+- Still unconfirmed: the reason code a client sees when the host quits mid-match.
+
+### Over the internet (Phase 5, 2026-10-15)
+
+Pokémon X (this repository's owner, hosting) and Pokémon Y (a friend on another home network), plugin 0.3.2 on both, the relay on a public server. They completed a battle and a trade (about 106 s and 130 s with both in the network), each returning to PSS normally. Trace: `recon/traces/internet-hw-01` (both logs redacted, including the relay's address).
+
+| | X (host) | Y (client) |
+| --- | --- | --- |
+| Data frames sent | 955 | 921 |
+| Data frames received | 919 of 921 (0.2% lost) | 954 of 955 (0.1% lost) |
+| Relay round trip: BeginHostingNetwork (HOST_CREATE), median / p90 | 24 / 29 ms | 94 / 143 ms |
+| Relay round trip: scan (SCAN_REQ), median / p90 | 25 / 32 ms | 91 / 121 ms |
+| ConnectToNetwork (JOIN) | | 93 and 102 ms |
+
+Console to console is roughly the sum of the two relay legs, about 115 ms round trip, against the game's 23–28 s peer timeout; neither match showed a stall. Loss was far below the 3–4% the real radio showed on one LAN (`battle-hw-01`).
+
+Seen in passing:
+
+- SendTo takes about 14 ms in the shim (median, both consoles), against about 1 ms from real NWM. The emulator sends the datagram through `soc:U` while holding its lock, so the other session's PullPacket waits behind it. It did not matter at X/Y's 3–4 frames a second; sending outside the lock would remove it.
+- The first attempt that evening ran in passthrough: both `shim.ini` files lacked `mode = relay` and kept `fake_ndm = 0` from the relay check, so real NDM dropped Wi-Fi as soon as PSS went local. The log's first line says which mode is running.
 
 ## Troubleshooting
 
@@ -232,6 +251,7 @@ What to look for: whether the client sees the host's network in PSS, whether the
 | `forwarding 0x.... failed` | The real service rejected the forwarded request. | Usually a static buffer larger than the shim's 0x800-byte slots; raise `kSlotSize` in `shim.cpp`. |
 | Game freezes when local play starts | A forwarding thread is stuck or crashed. | Disable the plugin loader to confirm, then send the log. |
 | `InitializeWithVersion: the relay does not answer` (relay mode) | No HELLO answer within 3 s: Wi-Fi off, wrong address or lobby key, or the relay not running. | Look for `relay did not answer HELLO` lines ("did not verify" means a wrong lobby key) and the relay's terminal; section 7's table applies. |
+| Relay HELLO works at first, then fails once PSS opens; the log's first line says `mode passthrough` | `shim.ini` lacks `mode = relay`, so real NDM drops Wi-Fi for local play. | Add `mode = relay` (it turns fake NDM on by itself). |
 | `nwm::UDS command 0x.... not emulated` (relay mode) | The game used a command the emulator does not model; it got success and no data. | Note what the game did next and add the command to `shim/core/src/uds.c`. |
 
 ## Status and risks

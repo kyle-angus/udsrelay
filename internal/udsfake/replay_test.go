@@ -17,13 +17,14 @@ import (
 // be one the other side sent, byte for byte.
 func TestReplayTraces(t *testing.T) {
 	traces := map[string][2]string{
-		"trade-01":     {"host.log", "client.log"},
-		"battle-01":    {"host.log", "client.log"},
-		"xy-01":        {"host.log", "client.log"},
-		"drop-01":      {"host.log", "client.log"},
-		"drop-02":      {"host.log", "client.log"},
-		"battle-hw-01": {"console-host.log", "console-client.log"},
-		"relay-hw-01":  {"console-host.log", "console-client.log"},
+		"trade-01":       {"host.log", "client.log"},
+		"battle-01":      {"host.log", "client.log"},
+		"xy-01":          {"host.log", "client.log"},
+		"drop-01":        {"host.log", "client.log"},
+		"drop-02":        {"host.log", "client.log"},
+		"battle-hw-01":   {"console-host.log", "console-client.log"},
+		"relay-hw-01":    {"console-host.log", "console-client.log"},
+		"internet-hw-01": {"console-host.log", "console-client.log"},
 	}
 	for name, files := range traces {
 		t.Run(name, func(t *testing.T) {
@@ -103,13 +104,14 @@ func TestReplayTracesShim(t *testing.T) {
 	}
 	bin := buildShimReplay(t)
 	traces := map[string][2]string{
-		"trade-01":     {"host.log", "client.log"},
-		"battle-01":    {"host.log", "client.log"},
-		"xy-01":        {"host.log", "client.log"},
-		"drop-01":      {"host.log", "client.log"},
-		"drop-02":      {"host.log", "client.log"},
-		"battle-hw-01": {"console-host.log", "console-client.log"},
-		"relay-hw-01":  {"console-host.log", "console-client.log"},
+		"trade-01":       {"host.log", "client.log"},
+		"battle-01":      {"host.log", "client.log"},
+		"xy-01":          {"host.log", "client.log"},
+		"drop-01":        {"host.log", "client.log"},
+		"drop-02":        {"host.log", "client.log"},
+		"battle-hw-01":   {"console-host.log", "console-client.log"},
+		"relay-hw-01":    {"console-host.log", "console-client.log"},
+		"internet-hw-01": {"console-host.log", "console-client.log"},
 	}
 	for name, files := range traces {
 		t.Run(name, func(t *testing.T) {

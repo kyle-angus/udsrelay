@@ -35,7 +35,8 @@ It exits 1 when the traces differ.
 redact copies a console log with identifying data removed: beacon payloads emptied (the
 game's first scan returns all nearby Wi-Fi access points), the host MAC in netinfo zeroed,
 and NodeInfo friend-code seeds zeroed, also inside data frames (X/Y sends them during a
-trade). Changed lines are marked redacted=<what>. Redact
+trade), and the relay's address in the shim's notes replaced by <relay>. Changed lines
+are marked redacted=<what>. Redact
 hardware logs before committing them.
 
 flags:

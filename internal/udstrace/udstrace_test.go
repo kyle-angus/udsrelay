@@ -220,11 +220,25 @@ func TestRedact(t *testing.T) {
 		strings.Repeat("00", 0x28) + "1122334455667788" + strings.Repeat("00", 0x20) + "\n" +
 		pfx + "kind=blob wall=7 port=nwm::UDS sess=1 cmd=0x0017 tag=send dest=0x0002 chan=243 flags=0x02 size=12 hex=aab0be1003" + "0200fb0a" + "cc\n" +
 		pfx + "kind=blob wall=8 port=nwm::UDS sess=2 cmd=0x0014 tag=recv bind=2 src=0x0002 size=9 hex=011122334455667788\n" +
-		pfx + "kind=blob wall=9 port=nwm::UDS sess=2 cmd=0x0014 tag=recv bind=2 src=0x0002 size=9 hex=a1122334455667788b\n"
+		pfx + "kind=blob wall=9 port=nwm::UDS sess=2 cmd=0x0014 tag=recv bind=2 src=0x0002 size=9 hex=a1122334455667788b\n" +
+		// The relay's address in the shim's notes.
+		"[ 0.01] Plugin <Info> shim:Relay:0: relay mode: 203.0.113.7:28300\n" +
+		"[ 0.02] Plugin <Info> shim:RelayCheck:0: sockets ready; checking relay.example.net:28300 every 5 s (fake_ndm 0)\n" +
+		"[ 0.03] Plugin <Warning> shim:Relay:0: cannot resolve relay.example.net; retrying in 5 s\n"
 	var out bytes.Buffer
 	n, err := Redact(strings.NewReader(in), &out)
-	if err != nil || n != 7 {
-		t.Fatalf("Redact = %d, %v; want 7 lines", n, err)
+	if err != nil || n != 10 {
+		t.Fatalf("Redact = %d, %v; want 10 lines", n, err)
+	}
+	for _, leak := range []string{"203.0.113.7", "relay.example.net"} {
+		if strings.Contains(out.String(), leak) {
+			t.Errorf("relay address %s left in", leak)
+		}
+	}
+	for _, want := range []string{"relay mode: <relay>\n", "checking <relay> every 5 s", "cannot resolve <relay>; retrying"} {
+		if !strings.Contains(out.String(), want) {
+			t.Errorf("missing %q", want)
+		}
 	}
 	got := out.String()
 	for _, want := range []string{
@@ -252,7 +266,7 @@ func TestRedact(t *testing.T) {
 		}
 	}
 	recs, err := Parse(strings.NewReader(got), "console")
-	if err != nil || len(recs) != 9 || recs[0].Size != 12 || len(recs[0].Data) != 0 || recs[3].Words[2] != 0 {
+	if err != nil || len(recs) != 12 || recs[0].Size != 12 || len(recs[0].Data) != 0 || recs[3].Words[2] != 0 {
 		t.Errorf("redacted log does not parse cleanly: %v %+v", err, recs)
 	}
 }
