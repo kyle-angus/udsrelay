@@ -609,6 +609,12 @@ static void initialize(shim_uds *u, uint32_t *cmd) {
         reply(cmd, 0x001B, 1, 0, SHIM_UDS_RESULT_NO_RELAY);
         return;
     }
+    if (in_network(u)) {
+        // The last game left without Shutdown (it exited or crashed). In the sysmodule the
+        // emulator outlives the game, so leave its network before starting over.
+        note(u, "Warning", "InitializeWithVersion while still in a network; leaving it");
+        leave(u);
+    }
     if (u->status_event) {
         u->ops->close_handle(u->ops->ctx, u->status_event);
     }

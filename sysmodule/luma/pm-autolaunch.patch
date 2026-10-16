@@ -1,0 +1,18 @@
+diff --git a/sysmodules/pm/source/launch.c b/sysmodules/pm/source/launch.c
+index 9a391e6..09319db 100644
+--- a/sysmodules/pm/source/launch.c
++++ b/sysmodules/pm/source/launch.c
+@@ -542,6 +542,13 @@ Result autolaunchSysmodules(void)
+         TRY(launchTitleImplWrapper(NULL, NULL, &programInfo, &programInfo, PMLAUNCHFLAG_LOAD_DEPENDENCIES));
+     }
+ 
++    // udsrelay: start the local-wireless relay sysmodule, after NS so the services it uses are
++    // up. It is not installed: Luma's loader takes it from /luma/sysmodules/0004013000F00D02.cxi
++    // when external modules are enabled. If the file is missing, the launch fails and nothing
++    // else changes.
++    programInfo.programId = 0x0004013000F00D02ULL;
++    launchTitleImplWrapper(NULL, NULL, &programInfo, &programInfo, 0);
++
+     return res;
+ }
+ 

@@ -5,6 +5,9 @@ shim/core/build/
 shim/plugin/build/
 *.3gx
 *.elf
+sysmodule/build/
+sysmodule/out/
+*.cxi
 
 # Game dumps and saves used for recon; never commit them.
 game/

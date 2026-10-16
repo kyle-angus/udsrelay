@@ -1,0 +1,58 @@
+diff --git a/sysmodules/sm/source/services.c b/sysmodules/sm/source/services.c
+index f2893d3..e3795f2 100644
+--- a/sysmodules/sm/source/services.c
++++ b/sysmodules/sm/source/services.c
+@@ -164,6 +164,39 @@ Result IsServiceRegistered(SessionData *sessionData, bool *isRegistered, const c
+     }
+ }
+ 
++// udsrelay: local-wireless relay redirect.
++// An application asking for nwm::UDS or ndm:u is given the udsrelay sysmodule's uds:rly or
++// ndm:rly instead, when that is registered. System processes, and the sysmodule itself, keep
++// the real services, and nothing changes while the sysmodule is not running.
++static bool isApplicationProcess(u32 pid)
++{
++    Handle process;
++    s64 titleId = 0;
++    if(R_FAILED(svcOpenProcess(&process, pid)))
++        return false;
++    // Luma3DS extension: 0x10001 is the process's title ID.
++    Result res = svcGetProcessInfo(&titleId, process, 0x10001);
++    svcCloseHandle(process);
++    return R_SUCCEEDED(res) && ((u64)titleId >> 32) == 0x00040000;
++}
++
++static const char *udsRelayRedirect(SessionData *sessionData, const char *name, s32 nameSize)
++{
++    static const char *const redirects[][2] = {
++        { "nwm::UDS", "uds:rly" },
++        { "ndm:u", "ndm:rly" },
++    };
++    for(u32 i = 0; i < sizeof(redirects) / sizeof(redirects[0]); i++)
++    {
++        const char *to = redirects[i][1];
++        if(areServiceNamesEqual(redirects[i][0], name, nameSize) &&
++           findServicePortByName(false, to, (s32)strlen(to)) != -1 &&
++           isApplicationProcess(sessionData->pid))
++            return to;
++    }
++    return NULL;
++}
++
+ Result GetServiceHandle(SessionData *sessionData, Handle *session, const char *name, s32 nameSize, u32 flags)
+ {
+     Result res = checkServiceName(name, nameSize);
+@@ -175,6 +208,13 @@ Result GetServiceHandle(SessionData *sessionData, Handle *session, const char *n
+     else if(!checkServiceAccess(sessionData, name, nameSize))
+         return 0xD8E06406;
+ 
++    const char *redirect = udsRelayRedirect(sessionData, name, nameSize);
++    if(redirect != NULL)
++    {
++        name = redirect;
++        nameSize = (s32)strlen(redirect);
++    }
++
+     serviceId = findServicePortByName(false, name, nameSize);
+     if(serviceId == -1)
+         return 0xD0406401;

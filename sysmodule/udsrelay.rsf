@@ -1,0 +1,97 @@
+BasicInfo:
+  Title                   : udsrely
+  CompanyCode             : "00"
+  ProductCode             : udsrelay
+  ContentType             : Application
+  Logo                    : None
+
+TitleInfo:
+  UniqueId                : 0xF00D # title ID 0004013000F00D02
+  Category                : Base
+  Version                 : 2 # last byte of the title ID (core version), as for every system module
+
+Option:
+  UseOnSD                 : false
+  FreeProductCode         : true # Removes limitations on ProductCode
+  MediaFootPadding        : false
+  EnableCrypt             : false
+  EnableCompress          : true
+
+AccessControlInfo:
+  IdealProcessor                : 1 # the system core; games run on core 0
+  AffinityMask                  : 3
+
+  Priority                      : 30
+
+  DisableDebug                  : false
+  EnableForceDebug              : false
+  CanWriteSharedPage            : false
+  CanUsePrivilegedPriority      : false
+  CanUseNonAlphabetAndNumber    : false
+  PermitMainFunctionArgument    : false
+  CanShareDeviceMemory          : false
+  RunnableOnSleep               : false
+  SpecialMemoryArrange          : false
+  ResourceLimitCategory         : Other
+
+  CoreVersion                   : 2
+  DescVersion                   : 2
+
+  MemoryType                    : Base # Application / System / Base
+  HandleTableSize: 0x200
+
+  # Luma3DS's kernel extension removes system call permission checks; makerom needs a list.
+  SystemCallAccess:
+    ControlMemory: 1
+    QueryMemory: 2
+    ExitProcess: 3
+    CreateThread: 8
+    ExitThread: 9
+    SleepThread: 10
+    GetThreadPriority: 11
+    SetThreadPriority: 12
+    CreateMutex: 19
+    ReleaseMutex: 20
+    CreateSemaphore: 21
+    ReleaseSemaphore: 22
+    CreateEvent: 23
+    SignalEvent: 24
+    ClearEvent: 25
+    CreateMemoryBlock: 30
+    MapMemoryBlock: 31
+    UnmapMemoryBlock: 32
+    CreateAddressArbiter: 33
+    ArbitrateAddress: 34
+    CloseHandle: 35
+    WaitSynchronization1: 36
+    WaitSynchronizationN: 37
+    DuplicateHandle: 39
+    GetSystemTick: 40
+    GetSystemInfo: 42
+    GetProcessInfo: 43
+    ConnectToPort: 45
+    SendSyncRequest: 50
+    GetProcessId: 53
+    GetThreadId: 55
+    GetResourceLimit: 56
+    GetResourceLimitLimitValues: 57
+    GetResourceLimitCurrentValues: 58
+    Break: 60
+    OutputDebugString: 61
+    CreateSession: 72
+    AcceptSession: 74
+    ReplyAndReceive: 79
+
+  InterruptNumbers:
+  ServiceAccessControl:
+    - fs:USER
+    - soc:U
+    - ndm:u
+    - ac:u
+  FileSystemAccess:
+    - DirectSdmc
+
+SystemControlInfo:
+  SaveDataSize: 0KB
+  RemasterVersion: 0
+  StackSize: 0x2000

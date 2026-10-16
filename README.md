@@ -11,6 +11,7 @@ The first target is Pokémon X/Y: a local trade, then a local battle.
 - Phase 3 (relay server): done. `udsrelay` serves rooms, scan, join, node events, data forwarding and keepalive over UDP. `udsfake` fake consoles pass the exit test and replay all six two-console traces through it with hardware's result codes and byte-for-byte data.
 - Phase 4 (relay mode): done on one LAN. A full trade and a full battle ran between two consoles through the relay (`shim/RUNBOOK.md` section 8). The shim core emulates `nwm::UDS` over the relay (`shim/core/src/uds.c`), and the plugin runs it with `mode = relay` in `shim.ini`. All eight two-console traces, including the relay-mode runs (`recon/traces/relay-hw-01` and `internet-hw-01`), replay through the C emulator against the relay (`TestReplayTracesShim`).
 - Phase 5 (over the internet): done. Pokémon X and Y on two home networks, with the relay on a public server, completed a battle and a trade. Frame loss was 0.1–0.2%, and relay round trips took about 25 ms from one console and 90 ms from the other (`shim/RUNBOOK.md` section 8, `recon/traces/internet-hw-01`).
+- Phase 6 (sysmodule): built, not yet tested on hardware. A background sysmodule serves `nwm::UDS` over the relay for every game, through patched copies of Luma's `sm` and `pm` loaded from the SD card; no per-game code. Next: Pokémon X/Y, Mario Kart 7 and Smash Bros. for 3DS through it (`sysmodule/RUNBOOK.md`).
 
 ## Layout
 
@@ -24,6 +25,8 @@ The first target is Pokémon X/Y: a local trade, then a local battle.
 | `shim/RUNBOOK.md` | How to build the Phase 2 shim, install it on two consoles, and compare its logs against the Azahar trace |
 | `shim/core` | Host-agnostic C: IPC parsing, passthrough forwarding loop, GetServiceHandle finder, trace formatting, the relay wire protocol and client, and the `nwm::UDS` emulator with beacon synthesis for relay mode |
 | `shim/plugin` | CTRPluginFramework 3GX plugin: hooks GetServiceHandle, runs the session threads (forwarding, or the emulator in relay mode) and the relay thread, writes logs to SD |
+| `sysmodule/RUNBOOK.md` | How to build, install and test the Phase 6 sysmodule |
+| `sysmodule` | The udsrelay sysmodule (`shim/core` as a background system module) and the patches to Luma3DS's `sm` and `pm` that redirect games to it |
 | `relay/RUNBOOK.md` | How to run the relay and fake consoles, replay traces, and the wire protocol |
 | `cmd/udsrelay` | The relay server |
 | `cmd/udsfake` | Fake consoles: a scripted host and joiner, and trace replay |
