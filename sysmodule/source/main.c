@@ -31,7 +31,7 @@
 #include "shim/trace.h"
 #include "shim/uds.h"
 
-#define VERSION "0.4.0"
+#define VERSION "0.4.3"
 
 #define MAX_SESSIONS 4
 #define SLOT_SIZE 0x800 // largest UDS static buffer is SendTo's 0x5F4
@@ -46,6 +46,8 @@
 #define WRITER_PRIORITY 0x30
 #define NS_PER_MS 1000000LL
 #define MS_FROM_1900_TO_1970 2208988800000ULL
+#define MS_FROM_1900_TO_2000 3155673600000ULL // earlier than this, the clock is not set yet
+#define CLOCK_WAIT_MS 10000
 #define CONFIG_PATH "/udsrelay/shim.ini"
 
 // Luma3DS custom system call (csvc.s): svcControlMemory that can allocate from another region.
@@ -63,6 +65,7 @@ void __system_initSyscalls(void);
 void __libc_init_array(void);
 
 static u8 g_heap[HEAP_SIZE] __attribute__((aligned(0x1000)));
+static Result g_fsInitResult; // fsInit in initSystem; retried later if it failed
 
 void __ctru_exit(int rc) { (void)rc; }
 
@@ -84,9 +87,9 @@ void initSystem(void (*retAddr)(void)) {
             svcBreak(USERBREAK_PANIC);
         }
     }
-    if (R_FAILED(fsInit())) {
-        svcBreak(USERBREAK_PANIC);
-    }
+    // No log exists yet to say why, so a failure here is recorded and retried by the writer
+    // thread instead of stopping the process.
+    g_fsInitResult = fsInit();
     __libc_init_array();
 }
 
@@ -130,26 +133,124 @@ static void Note(const char *level, const char *func, const char *fmt, ...) {
 }
 
 static FS_Archive g_sdmc;
+static LightEvent g_sdReady; // the SD archive is open: the config can be read
 
-static void EnsureDir(const char *path) {
-    FSUSER_CreateDirectory(g_sdmc, fsMakePath(PATH_ASCII, path), 0); // fails harmlessly if it exists
+// Records one try at a startup step. Every failure is noted for the first ten tries, then every
+// 30th; the first success after failures is noted with how many it took. Until the log file
+// opens, notes wait in the ring, so the log starts with what went wrong at boot and for how long.
+static bool Attempt(const char *what, Result rc, int attempt) {
+    if (R_SUCCEEDED(rc)) {
+        if (attempt > 0) {
+            Note("Info", "Startup", "%s ok after %d failed attempt(s)", what, attempt);
+        }
+        return true;
+    }
+    if (attempt < 10 || attempt % 30 == 0) {
+        Note("Warning", "Startup", "%s failed 0x%08lx (attempt %d)", what, (unsigned long)rc, attempt + 1);
+    }
+    return false;
 }
 
-// Flushes the log to the SD card every second, one file per boot.
+// Opens the log for appending. If the file cannot be opened, the SD archive is reopened too: the
+// handle may have gone stale. Returns the handle and sets *offset to the file's end, or 0.
+static Handle OpenLog(const char *path, u64 *offset, Result *rc) {
+    Handle file = 0;
+    *rc = FSUSER_OpenFile(&file, g_sdmc, fsMakePath(PATH_ASCII, path), FS_OPEN_WRITE | FS_OPEN_CREATE, 0);
+    if (R_FAILED(*rc)) {
+        FSUSER_CloseArchive(g_sdmc);
+        const Result ar = FSUSER_OpenArchive(&g_sdmc, ARCHIVE_SDMC, fsMakePath(PATH_EMPTY, ""));
+        if (R_FAILED(ar)) {
+            *rc = ar;
+            return 0;
+        }
+        *rc = FSUSER_OpenFile(&file, g_sdmc, fsMakePath(PATH_ASCII, path), FS_OPEN_WRITE | FS_OPEN_CREATE, 0);
+        if (R_FAILED(*rc)) {
+            return 0;
+        }
+    }
+    u64 size = 0;
+    FSFILE_GetSize(file, &size);
+    *offset = size;
+    return file;
+}
+
+// After a failed write or flush: notes the error, then reopens the log at its end, retrying
+// every second. Writes go on from the end of the file, so nothing already written is lost.
+static Handle ReopenLog(Handle file, const char *path, const char *op, Result failure, u64 *offset) {
+    Note("Warning", "Writer", "%s failed 0x%08lx at offset %llu; reopening the log", op, (unsigned long)failure,
+         (unsigned long long)*offset);
+    FSFILE_Close(file);
+    Result rc;
+    for (int a = 0;; a++) {
+        file = OpenLog(path, offset, &rc);
+        if (Attempt("log file reopen", rc, a)) {
+            return file;
+        }
+        svcSleepThread(1000 * NS_PER_MS);
+    }
+}
+
+// Brings up SD access, retrying every second, then flushes the log to the SD card every second,
+// one file per boot. Write and flush errors are noted with their result codes and the log is
+// reopened, so logging carries on.
 static void WriterThread(void *arg) {
     (void)arg;
     static char chunk[16 * 1024];
-    char path[64];
-    const time_t secs = (time_t)(g_baseWallUs / 1000000ULL);
-    struct tm tm;
-    gmtime_r(&secs, &tm);
-    snprintf(path, sizeof(path), "/udsrelay/logs/sysmodule-%04d%02d%02d-%02d%02d%02d.log", tm.tm_year + 1900,
-             tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-    Handle file = 0;
-    if (R_FAILED(FSUSER_OpenFile(&file, g_sdmc, fsMakePath(PATH_ASCII, path), FS_OPEN_WRITE | FS_OPEN_CREATE, 0))) {
-        return; // nowhere to log; keep serving
+    for (int a = 0; !Attempt("fs:USER (fsInit)", g_fsInitResult, a); a++) {
+        svcSleepThread(1000 * NS_PER_MS);
+        g_fsInitResult = fsInit();
     }
-    u64 offset = 0, lastFlush = osGetTime();
+    for (int a = 0; !Attempt("SD archive (FSUSER_OpenArchive)",
+                             FSUSER_OpenArchive(&g_sdmc, ARCHIVE_SDMC, fsMakePath(PATH_EMPTY, "")), a);
+         a++) {
+        svcSleepThread(1000 * NS_PER_MS);
+    }
+    // The module starts so early in boot that the system date may not be set yet: osGetTime() is
+    // then about 0, and the log name would come out as a nonsense year. Wait for a plausible date
+    // before naming the log, and base the log's timestamps on it, minus the time since boot. The
+    // services start only after g_sdReady, so nothing else reads the clock meanwhile.
+    u64 clock = osGetTime();
+    const u64 waitStart = clock;
+    const u64 tickStart = svcGetSystemTick();
+    while (clock < MS_FROM_1900_TO_2000 && (svcGetSystemTick() - tickStart) / (SYSCLOCK_ARM11 / 1000) < CLOCK_WAIT_MS) {
+        svcSleepThread(100 * NS_PER_MS);
+        clock = osGetTime();
+    }
+    const bool clockValid = clock >= MS_FROM_1900_TO_2000;
+    if (clockValid) {
+        g_baseWallUs = (clock - MS_FROM_1900_TO_1970) * 1000ULL - Now().uptime_us;
+    }
+    Note(clockValid ? "Info" : "Warning", "Startup", "system clock %s (osGetTime %llu, first read %llu)",
+         clockValid ? "set" : "not set after 10 s; log timestamps count from boot", (unsigned long long)clock,
+         (unsigned long long)waitStart);
+    LightEvent_Signal(&g_sdReady);
+
+    // Directories that already exist fail harmlessly; the codes are noted in case they matter.
+    const Result d1 = FSUSER_CreateDirectory(g_sdmc, fsMakePath(PATH_ASCII, "/udsrelay"), 0);
+    const Result d2 = FSUSER_CreateDirectory(g_sdmc, fsMakePath(PATH_ASCII, "/udsrelay/logs"), 0);
+    Note("Info", "Startup", "create /udsrelay: 0x%08lx, /udsrelay/logs: 0x%08lx", (unsigned long)d1,
+         (unsigned long)d2);
+
+    char path[64];
+    if (clockValid) {
+        const time_t secs = (time_t)(g_baseWallUs / 1000000ULL);
+        struct tm tm;
+        gmtime_r(&secs, &tm);
+        snprintf(path, sizeof(path), "/udsrelay/logs/sysmodule-%04d%02d%02d-%02d%02d%02d.log", tm.tm_year + 1900,
+                 tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+    } else {
+        // No date to name it by: the system tick's low bits are as good as random per boot.
+        snprintf(path, sizeof(path), "/udsrelay/logs/sysmodule-noclock-%08lx.log", (unsigned long)svcGetSystemTick());
+    }
+    Handle file = 0;
+    u64 offset = 0;
+    Result rc;
+    for (int a = 0; !Attempt("log file (FSUSER_OpenFile)", (file = OpenLog(path, &offset, &rc), rc), a); a++) {
+        svcSleepThread(1000 * NS_PER_MS);
+    }
+    Note("Info", "Startup", "logging to %s", path);
+    u64 lastFlush = osGetTime();
+    u32 writeFailures = 0;
     for (;;) {
         LightLock_Lock(&g_logLock);
         const size_t n = shim_ring_pop(&g_ring, chunk, sizeof(chunk));
@@ -161,11 +262,25 @@ static void WriterThread(void *arg) {
         }
         if (n) {
             u32 written = 0;
-            FSFILE_Write(file, &written, offset, chunk, (u32)n, 0);
+            Result wr = FSFILE_Write(file, &written, offset, chunk, (u32)n, 0);
+            if (R_FAILED(wr) || written != n) {
+                // Retry the same chunk once in the reopened file; nothing popped is dropped.
+                writeFailures++;
+                file = ReopenLog(file, path, "write", R_FAILED(wr) ? wr : (Result)written, &offset);
+                written = 0;
+                wr = FSFILE_Write(file, &written, offset, chunk, (u32)n, 0);
+                Note(R_SUCCEEDED(wr) ? "Info" : "Warning", "Writer",
+                     "retried %lu bytes after reopening: 0x%08lx (failures so far %lu)", (unsigned long)n,
+                     (unsigned long)wr, (unsigned long)writeFailures);
+            }
             offset += written;
         }
         if (osGetTime() - lastFlush >= 1000) {
-            FSFILE_Flush(file);
+            const Result fr = FSFILE_Flush(file);
+            if (R_FAILED(fr)) {
+                writeFailures++;
+                file = ReopenLog(file, path, "flush", fr, &offset);
+            }
             lastFlush = osGetTime();
         }
         if (!n) {
@@ -177,7 +292,9 @@ static void WriterThread(void *arg) {
 static void LoadConfig(void) {
     shim_config_defaults(&g_cfg);
     Handle file = 0;
-    if (R_FAILED(FSUSER_OpenFile(&file, g_sdmc, fsMakePath(PATH_ASCII, CONFIG_PATH), FS_OPEN_READ, 0))) {
+    const Result rc = FSUSER_OpenFile(&file, g_sdmc, fsMakePath(PATH_ASCII, CONFIG_PATH), FS_OPEN_READ, 0);
+    if (R_FAILED(rc)) {
+        Note("Warning", "LoadConfig", "cannot open %s: 0x%08lx", CONFIG_PATH, (unsigned long)rc);
         return;
     }
     static char text[1024];
@@ -187,7 +304,10 @@ static void LoadConfig(void) {
     if (size > sizeof(text) - 1) {
         size = sizeof(text) - 1;
     }
-    if (R_SUCCEEDED(FSFILE_Read(file, &n, 0, text, (u32)size))) {
+    const Result rd = FSFILE_Read(file, &n, 0, text, (u32)size);
+    Note("Info", "LoadConfig", "read %lu of %llu bytes from %s: 0x%08lx", (unsigned long)n, (unsigned long long)size,
+         CONFIG_PATH, (unsigned long)rd);
+    if (R_SUCCEEDED(rd)) {
         const int bad = shim_config_parse(&g_cfg, text, n);
         if (bad) {
             Note("Warning", "LoadConfig", "%d unrecognised line(s) in %s", bad, CONFIG_PATH);
@@ -481,20 +601,32 @@ static void RelayThread(void *arg) {
 
 int main(void) {
     g_baseTick = svcGetSystemTick();
-    g_baseWallUs = (osGetTime() - MS_FROM_1900_TO_1970) * 1000ULL;
+    // Set properly by the writer once the system clock is valid; until then timestamps count from
+    // boot rather than from a wrapped-around date.
+    const u64 clock = osGetTime();
+    g_baseWallUs = clock >= MS_FROM_1900_TO_2000 ? (clock - MS_FROM_1900_TO_1970) * 1000ULL : 0;
     LightLock_Init(&g_logLock);
     LightLock_Init(&g_slotLock);
     LightLock_Init(&g_udsLock);
     CondVar_Init(&g_udsCv);
     LightEvent_Init(&g_relayWanted, RESET_STICKY);
+    LightEvent_Init(&g_sdReady, RESET_STICKY);
     shim_ring_init(&g_ring, g_ringMem, sizeof(g_ringMem));
 
-    if (R_FAILED(FSUSER_OpenArchive(&g_sdmc, ARCHIVE_SDMC, fsMakePath(PATH_EMPTY, "")))) {
-        svcBreak(USERBREAK_PANIC);
+    s64 baseUsed = 0;
+    svcGetSystemInfo(&baseUsed, 0, 3); // BASE region in use
+    Note("Info", "Startup", "udsrelay sysmodule %s started; fsInit 0x%08lx; BASE region in use 0x%llx", VERSION,
+         (unsigned long)g_fsInitResult, (unsigned long long)baseUsed);
+    if (!threadCreate(WriterThread, NULL, WRITER_STACK, WRITER_PRIORITY, -2, true)) {
+        // Nothing can be logged without the writer, but the services can still run.
+        Note("Error", "Startup", "could not start the log writer");
+        if (R_FAILED(g_fsInitResult) ||
+            R_FAILED(FSUSER_OpenArchive(&g_sdmc, ARCHIVE_SDMC, fsMakePath(PATH_EMPTY, "")))) {
+            return 0;
+        }
+        LightEvent_Signal(&g_sdReady);
     }
-    EnsureDir("/udsrelay");
-    EnsureDir("/udsrelay/logs");
-    threadCreate(WriterThread, NULL, WRITER_STACK, WRITER_PRIORITY, -2, true);
+    LightEvent_Wait(&g_sdReady);
     LoadConfig();
 
     if (!g_cfg.relay_host[0] || !g_cfg.lobby[0]) {
@@ -521,9 +653,11 @@ int main(void) {
     }
 
     Handle ports[2] = {0, 0};
-    if (R_FAILED(srvRegisterService(&ports[0], "uds:rly", MAX_SESSIONS)) ||
-        R_FAILED(srvRegisterService(&ports[1], "ndm:rly", MAX_SESSIONS))) {
-        Note("Error", "Start", "could not register uds:rly and ndm:rly; games keep the real services");
+    const Result r0 = srvRegisterService(&ports[0], "uds:rly", MAX_SESSIONS);
+    const Result r1 = srvRegisterService(&ports[1], "ndm:rly", MAX_SESSIONS);
+    if (R_FAILED(r0) || R_FAILED(r1)) {
+        Note("Error", "Start", "could not register uds:rly (0x%08lx) and ndm:rly (0x%08lx); games keep the real services",
+             (unsigned long)r0, (unsigned long)r1);
         svcSleepThread(2000 * NS_PER_MS);
         return 0;
     }

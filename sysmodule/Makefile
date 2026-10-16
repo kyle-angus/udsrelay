@@ -138,8 +138,12 @@ DEPENDS	:=	$(OFILES:.o=.d)
 #---------------------------------------------------------------------------------
 all	:	$(OUTPUT).cxi
 
+# No -nocodepadding, unlike Luma's own modules: those boot as kernel modules, but this one is
+# started by Luma's loader, which maps code.bin page by page (text, then rodata, then data) and so
+# needs each segment padded to a page boundary. Packed, every global and constant lands at the
+# wrong address and startup stalls.
 $(OUTPUT).cxi	:	$(OUTPUT).elf $(OUTPUT).rsf
-	@makerom -f ncch -rsf $(word 2,$^) -nocodepadding -o $@ -elf $<
+	@makerom -f ncch -rsf $(word 2,$^) -o $@ -elf $<
 	@echo built ... $(notdir $@)
 
 $(OUTPUT).elf	:	$(OFILES)

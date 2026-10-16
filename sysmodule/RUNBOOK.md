@@ -73,9 +73,14 @@ Send both consoles' logs from each step that fails, and from c and d either way.
 | `socInit failed` or `cannot allocate a socket buffer` | The SYSTEM-region allocation and the fallback both failed; the log has the result codes. |
 | `nwm::UDS command 0x.... not emulated` | The game uses a command the emulator does not handle yet; it got success and no data. Expected for some games; note what the game did next. |
 
+## Results so far (2026-10-15)
+
+- Pokémon X/Y traded between a sysmodule console and a plugin console, and Pokémon X/Y and Smash Bros. for 3DS played over the internet. Donkey Kong Country Returns 3D played but slowly. Animal Crossing: New Leaf – Welcome amiibo (comm ID `0x00198D10`) connected and received data steadily, then the game itself disconnected after about 41 s, twice; the internet round trip limiting its transfer is the leading suspect, untested.
+- Fixed on the way: `-nocodepadding` (copied from Luma's own modules) packed the code file, so Luma's loader mapped every constant and global to the wrong address and startup stalled before `main` (found from a Rosalina memory dump). The module now waits for SD access and a valid system clock instead of crashing or naming its log with a wrapped-around date, and reopens its log after write errors.
+- Seen but not explained: the log stopped growing once ftpd started (0.4.1). 0.4.2 notes the failing write's result code and reopens the file.
+
 ## Not done yet
 
-- Not run on hardware.
 - Sleep mode: the sysmodule does not handle sleep notifications; after waking, the relay resets its session and it says HELLO again, but a game in local play at that moment will see the network drop.
 - No status display: the plugin's menu and notifications have no counterpart; the log is the only output.
 - Memory: about 670 KB of BASE-region memory (mostly four sessions' receive buffers), plus a 128 KB socket buffer from the SYSTEM region. Fine on both models in principle; untested.
