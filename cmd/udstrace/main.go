@@ -5,7 +5,7 @@
 //	udstrace summary [-title "Pokémon X/Y trade"] [-o trace.md] host=host.log client=client.log
 //	udstrace compare azahar=recon/traces/trade-01/host.log console=shim-host.log
 //	udstrace json host=host.log
-//	udstrace redact console-host.log recon/traces/battle-hw-01/console-host.log
+//	udstrace redact console-host.log recon/traces/battle-hw-01/console-host.log [in out ...]
 package main
 
 import (
@@ -23,7 +23,7 @@ import (
 
 func usage() {
 	fmt.Fprint(os.Stderr, `usage: udstrace <timeline|summary|compare|json> [flags] [label=]log ...
-       udstrace redact in.log out.log
+       udstrace redact in.log out.log [in2.log out2.log ...]
 
 Each log is one instance's trace: an Azahar log or a console shim log. The label (default:
 file name) names the instance in the output, e.g. host=host/user/log/azahar_log.txt.
@@ -35,9 +35,10 @@ It exits 1 when the traces differ.
 redact copies a console log with identifying data removed: beacon payloads emptied (the
 game's first scan returns all nearby Wi-Fi access points), the host MAC in netinfo zeroed,
 and NodeInfo friend-code seeds zeroed, also inside data frames (X/Y sends them during a
-trade), and the relay's address in the shim's notes replaced by <relay>. Changed lines
-are marked redacted=<what>. Redact
-hardware logs before committing them.
+trade), usernames replaced by stand-ins (P1, P2, ...) wherever they appear as UTF-16, and
+the relay's address in the shim's notes replaced by <relay>. Changed lines are marked
+redacted=<what>. Pass a capture's logs together (host first) so each console's username
+gets the same stand-in in both. Redact hardware logs before committing them.
 
 flags:
   -v              timeline: show every poll, data packet, payload preview and debug note
@@ -150,31 +151,49 @@ func main() {
 	}
 }
 
-// redact copies a log with identifying data removed: udstrace redact in.log out.log
+// redact copies logs with identifying data removed: udstrace redact in.log out.log [...]
 func redact(args []string) {
-	if len(args) != 2 || args[0] == args[1] {
+	if len(args) == 0 || len(args)%2 != 0 {
 		usage()
 	}
-	in, err := os.Open(args[0])
-	if err != nil {
+	var ins []io.Reader
+	var outs []io.Writer
+	var files []*os.File
+	fail := func(err error) {
 		fmt.Fprintln(os.Stderr, "udstrace:", err)
 		os.Exit(1)
 	}
-	defer in.Close()
-	out, err := os.Create(args[1])
+	for i := 0; i < len(args); i += 2 {
+		if args[i] == args[i+1] {
+			usage()
+		}
+		in, err := os.Open(args[i])
+		if err != nil {
+			fail(err)
+		}
+		defer in.Close()
+		ins = append(ins, in)
+	}
+	for i := 1; i < len(args); i += 2 {
+		out, err := os.Create(args[i])
+		if err != nil {
+			fail(err)
+		}
+		files = append(files, out)
+		outs = append(outs, out)
+	}
+	counts, err := udstrace.RedactLogs(ins, outs)
+	for _, f := range files {
+		if cerr := f.Close(); err == nil {
+			err = cerr
+		}
+	}
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "udstrace:", err)
-		os.Exit(1)
+		fail(err)
 	}
-	n, err := udstrace.Redact(in, out)
-	if cerr := out.Close(); err == nil {
-		err = cerr
+	for i, n := range counts {
+		fmt.Fprintf(os.Stderr, "redacted %d line(s) into %s\n", n, args[2*i+1])
 	}
-	if err != nil {
-		fmt.Fprintln(os.Stderr, "udstrace:", err)
-		os.Exit(1)
-	}
-	fmt.Fprintf(os.Stderr, "redacted %d line(s) into %s\n", n, args[1])
 }
 
 func load(args []string) ([]*udstrace.Session, error) {

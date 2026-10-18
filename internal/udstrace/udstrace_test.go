@@ -2,6 +2,7 @@ package udstrace
 
 import (
 	"bytes"
+	"io"
 	"os"
 	"strings"
 	"testing"
@@ -274,6 +275,53 @@ func TestRedact(t *testing.T) {
 	recs, err := Parse(strings.NewReader(got), "console")
 	if err != nil || len(recs) != 13 || recs[0].Size != 12 || len(recs[0].Data) != 0 || recs[3].Words[2] != 0 {
 		t.Errorf("redacted log does not parse cleanly: %v %+v", err, recs)
+	}
+}
+
+func TestRedactNames(t *testing.T) {
+	const pfx = "[ 1.0] Service <Info> shim:TraceBlob:0: UDSTRACE v=1 "
+	// "Serena" in NodeInfo words 4-8 (the seed in words 2-3 is zero already), then "Calem" as
+	// the peer in a GetNodeInformation reply, then both inside game data.
+	host := pfx + `kind=req wall=1 port=nwm::UDS sess=0 cmd=0x001b name="InitializeWithVersion" tid=0 proc="p" hdr=0x001b0302 words=0x001b0302,0x00014000,0x00000000,0x00000000,0x00650053,0x00650072,0x0061006e,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000400` + "\n" +
+		pfx + `kind=rsp wall=2 port=nwm::UDS sess=0 cmd=0x000d name="GetNodeInformation" tid=0 proc="p" hdr=0x000d0b00 words=0x000d0b00,0x00000000,0x00000000,0x00000000,0x00610043,0x0065006c,0x0000006d,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000` + "\n" +
+		pfx + "kind=blob wall=3 port=nwm::UDS sess=2 cmd=0x0014 tag=recv bind=2 src=0x0002 size=13 hex=ff430061006c0065006d0000ff\n" +
+		pfx + "kind=blob wall=4 port=nwm::UDS sess=1 cmd=0x0017 tag=send dest=0x0002 chan=243 flags=0x02 size=13 hex=53006500720065006e006100ee\n"
+	// The client's log: its own name is the host's peer, so it keeps the host's stand-in. Its
+	// peer's name, "Serena", is only in its data, and goes too.
+	client := pfx + `kind=req wall=1 port=nwm::UDS sess=0 cmd=0x001b name="InitializeWithVersion" tid=0 proc="p" hdr=0x001b0302 words=0x001b0302,0x00014000,0x00000000,0x00000000,0x00610043,0x0065006c,0x0000006d,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000400` + "\n" +
+		pfx + "kind=blob wall=2 port=nwm::UDS sess=2 cmd=0x0014 tag=recv bind=2 src=0x0001 size=12 hex=53006500720065006e006100\n"
+	var hostOut, clientOut bytes.Buffer
+	n, err := RedactLogs([]io.Reader{strings.NewReader(host), strings.NewReader(client)}, []io.Writer{&hostOut, &clientOut})
+	if err != nil || n[0] != 4 || n[1] != 2 {
+		t.Fatalf("RedactLogs = %v, %v; want [4 2] lines", n, err)
+	}
+	got := hostOut.String() + clientOut.String()
+	for _, leak := range []string{"0x00650053", "0x00610043", "430061006c0065006d00", "53006500720065006e006100"} {
+		if strings.Contains(got, leak) {
+			t.Errorf("%s left in:\n%s", leak, got)
+		}
+	}
+	for _, want := range []string{
+		"redacted=name words=0x001b0302,0x00014000,0x00000000,0x00000000,0x00310050,0x00000000,",
+		"redacted=name words=0x000d0b00,0x00000000,0x00000000,0x00000000,0x00320050,0x00000000,",
+		"redacted=name hex=ff5000320000000000000000ff\n",
+		"redacted=name hex=500031000000000000000000ee\n",
+	} {
+		if !strings.Contains(got, want) {
+			t.Errorf("missing %q in:\n%s", want, got)
+		}
+	}
+	if !strings.Contains(got, "src=0x0001 size=12 redacted=name hex=500031000000000000000000\n") {
+		t.Errorf("peer name in the client's data not replaced:\n%s", got)
+	}
+	recs, err := Parse(strings.NewReader(clientOut.String()), "client")
+	if err != nil || len(recs) != 2 || nodeUsername(recs[0].Words) != "P2" {
+		t.Errorf("client username not P2: %v %+v", err, recs)
+	}
+	// Redacting again changes nothing.
+	var again bytes.Buffer
+	if n, err := Redact(strings.NewReader(hostOut.String()), &again); err != nil || n != 0 || again.String() != hostOut.String() {
+		t.Errorf("second pass changed %d line(s), %v:\n%s", n, err, again.String())
 	}
 }
 
