@@ -38,7 +38,7 @@
 #include "shim/trace.h"
 #include "shim/uds.h"
 
-#define VERSION "0.5.8"
+#define VERSION "0.5.9"
 
 // Three at once is the most any log shows (the game's two nwm::UDS sessions and ndm:u, or
 // Download Play's two). Each costs 32 KB of BASE memory, which games' on-demand modules share:

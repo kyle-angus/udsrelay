@@ -144,6 +144,10 @@ Whether Animal Crossing also needs something besides throughput is unknown: ther
 
 **0.5.7 worked (2026-10-16):** a visit to a town in Animal Crossing over the relay, two consoles at home. The cause was the visitor's relay thread not reading while it sent, which 0.5.6's send queue exposed: it lost the host's acknowledgements. Not yet tried over the internet.
 
+**Over the internet on 0.5.7 (2026-10-16), with the friend:** Animal Crossing and Smash worked well. Donkey Kong Country Returns 3D worked but ran almost in slow motion (one log: about 56 frames a second received, 25 minutes, almost no loss). New Super Mario Bros. 2 co-op did not connect: the joining console scanned for comm ID `0x0007AE10`, ID8 0, 2270 times in 57 s and the relay returned nothing. There is no log of the host's side, which would show the ID8 it hosted with; the relay matches ID8 exactly, while Azahar does no comm ID or ID8 filtering at all and leaves that to the game.
+
+The Download Play app (HOME Menu) failed because its title ID (`00040010-0002x100`) is not an application's, so sm gave it the real `ndm:u`. Its EnterExclusiveState turned Wi-Fi off: from then on every scan failed, and sends to the relay failed ("not sent" rose from 5 to 121). 0.5.9's `sm` treats the Download Play app like a game, so it gets `ndm:rly`, whose exclusive-state calls are faked.
+
 ## What to look for
 
 | Symptom | Meaning |
