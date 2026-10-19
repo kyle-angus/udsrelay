@@ -1,17 +1,17 @@
 # 3DS Local Wireless Relay
 
-Local-wireless multiplayer for real 3DS consoles over the internet. A shim on each console answers the game's `nwm::UDS` calls and relays the traffic through a small server. The design, architecture and phased plan are in the [design doc](https://claude.ai/code/artifact/f58bd746-9f54-4357-8924-2776589a39df).
+Local-wireless multiplayer for real 3DS consoles over the internet. A shim on each console answers the game's `nwm::UDS` calls and relays the traffic through a small server. The work went in phases, below; each component's runbook has the details.
 
 ## Status
 
 The first target is Pokémon X/Y: a local trade, then a local battle.
 
-- Phase 1 (recon in Azahar): done. Traces for idle, trade, battle, two drop cases and an X–Y trade are in `recon/traces/`; findings are in the design doc's Phase 1 entry.
-- Phase 2 (passthrough shim on hardware): done. A full trade and a full battle ran between two consoles through the shim; the battle trace is in `recon/traces/battle-hw-01/`, and the differences from Azahar are in the design doc.
+- Phase 1 (recon in Azahar): done. Traces for idle, trade, battle, two drop cases and an X–Y trade are in `recon/traces/`.
+- Phase 2 (passthrough shim on hardware): done. A full trade and a full battle ran between two consoles through the shim; the battle trace is in `recon/traces/battle-hw-01/`.
 - Phase 3 (relay server): done. `udsrelay` serves rooms, scan, join, node events, data forwarding and keepalive over UDP. `udsfake` fake consoles pass the exit test and replay all six two-console traces through it with hardware's result codes and byte-for-byte data.
 - Phase 4 (relay mode): done on one LAN. A full trade and a full battle ran between two consoles through the relay (`shim/RUNBOOK.md` section 8). The shim core emulates `nwm::UDS` over the relay (`shim/core/src/uds.c`), and the plugin runs it with `mode = relay` in `shim.ini`. All eight two-console traces, including the relay-mode runs (`recon/traces/relay-hw-01` and `internet-hw-01`), replay through the C emulator against the relay (`TestReplayTracesShim`).
 - Phase 5 (over the internet): done. Pokémon X and Y on two home networks, with the relay on a public server, completed a battle and a trade. Frame loss was 0.1–0.2%, and relay round trips took about 25 ms from one console and 90 ms from the other (`shim/RUNBOOK.md` section 8, `recon/traces/internet-hw-01`).
-- Phase 6 (sysmodule): working on hardware for Pokémon X/Y and Smash Bros. for 3DS, including over the internet; Animal Crossing disconnects after about 41 s (`sysmodule/RUNBOOK.md`). A background sysmodule serves `nwm::UDS` over the relay for every game, through patched copies of Luma's `sm` and `pm` loaded from the SD card; no per-game code. Next: Pokémon X/Y, Mario Kart 7 and Smash Bros. for 3DS through it (`sysmodule/RUNBOOK.md`).
+- Phase 6 (sysmodule): working on hardware, including over the internet, for Pokémon X/Y, Smash Bros. for 3DS, Mario Kart 7 (through Download Play) and Animal Crossing: New Leaf town visits (`sysmodule/RUNBOOK.md`). A background sysmodule serves `nwm::UDS` over the relay for every game, through patched copies of Luma's `sm` and `pm` loaded from the SD card; no per-game code. New Super Mario Bros. 2 co-op does not connect yet.
 
 ## Layout
 
@@ -52,3 +52,7 @@ go run ./cmd/udstrace summary host=internal/udstrace/testdata/host.log client=in
 ```
 
 The fixtures in `internal/udstrace/testdata` are synthetic, not real captures. `host.log` and `client.log` come from `gen_fixtures.py` in the Azahar patch's line format. `console_host.log` comes from the shim core's fake-kernel test (`make -C shim/core fixtures`), so the Go tests also check that the C and Go sides agree on the format.
+
+## Licence
+
+GPL-3.0-or-later; see `LICENSE`. `sysmodule/luma/*.patch` modify Luma3DS, which is GPLv3, and the shim plugin links CTRPluginFramework, whose terms are in `shim/plugin/LICENSE-CTRPF.txt`.

@@ -11,3 +11,7 @@ sysmodule/out/
 
 # Game dumps and saves used for recon; never commit them.
 game/
+
+# Holds the lobby key; only shim.ini.example is tracked.
+shim.ini
+*.zip
